@@ -60,16 +60,13 @@ foreach ($categories as $category) {
     <meta property="og:description" content="<?php echo $site_description; ?>">
     <link rel="stylesheet" href="assets/css/home.css">
 </head>
-<body>
+<body data-theme="dark">
     <header>
         <div class="header-container">
             <div class="logo">
                 <h1><?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></h1>
             </div>
             <div class="nav-buttons">
-                <button type="button" id="themeToggle" class="theme-toggle" title="<?php echo __('theme.switch'); ?>" aria-label="<?php echo __('theme.switch'); ?>">
-                    🌙
-                </button>
                 <a href="?lang=<?php echo opposite_lang(); ?>" class="lang-toggle" title="Switch Language" aria-label="Switch Language">
                     <?php echo strtoupper(opposite_lang()); ?>
                 </a>
@@ -115,7 +112,7 @@ foreach ($categories as $category) {
         <div class="container">
             <h2 class="section-title"><?php echo __('categories'); ?></h2>
             <div class="categories-grid">
-                <?php foreach ($activeCategories as $category): 
+                <?php foreach ($activeCategories as $category):
                     // Get the latest product from this category (from all products, not just the 6 shown)
                     $categoryProducts = array_filter($products, function($product) use ($category) {
                         $productCategory = strtolower(trim($product['category'] ?? ''));
@@ -143,7 +140,7 @@ foreach ($categories as $category) {
                         <div class="category-info">
                             <div class="category-name"><?php echo htmlspecialchars($category['name']); ?></div>
                             <?php if (!empty($category['description'])): ?>
-                                <div class="category-desc"><?php echo htmlspecialchars(mb_substr($category['description'], 0, 50)) . (mb_strlen($category['description']) > 50 ? '...' : ''); ?></div>
+                                <div class="category-desc"><?php echo htmlspecialchars(substr($category['description'], 0, 50)) . (strlen($category['description']) > 50 ? '...' : ''); ?></div>
                             <?php endif; ?>
                         </div>
                     </a>
@@ -164,7 +161,7 @@ foreach ($categories as $category) {
                 </div>
             <?php else: ?>
                 <div class="products-grid">
-                    <?php foreach ($published_products as $product): 
+                    <?php foreach ($published_products as $product):
                         $stock = $product['stock'] ?? 0;
                         $price_eur = $product['price'] ?? 0;
                         $productCategoryRaw = (string)($product['category'] ?? '');
@@ -174,7 +171,7 @@ foreach ($categories as $category) {
                         <div class="product-card">
                             <div class="product-image">
                                 <?php if (!empty($product['image'])): ?>
-                                    <img src="<?php echo htmlspecialchars($product['image']); ?>" 
+                                    <img src="<?php echo htmlspecialchars($product['image']); ?>"
                                          alt="<?php echo htmlspecialchars($product['name']); ?>"
                                          loading="lazy"
                                          decoding="async">
@@ -193,8 +190,10 @@ foreach ($categories as $category) {
                                 <p class="product-description">
                                     <?php 
                                     $desc = $product['description'] ?? 'Красив продукт';
-                                    echo htmlspecialchars(mb_substr($desc, 0, 120));
-                                    if (mb_strlen($desc) > 120) echo '...';
+                                    echo htmlspecialchars(substr($desc, 0, 120));
+                                    if (strlen($desc) > 120) {
+                                        echo '...';
+                                    }
                                     ?>
                                 </p>
                                 
@@ -231,7 +230,6 @@ foreach ($categories as $category) {
         <p>&copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>. Всички права запазени.</p>
     </footer>
     
-    <script src="assets/js/theme.js"></script>
 </body>
 </html>
 

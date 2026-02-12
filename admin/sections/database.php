@@ -218,9 +218,9 @@ if (isset($_POST['save_database_config'])) {
         </div>
     </form>
 
-    <div style="margin-top: 30px; padding: 15px; background: var(--warning-bg, #fff3cd); border: 1px solid var(--warning, #ffc107); border-radius: 6px;">
-        <h3 style="color: var(--text-primary, #856404); margin-bottom: 10px;">📖 How to Setup MySQL in cPanel</h3>
-        <ol style="color: var(--text-primary, #856404); line-height: 1.8;">
+    <div style="margin-top: 30px; padding: 15px; background: #383838; border: 1px solid #4a4a4a; border-radius: 6px;">
+        <h3 style="color: #ffffff; margin-bottom: 10px;">📖 How to Setup MySQL in cPanel</h3>
+        <ol style="color: #ffffff; line-height: 1.8;">
             <li>Login to cPanel</li>
             <li>Go to <strong>MySQL Databases</strong></li>
             <li>Create a new database (e.g., "username_cms")</li>
@@ -230,7 +230,7 @@ if (isset($_POST['save_database_config'])) {
             <li>Click "Test Connection" to verify</li>
             <li>Click "Save Configuration" to activate MySQL</li>
         </ol>
-        <p style="color: var(--text-primary, #856404); margin-top: 10px;"><strong>Note:</strong> Tables will be created automatically when you save!</p>
+        <p style="color: #ffffff; margin-top: 10px;"><strong>Note:</strong> Tables will be created automatically when you save!</p>
     </div>
 </div>
 

@@ -1,11 +1,11 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-    --bg-primary: #f8f7ff;
-    --bg-secondary: rgba(255, 255, 255, 0.7);
-    --bg-sidebar: #6b46c1;
-    --text-primary: #2d1b4e;
-    --text-secondary: #6b7280;
+    --bg-primary: #383838;
+    --bg-secondary: #383838;
+    --bg-sidebar: #002B4D;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
     --border-color: rgba(107, 70, 193, 0.15);
     --shadow: rgba(107, 70, 193, 0.08);
     --primary: #6b46c1;
@@ -32,7 +32,7 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: var(--bg-primary);
-    color: var(--text-primary);
+    color: #ffffff;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 .container {
@@ -96,9 +96,10 @@ body {
 .main {
     flex: 1;
     padding: 30px;
+    background: #272727;
 }
 .header {
-    background: var(--bg-secondary);
+    background: #2d2d2d;
     backdrop-filter: blur(10px);
     padding: 20px;
     border-radius: 12px;
@@ -110,8 +111,8 @@ body {
     border: 1px solid var(--border-color);
     transition: all 0.3s ease;
 }
-h1 { font-size: 28px; color: var(--text-primary); transition: color 0.3s ease; }
-h2, h3, h4 { color: var(--text-primary); transition: color 0.3s ease; }
+h1 { font-size: 28px; color: #ffffff; transition: color 0.3s ease; }
+h2, h3, h4 { color: #ffffff; transition: color 0.3s ease; }
 .logout-btn {
     padding: 10px 20px;
     background: var(--danger);
@@ -134,7 +135,7 @@ h2, h3, h4 { color: var(--text-primary); transition: color 0.3s ease; }
     margin-bottom: 30px;
 }
 .stat-card {
-    background: var(--bg-secondary);
+    background: #3a3a3a;
     backdrop-filter: blur(10px);
     padding: 20px;
     border-radius: 12px;
@@ -147,10 +148,10 @@ h2, h3, h4 { color: var(--text-primary); transition: color 0.3s ease; }
     transform: translateY(-2px);
     box-shadow: 0 4px 12px var(--shadow);
 }
-.stat-card h3 { color: var(--text-secondary); font-size: 14px; margin-bottom: 10px; }
+.stat-card h3 { color: #ffffff; font-size: 14px; margin-bottom: 10px; }
 .stat-card .number { font-size: 32px; font-weight: bold; color: var(--primary); }
 .content {
-    background: var(--bg-secondary);
+    background: #2d2d2d;
     backdrop-filter: blur(10px);
     padding: 30px;
     border-radius: 12px;
@@ -159,11 +160,12 @@ h2, h3, h4 { color: var(--text-primary); transition: color 0.3s ease; }
     transition: all 0.3s ease;
 }
 .message {
+    margin-top: 30px;
     padding: 15px;
-    background: var(--success-bg, #d4edda);
-    border: 1px solid var(--success-border, #c3e6cb);
+    background: #383838;
+    border: 1px solid #4a4a4a;
     border-radius: 6px;
-    color: var(--success-text, #155724);
+    color: #ffffff;
     margin-bottom: 20px;
 }
 .form-group {
@@ -192,7 +194,7 @@ select {
     border-radius: 6px;
     font-family: inherit;
     font-size: 14px;
-    background: var(--bg-secondary);
+    background: #3a3a3a;
     color: var(--text-primary);
     transition: all 0.2s;
 }
@@ -207,7 +209,7 @@ input[type="datetime-local"] {
     font-size: 14px;
     font-weight: 500;
     color: var(--text-primary, #333);
-    background: var(--bg-secondary, white);
+    background: #3a3a3a;
     border: 2px solid var(--border-color, #e0e0e0);
     border-radius: 8px;
     cursor: pointer;
@@ -229,7 +231,7 @@ input[type="datetime-local"]:hover {
 input[type="datetime-local"]:focus {
     border-color: var(--primary, #3498db);
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
-    background: var(--bg-secondary, white);
+    background: #3a3a3a;
 }
 input[type="number"] {
     font-variant-numeric: tabular-nums;
@@ -243,7 +245,7 @@ input[type="number"] {
 }
 button {
     padding: 10px 20px;
-    background: var(--primary);
+    background: #002B4D;
     color: white;
     border: none;
     border-radius: 6px;
@@ -266,12 +268,12 @@ th, td {
     border-bottom: 1px solid var(--border-color);
 }
 th {
-    background: var(--bg-primary);
+    background: #383838;
     font-weight: 600;
     color: var(--text-primary);
 }
 tr:hover {
-    background: var(--bg-primary);
+    background: #383838;
 }
 .section-header {
     display: flex;
@@ -295,7 +297,7 @@ tr:hover {
     align-items: center;
     gap: 8px;
     padding: 12px 24px;
-    background: linear-gradient(135deg, var(--primary, #3498db) 0%, #2980b9 100%);
+    background: linear-gradient(135deg, #002B4D 0%, #004080 100%);
     color: white;
     text-decoration: none;
     border: none;
@@ -304,7 +306,7 @@ tr:hover {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 43, 77, 0.25);
 }
 .btn:hover {
     transform: translateY(-2px);
@@ -346,7 +348,7 @@ tr:hover {
 .btn-small {
     padding: 6px 12px;
     font-size: 12px;
-    background: var(--primary, #3498db);
+    background: #002B4D;
     color: white;
     border: none;
     border-radius: 4px;

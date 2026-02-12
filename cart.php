@@ -396,7 +396,7 @@ $total = max(0, $subtotal - $discount_amount);
             </div>
             <div class="nav-buttons">
                 <!-- Theme Toggle -->
-                <button type="button" id="themeToggle" class="btn theme-toggle" title="<?php echo __('theme.switch_to_dark'); ?>"><?php echo icon_moon(18); ?></button>
+                <button type="button" class="btn theme-toggle" title="<?php echo __('theme.switch_to_dark'); ?>"><?php echo icon_moon(18); ?></button>
                 
                 <!-- Language Toggle -->
                 <a href="?lang=<?php echo opposite_lang(); ?>" class="btn lang-toggle" title="Switch Language">
@@ -507,58 +507,58 @@ $total = max(0, $subtotal - $discount_amount);
                         
                         <div class="form-grid">
                             <div class="form-group">
-                                <label class="form-label"><?php echo __('checkout.first_name'); ?> *</label>
-                                <input type="text" name="first_name" class="form-input" required>
+                                <label class="form-label" for="checkout_first_name"><?php echo __('checkout.first_name'); ?> *</label>
+                                <input type="text" id="checkout_first_name" name="first_name" class="form-input" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label"><?php echo __('checkout.last_name'); ?> *</label>
-                                <input type="text" name="last_name" class="form-input" required>
+                                <label class="form-label" for="checkout_last_name"><?php echo __('checkout.last_name'); ?> *</label>
+                                <input type="text" id="checkout_last_name" name="last_name" class="form-input" required>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label"><?php echo __('checkout.phone'); ?> *</label>
-                            <input type="tel" name="phone" class="form-input" required placeholder="+359 888 123 456">
+                            <label class="form-label" for="checkout_phone"><?php echo __('checkout.phone'); ?> *</label>
+                            <input type="tel" id="checkout_phone" name="phone" class="form-input" required placeholder="+359 888 123 456">
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label"><?php echo __('checkout.email'); ?></label>
-                            <input type="email" name="email" class="form-input" placeholder="your@email.com">
+                            <label class="form-label" for="checkout_email"><?php echo __('checkout.email'); ?></label>
+                            <input type="email" id="checkout_email" name="email" class="form-input" placeholder="your@email.com">
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label"><?php echo __('checkout.address'); ?> *</label>
-                            <input type="text" name="address" class="form-input" required placeholder="<?php echo __('checkout.address_placeholder'); ?>">
+                            <label class="form-label" for="checkout_address"><?php echo __('checkout.address'); ?> *</label>
+                            <input type="text" id="checkout_address" name="address" class="form-input" required placeholder="<?php echo __('checkout.address_placeholder'); ?>">
                         </div>
                         
                         <div class="form-grid-2-1">
                             <div class="form-group">
-                                <label class="form-label"><?php echo __('checkout.city'); ?> *</label>
-                                <input type="text" name="city" class="form-input" required placeholder="<?php echo __('checkout.city_placeholder'); ?>">
+                                <label class="form-label" for="checkout_city"><?php echo __('checkout.city'); ?> *</label>
+                                <input type="text" id="checkout_city" name="city" class="form-input" required placeholder="<?php echo __('checkout.city_placeholder'); ?>">
                             </div>
                             <div class="form-group">
-                                <label class="form-label"><?php echo __('checkout.postal_code'); ?></label>
-                                <input type="text" name="postal_code" class="form-input" placeholder="1000">
+                                <label class="form-label" for="checkout_postal"><?php echo __('checkout.postal_code'); ?></label>
+                                <input type="text" id="checkout_postal" name="postal_code" class="form-input" placeholder="1000">
                             </div>
                         </div>
                         
                         <h3><?php echo __('checkout.receiver_info'); ?> (<?php echo __('checkout.if_different'); ?>)</h3>
                         
                         <div class="form-group">
-                            <label class="form-label"><?php echo __('checkout.receiver_name'); ?></label>
-                            <input type="text" name="receiver_name" class="form-input" placeholder="<?php echo __('checkout.receiver_name_placeholder'); ?>">
+                            <label class="form-label" for="checkout_receiver"><?php echo __('checkout.receiver_name'); ?></label>
+                            <input type="text" id="checkout_receiver" name="receiver_name" class="form-input" placeholder="<?php echo __('checkout.receiver_name_placeholder'); ?>">
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label"><?php echo __('checkout.receiver_phone'); ?></label>
-                            <input type="tel" name="receiver_phone" class="form-input" placeholder="<?php echo __('checkout.receiver_phone_placeholder'); ?>">
+                            <label class="form-label" for="checkout_receiver_phone"><?php echo __('checkout.receiver_phone'); ?></label>
+                            <input type="tel" id="checkout_receiver_phone" name="receiver_phone" class="form-input" placeholder="<?php echo __('checkout.receiver_phone_placeholder'); ?>">
                         </div>
                         
                         <h3><?php echo icon_truck(24); ?> <?php echo __('checkout.delivery_payment'); ?></h3>
                         
                         <div class="form-group">
-                            <label class="form-label"><?php echo __('checkout.courier_service'); ?> *</label>
-                            <select name="courier" class="form-select" required>
+                            <label class="form-label" for="checkout_courier"><?php echo __('checkout.courier_service'); ?> *</label>
+                            <select id="checkout_courier" name="courier" class="form-select" required>
                                 <option value="econt"><?php echo icon_package(16); ?> <?php echo __('courier.econt'); ?> (<?php echo __('courier.econt_description'); ?>)</option>
                                 <option value="speedy"><?php echo icon_zap(16); ?> <?php echo __('courier.speedy'); ?> (<?php echo __('courier.speedy_description'); ?>)</option>
                             </select>
@@ -566,8 +566,8 @@ $total = max(0, $subtotal - $discount_amount);
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label"><?php echo __('checkout.payment_method'); ?> *</label>
-                            <select name="payment_method" class="form-select" required>
+                            <label class="form-label" for="checkout_payment"><?php echo __('checkout.payment_method'); ?> *</label>
+                            <select id="checkout_payment" name="payment_method" class="form-select" required>
                                 <option value="cod"><?php echo icon_dollar(16); ?> <?php echo __('payment.cod'); ?></option>
                                 <option value="bank_transfer"><?php echo icon_bank(16); ?> <?php echo __('payment.bank_transfer'); ?></option>
                                 <option value="card"><?php echo icon_credit_card(16); ?> <?php echo __('payment.card'); ?></option>
@@ -576,8 +576,8 @@ $total = max(0, $subtotal - $discount_amount);
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label"><?php echo __('checkout.delivery_notes'); ?></label>
-                            <textarea name="delivery_notes" class="form-textarea" rows="3" placeholder="<?php echo __('checkout.delivery_notes_placeholder'); ?>"></textarea>
+                            <label class="form-label" for="checkout_notes"><?php echo __('checkout.delivery_notes'); ?></label>
+                            <textarea id="checkout_notes" name="delivery_notes" class="form-textarea" rows="3" placeholder="<?php echo __('checkout.delivery_notes_placeholder'); ?>"></textarea>
                         </div>
                         
                         <button type="submit" class="btn btn-checkout">

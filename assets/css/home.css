@@ -15,16 +15,16 @@
 
 body {
     font-family: "Space Grotesk", "Segoe UI", system-ui, -apple-system, sans-serif;
-    background: radial-gradient(circle at 20% 20%, #f9f6ff 0%, #f0ecff 40%, #f8f7ff 100%);
-    color: var(--ink);
-    --products-section-bg: #f8f7ff;
+    background: linear-gradient(135deg, #e8ddf5 0%, #decceb 50%, #d4c5e2 100%);
+    color: white;
+    --products-section-bg: rgba(107, 70, 193, 0.05);
 }
 
 /* Header */
 header {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(200, 185, 217, 0.85);
     backdrop-filter: blur(10px);
-    box-shadow: 0 2px 10px rgba(107, 70, 193, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -42,7 +42,7 @@ header {
 .logo h1 {
     font-family: "Fraunces", "Times New Roman", serif;
     font-size: 24px;
-    color: var(--accent);
+    color: white;
     font-weight: 700;
     letter-spacing: 0.3px;
 }
@@ -185,12 +185,12 @@ header {
     font-weight: 700;
     margin-bottom: 24px;
     text-align: center;
-    color: #2c3e50;
+    color: white;
 }
 
 /* Categories */
 .categories-section {
-    background: linear-gradient(180deg, #faf9ff 0%, #f5f3ff 100%);
+    background: linear-gradient(135deg, #e8ddf5 0%, #decceb 50%, #d4c5e2 100%);
     padding: 30px 0;
 }
 
@@ -248,7 +248,8 @@ header {
 
 /* Products */
 .products-section {
-    background: var(--products-section-bg);
+    background: linear-gradient(135deg, #5a2fb1 0%, #3b2a7c 60%, #1c123c 100%);
+    padding: 30px 0;
 }
 
 .products-grid {
@@ -258,20 +259,21 @@ header {
 }
 
 .product-card {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(10px);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(107, 70, 193, 0.12);
+    box-shadow: 0 4px 12px rgba(107, 70, 193, 0.2);
     transition: all 0.4s;
-    border: 2px solid rgba(107, 70, 193, 0.1);
+    border: 2px solid rgba(107, 70, 193, 0.3);
+    color: #1b1430;
 }
 
 .product-card:hover {
     transform: translateY(-12px);
-    box-shadow: 0 20px 50px rgba(107, 70, 193, 0.25);
+    box-shadow: 0 20px 50px rgba(107, 70, 193, 0.3);
     border-color: #6b46c1;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
 }
 
 .product-image {
@@ -592,7 +594,7 @@ footer p {
     font-size: 34px;
     font-weight: 700;
     margin-bottom: 40px;
-    color: #1f2937;
+    color: white;
     text-align: center;
     position: relative;
     padding-bottom: 20px;
@@ -715,6 +717,9 @@ footer p {
 }
 
 .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.3s;
 }
 
@@ -895,10 +900,11 @@ footer p {
 .empty-state {
     text-align: center;
     padding: 80px 40px;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
     border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(107, 70, 193, 0.08);
+    box-shadow: 0 2px 8px rgba(107, 70, 193, 0.12);
+    border: 2px solid rgba(107, 70, 193, 0.1);
 }
 
 .empty-state h3 {
@@ -975,7 +981,9 @@ footer {
 
 /* Categories Section */
 .categories-section {
-    background: linear-gradient(180deg, #faf9ff 0%, #f5f3ff 100%);
+    background: linear-gradient(135deg, #e8ddf5 0%, #decceb 50%, #d4c5e2 100%);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(107, 70, 193, 0.1);
     padding: 25px 0;
 }
 
@@ -1015,7 +1023,7 @@ footer {
 
 .category-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
     border-radius: 12px;
     text-decoration: none;
@@ -1023,9 +1031,9 @@ footer {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    box-shadow: 0 2px 8px rgba(107, 70, 193, 0.1);
+    box-shadow: 0 2px 8px rgba(107, 70, 193, 0.15);
     overflow: hidden;
-    border: 2px solid rgba(107, 70, 193, 0.15);
+    border: 2px solid rgba(107, 70, 193, 0.2);
 }
 
 .category-card:hover {
@@ -1040,7 +1048,9 @@ footer {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-attachment: scroll;
     transition: transform 0.3s;
+    flex-shrink: 0;
 }
 
 .category-card:hover .category-preview-image {
@@ -1049,7 +1059,7 @@ footer {
 
 .category-info {
     padding: 16px;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.7);
 }
 
 .category-name {
