@@ -106,39 +106,50 @@ if (isset($_POST['login'])) {
     if (empty($username) || empty($password)) {
         $error = __('auth.username_password_required');
     } else {
-        // Check admin first
-        if ($username === 'Warton' && $password === 'Warton2026') {
+        // Check all users in customer database
+        $customers = load_json('storage/customers.json');
+        $found = false;
+        
+        foreach ($customers as $customer) {
+            if ($customer['username'] === $username && password_verify($password, $customer['password'])) {
+                // Check if account is activated (for regular customers)
+                if (isset($customer['activated']) && $customer['activated'] === false) {
+                    $error = __('auth.activation_required') . '. ' . __('auth.check_email_activation') . '.';
+                    break;
+                }
+                
+                // Check if admin
+                if (isset($customer['role']) && $customer['role'] === 'admin') {
+                    $_SESSION['admin_user'] = $customer['username'];
+                    $_SESSION['user_role'] = 'admin';
+                    $_SESSION['admin'] = true;
+                    $_SESSION['customer_id'] = $customer['id'];
+                    header('Location: admin/index.php');
+                    exit;
+                } else {
+                    // Regular customer
+                    $_SESSION['customer_id'] = $customer['id'];
+                    $_SESSION['customer_user'] = $customer['username'];
+                    $_SESSION['user_role'] = 'customer';
+                    header('Location: index.php');
+                    exit;
+                }
+                $found = true;
+                break;
+            }
+        }
+        
+        // Also check hardcoded admin as fallback
+        if (!$found && $username === 'Warton' && $password === 'Warton2026') {
             $_SESSION['admin_user'] = $username;
             $_SESSION['user_role'] = 'admin';
             $_SESSION['admin'] = true;
             header('Location: admin/index.php');
             exit;
-        } else {
-            // Check customer
-            $customers = load_json('storage/customers.json');
-            $found = false;
-            
-            foreach ($customers as $customer) {
-                if ($customer['username'] === $username && password_verify($password, $customer['password'])) {
-                    // Check if account is activated
-                    if (isset($customer['activated']) && $customer['activated'] === false) {
-                        $error = __('auth.activation_required') . '. ' . __('auth.check_email_activation') . '.';
-                        break;
-                    }
-                    
-                    $_SESSION['customer_id'] = $customer['id'];
-                    $_SESSION['customer_user'] = $customer['username'];
-                    $_SESSION['user_role'] = 'customer';
-                    $found = true;
-                    header('Location: index.php');
-                    exit;
-                    break;
-                }
-            }
-            
-            if (!$found) {
-                $error = __('auth.invalid_credentials');
-            }
+        }
+        
+        if (!$found) {
+            $error = __('auth.invalid_credentials');
         }
     }
 }
