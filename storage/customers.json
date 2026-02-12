@@ -1,17 +1,4 @@
 {
-    "cust_698c96ab660c2": {
-        "id": "cust_698c96ab660c2",
-        "username": "Stefie",
-        "email": "Lubomirowa99@gmail.com",
-        "password": "$2y$12$nQrczVWpkpjIcYNAvYJFM.R.MNUSbtr8gpFKNOn8YIPAHVktDlWBO",
-        "role": "admin",
-        "permissions": [
-            "view_products",
-            "place_orders"
-        ],
-        "created": "2026-02-11 14:48:11",
-        "updated": "2026-02-11 14:48:11"
-    },
     "cust_698dbba238853": {
         "id": "cust_698dbba238853",
         "username": "user1",

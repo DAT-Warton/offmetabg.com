@@ -106,40 +106,41 @@ if (isset($_POST['login'])) {
     if (empty($username) || empty($password)) {
         $error = __('auth.username_password_required');
     } else {
-        // Check all users in customer database
-        $customers = load_json('storage/customers.json');
         $found = false;
         
+        // Check administrators first
+        $admins = load_json('storage/admins.json');
+        foreach ($admins as $admin) {
+            if ($admin['username'] === $username && password_verify($password, $admin['password'])) {
+                $_SESSION['admin_user'] = $admin['username'];
+                $_SESSION['user_role'] = 'admin';
+                $_SESSION['admin'] = true;
+                $_SESSION['user_id'] = $admin['id'];
+                header('Location: admin/index.php');
+                exit;
+            }
+        }
+        
+        // Then check customers
+        $customers = load_json('storage/customers.json');
         foreach ($customers as $customer) {
             if ($customer['username'] === $username && password_verify($password, $customer['password'])) {
-                // Check if account is activated (for regular customers)
+                // Check if account is activated
                 if (isset($customer['activated']) && $customer['activated'] === false) {
                     $error = __('auth.activation_required') . '. ' . __('auth.check_email_activation') . '.';
                     break;
                 }
                 
-                // Check if admin
-                if (isset($customer['role']) && $customer['role'] === 'admin') {
-                    $_SESSION['admin_user'] = $customer['username'];
-                    $_SESSION['user_role'] = 'admin';
-                    $_SESSION['admin'] = true;
-                    $_SESSION['customer_id'] = $customer['id'];
-                    header('Location: admin/index.php');
-                    exit;
-                } else {
-                    // Regular customer
-                    $_SESSION['customer_id'] = $customer['id'];
-                    $_SESSION['customer_user'] = $customer['username'];
-                    $_SESSION['user_role'] = 'customer';
-                    header('Location: index.php');
-                    exit;
-                }
+                $_SESSION['customer_id'] = $customer['id'];
+                $_SESSION['customer_user'] = $customer['username'];
+                $_SESSION['user_role'] = 'customer';
                 $found = true;
-                break;
+                header('Location: index.php');
+                exit;
             }
         }
         
-        // Also check hardcoded admin as fallback
+        // Fallback: hardcoded admin
         if (!$found && $username === 'Warton' && $password === 'Warton2026') {
             $_SESSION['admin_user'] = $username;
             $_SESSION['user_role'] = 'admin';
