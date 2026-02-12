@@ -50,9 +50,9 @@ $translations = [
         'hero_cta_products' => 'Browse products',
         'hero_cta_categories' => 'Categories',
         'hero_meta' => 'Limited series • Fast shipping from Bulgaria',
-        'new_products' => 'New Products',
-        'no_products_title' => 'No products yet',
-        'no_products_text' => 'We will add beautiful items soon!',
+        'new_products' => 'New Arrivals',
+        'no_products_title' => 'Products are coming soon',
+        'no_products_text' => 'We are preparing a carefully curated collection. Please check back soon.',
     ],
     
     // Navigation
