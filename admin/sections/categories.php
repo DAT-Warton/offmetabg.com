@@ -3,7 +3,7 @@
  * Categories Management Section
  */
 
-$categories = load_json('storage/categories.json');
+$categories = get_categories_data();
 $editCategory = null;
 
 // Handle edit mode

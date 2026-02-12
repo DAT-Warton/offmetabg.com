@@ -2,7 +2,7 @@
 /**
  * Products Management Section
  */
-$products = load_json('storage/products.json');
+$products = get_products_data();
 $editId = $_GET['edit'] ?? null;
 $editProduct = $editId ? ($products[$editId] ?? null) : null;
 ?>
@@ -59,7 +59,7 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
             <div class="form-group">
                 <label><?php echo __('product.category'); ?></label>
                 <?php
-                $categories = load_json('storage/categories.json');
+                $categories = get_categories_data();
                 $currentCategory = $editProduct['category'] ?? '';
                 ?>
                 <?php if (empty($categories)): ?>

@@ -3,6 +3,7 @@ define('CMS_ROOT', __DIR__);
 
 session_start();
 require_once 'includes/functions.php';
+require_once 'includes/database.php';
 require_once 'includes/language.php';
 require_once 'includes/icons.php';
 
@@ -12,6 +13,10 @@ $error = '';
 $show_form = false;
 $token = '';
 $user_id = '';
+
+if (db_enabled()) {
+    ensure_db_schema();
+}
 
 // Check if token is provided in URL (support both query param and URL path)
 if (isset($_GET['token']) && !empty($_GET['token'])) {
@@ -27,17 +32,31 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
 // If token is provided, verify it
 if (!empty($token)) {
     // Verify token exists and is not expired
-    $customers = load_json('storage/customers.json');
     $user = null;
     
-    foreach ($customers as $id => $customer) {
-        if (isset($customer['reset_token']) && 
-            $customer['reset_token'] === $token &&
-            isset($customer['reset_token_expires']) &&
-            strtotime($customer['reset_token_expires']) > time()) {
-            $user = $customer;
-            $user_id = $id;
-            break;
+    if (db_enabled()) {
+        $rows = db_table('customers')->all();
+        foreach ($rows as $row) {
+            if (isset($row['reset_token']) &&
+                $row['reset_token'] === $token &&
+                isset($row['reset_expires']) &&
+                strtotime($row['reset_expires']) > time()) {
+                $user = $row;
+                $user_id = $row['id'] ?? '';
+                break;
+            }
+        }
+    } else {
+        $customers = load_json('storage/customers.json');
+        foreach ($customers as $id => $customer) {
+            if (isset($customer['reset_token']) &&
+                $customer['reset_token'] === $token &&
+                isset($customer['reset_token_expires']) &&
+                strtotime($customer['reset_token_expires']) > time()) {
+                $user = $customer;
+                $user_id = $id;
+                break;
+            }
         }
     }
     
@@ -63,27 +82,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset_password'])) {
         $error = __('password_reset.passwords_no_match');
     } else {
         // Verify token again and update password
-        $customers = load_json('storage/customers.json');
         $found = false;
-        
-        foreach ($customers as $id => $customer) {
-            if (isset($customer['reset_token']) && 
-                $customer['reset_token'] === $token &&
-                isset($customer['reset_token_expires']) &&
-                strtotime($customer['reset_token_expires']) > time()) {
-                
-                // Update password and clear reset token
-                $customers[$id]['password'] = password_hash($new_password, PASSWORD_DEFAULT);
-                unset($customers[$id]['reset_token']);
-                unset($customers[$id]['reset_token_expires']);
-                
-                save_json('storage/customers.json', $customers);
-                
-                $message = __('password_reset.password_changed');
-                
-                $show_form = false;
-                $found = true;
-                break;
+
+        if (db_enabled()) {
+            $rows = db_table('customers')->all();
+            foreach ($rows as $row) {
+                if (isset($row['reset_token']) &&
+                    $row['reset_token'] === $token &&
+                    isset($row['reset_expires']) &&
+                    strtotime($row['reset_expires']) > time()) {
+                    db_table('customers')->update($row['id'], [
+                        'password' => password_hash($new_password, PASSWORD_DEFAULT),
+                        'reset_token' => null,
+                        'reset_expires' => null,
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ]);
+                    $message = __('password_reset.password_changed');
+                    $show_form = false;
+                    $found = true;
+                    break;
+                }
+            }
+        } else {
+            $customers = load_json('storage/customers.json');
+            foreach ($customers as $id => $customer) {
+                if (isset($customer['reset_token']) &&
+                    $customer['reset_token'] === $token &&
+                    isset($customer['reset_token_expires']) &&
+                    strtotime($customer['reset_token_expires']) > time()) {
+                    
+                    // Update password and clear reset token
+                    $customers[$id]['password'] = password_hash($new_password, PASSWORD_DEFAULT);
+                    unset($customers[$id]['reset_token']);
+                    unset($customers[$id]['reset_token_expires']);
+                    
+                    save_json('storage/customers.json', $customers);
+                    
+                    $message = __('password_reset.password_changed');
+                    
+                    $show_form = false;
+                    $found = true;
+                    break;
+                }
             }
         }
         
@@ -101,15 +141,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
         $error = __('password_reset.invalid_email');
     } else {
         // Check if user exists
-        $customers = load_json('storage/customers.json');
         $user = null;
         $user_id = null;
-        
-        foreach ($customers as $id => $customer) {
-            if ($customer['email'] === $email) {
-                $user = $customer;
-                $user_id = $id;
-                break;
+
+        if (db_enabled()) {
+            $rows = db_table('customers')->all();
+            foreach ($rows as $row) {
+                if (($row['email'] ?? '') === $email) {
+                    $user = $row;
+                    $user_id = $row['id'] ?? '';
+                    break;
+                }
+            }
+        } else {
+            $customers = load_json('storage/customers.json');
+            foreach ($customers as $id => $customer) {
+                if ($customer['email'] === $email) {
+                    $user = $customer;
+                    $user_id = $id;
+                    break;
+                }
             }
         }
         
@@ -117,11 +168,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
             // Generate shorter, user-friendly reset token (16 characters)
             $reset_token = bin2hex(random_bytes(8));
             $reset_expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
-            
+
             // Save token to customer data
-            $customers[$user_id]['reset_token'] = $reset_token;
-            $customers[$user_id]['reset_token_expires'] = $reset_expires;
-            save_json('storage/customers.json', $customers);
+            if (db_enabled()) {
+                db_table('customers')->update($user_id, [
+                    'reset_token' => $reset_token,
+                    'reset_expires' => $reset_expires,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            } else {
+                $customers[$user_id]['reset_token'] = $reset_token;
+                $customers[$user_id]['reset_token_expires'] = $reset_expires;
+                save_json('storage/customers.json', $customers);
+            }
             
             // Send reset email
             require_once 'includes/email.php';

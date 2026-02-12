@@ -46,11 +46,22 @@ function is_discount_usable($discount, $subtotal, $current_user) {
     }
 
     if (!empty($discount['first_purchase_only']) && $current_user !== '') {
-        $orders = load_json('storage/orders.json');
-        foreach ($orders as $order) {
-            $orderUser = $order['customer']['user'] ?? '';
-            if ($orderUser === $current_user) {
-                return false;
+        if (db_enabled()) {
+            $rows = db_table('orders')->all();
+            foreach ($rows as $row) {
+                $notes = parse_json_field($row['notes'] ?? '') ?? [];
+                $orderUser = $notes['customer']['user'] ?? '';
+                if ($orderUser === $current_user) {
+                    return false;
+                }
+            }
+        } else {
+            $orders = load_json('storage/orders.json');
+            foreach ($orders as $order) {
+                $orderUser = $order['customer']['user'] ?? '';
+                if ($orderUser === $current_user) {
+                    return false;
+                }
             }
         }
     }
@@ -66,7 +77,7 @@ $cart = $_SESSION['cart'];
 
 // Handle order success display
 if (!empty($_GET['success']) && !empty($_SESSION['last_order_id'])) {
-    $orders = load_json('storage/orders.json');
+    $orders = get_orders_data();
     $orderId = $_SESSION['last_order_id'];
     if (isset($orders[$orderId])) {
         $order = $orders[$orderId];
@@ -78,7 +89,7 @@ if (!empty($_GET['success']) && !empty($_SESSION['last_order_id'])) {
 // Handle cart actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
-    $products = load_json('storage/products.json');
+    $products = get_products_data();
 
     if ($action === 'add') {
         $productId = sanitize($_POST['product_id'] ?? '');
@@ -129,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'apply_discount') {
         $code = strtoupper(trim($_POST['discount_code'] ?? ''));
-        $discounts = load_json('storage/discounts.json');
+        $discounts = get_discounts_data();
         $discount = null;
         foreach ($discounts as $disc) {
             if (strtoupper($disc['code'] ?? '') === $code) {
@@ -211,8 +222,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $total = max(0, $subtotal - $discountAmount);
 
                 $orderId = uniqid('order_');
-                $orders = load_json('storage/orders.json');
-
                 $orderData = [
                     'id' => $orderId,
                     'customer' => [
@@ -238,22 +247,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'status' => 'pending'
                     ],
                     'items' => $items,
+                    'subtotal' => $subtotal,
+                    'discount_amount' => $discountAmount,
                     'total' => $total,
                     'status' => 'pending',
                     'created' => date('Y-m-d H:i:s')
                 ];
 
-                $orders[$orderId] = $orderData;
-                save_json('storage/orders.json', $orders);
+                save_order_data($orderData);
 
                 if ($discount) {
-                    $discounts = load_json('storage/discounts.json');
-                    foreach ($discounts as $id => $disc) {
-                        if (($disc['id'] ?? '') === ($discount['id'] ?? '')) {
-                            $discounts[$id]['used_count'] = (int)($disc['used_count'] ?? 0) + 1;
-                            save_json('storage/discounts.json', $discounts);
-                            break;
-                        }
+                    if (!empty($discount['id'])) {
+                        update_discount_usage($discount['id']);
                     }
                 }
 
@@ -337,26 +342,32 @@ $total = max(0, $subtotal - $discount_amount);
                 
                 <div class="order-details-box">
                     <h3><?php echo icon_package(24); ?> <?php echo __('order.order_details'); ?></h3>
+                    <?php
+                        $receiverName = $order['shipping']['receiver_name'] ?? ($order['shipping']['first_name'] ?? '');
+                        $receiverPhone = $order['shipping']['receiver_phone'] ?? ($order['shipping']['phone'] ?? '');
+                        $courier = $order['shipping']['courier'] ?? '';
+                    ?>
                     
                     <div class="order-grid">
                         <div>
                             <p><?php echo __('order.delivery_to'); ?>:</p>
-                            <strong><?php echo htmlspecialchars($order['shipping']['receiver_name']); ?></strong>
+                            <strong><?php echo htmlspecialchars($receiverName); ?></strong>
                             <p><?php echo htmlspecialchars($order['shipping']['address']); ?></p>
                             <p><?php echo htmlspecialchars($order['shipping']['city']); ?> <?php echo htmlspecialchars($order['shipping']['postal_code'] ?? ''); ?></p>
                         </div>
                         
                         <div>
                             <p><?php echo __('order.contact'); ?>:</p>
-                            <strong><?php echo icon_phone(16); ?> <?php echo htmlspecialchars($order['shipping']['receiver_phone']); ?></strong>
-                            <?php if (!empty($order['customer']['email'])): ?>
-                                <p><?php echo icon_mail(16); ?> <?php echo htmlspecialchars($order['customer']['email']); ?></p>
+                            <strong><?php echo icon_phone(16); ?> <?php echo htmlspecialchars($receiverPhone); ?></strong>
+                            <?php $customerEmail = $order['customer']['email'] ?? ($order['email'] ?? ''); ?>
+                            <?php if (!empty($customerEmail)): ?>
+                                <p><?php echo icon_mail(16); ?> <?php echo htmlspecialchars($customerEmail); ?></p>
                             <?php endif; ?>
                         </div>
                     </div>
                     
                     <div class="order-divider">
-                        <p><?php echo icon_truck(16); ?> <?php echo __('order.courier'); ?>: <strong><?php echo strtoupper($order['shipping']['courier']); ?></strong></p>
+                        <p><?php echo icon_truck(16); ?> <?php echo __('order.courier'); ?>: <strong><?php echo strtoupper($courier); ?></strong></p>
                         <p><?php echo icon_dollar(16); ?> <?php echo __('order.payment'); ?>: <strong><?php echo $order['payment']['cod'] ? __('payment.cod') : ucfirst($order['payment']['method']); ?></strong></p>
                         <p><?php echo icon_dollar(16); ?> <?php echo __('cart_page.total'); ?>: <strong class="total-amount">€<?php echo number_format($order['total'], 2); ?></strong></p>
                     </div>

@@ -4,10 +4,10 @@
  */
 
 // Load data from JSON files
-$products = load_json('storage/products.json');
-$orders = load_json('storage/orders.json');
-$customers = load_json('storage/customers.json');
-$inquiries = load_json('storage/inquiries.json');
+$products = get_products_data();
+$orders = get_orders_data();
+$customers = get_customers_data();
+$inquiries = get_inquiries_data();
 $analytics = load_json('storage/analytics.json');
 $financial = load_json('storage/financial.json');
 

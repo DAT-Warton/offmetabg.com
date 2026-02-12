@@ -40,13 +40,19 @@ if (isset($_POST['register'])) {
         $error = __('auth.password_min_6');
     } else {
         // Check if user exists
-        $customers = load_json('storage/customers.json');
         $userExists = false;
         
-        foreach ($customers as $customer) {
-            if ($customer['username'] === $username || $customer['email'] === $email) {
-                $userExists = true;
-                break;
+        if (db_enabled()) {
+            ensure_db_schema();
+            $table = db_table('customers');
+            $userExists = !empty($table->find('username', $username)) || !empty($table->find('email', $email));
+        } else {
+            $customers = load_json('storage/customers.json');
+            foreach ($customers as $customer) {
+                if ($customer['username'] === $username || $customer['email'] === $email) {
+                    $userExists = true;
+                    break;
+                }
             }
         }
         
@@ -58,19 +64,39 @@ if (isset($_POST['register'])) {
             // Generate shorter, user-friendly activation token (16 characters)
             $activationToken = bin2hex(random_bytes(8));
             
-            $customers[$customerId] = [
-                'id' => $customerId,
-                'username' => $username,
-                'email' => $email,
-                'password' => password_hash($password, PASSWORD_DEFAULT),
-                'role' => 'customer',
-                'activated' => false,
-                'activation_token' => $activationToken,
-                'activation_token_expires' => date('Y-m-d H:i:s', strtotime('+24 hours')),
-                'created' => date('Y-m-d H:i:s')
-            ];
-            
-            save_json('storage/customers.json', $customers);
+            $activationExpires = date('Y-m-d H:i:s', strtotime('+24 hours'));
+            if (db_enabled()) {
+                ensure_db_schema();
+                db_table('customers')->insert([
+                    'id' => $customerId,
+                    'username' => $username,
+                    'email' => $email,
+                    'password' => password_hash($password, PASSWORD_DEFAULT),
+                    'role' => 'customer',
+                    'status' => 'pending',
+                    'activated' => false,
+                    'email_verified' => false,
+                    'activation_token' => $activationToken,
+                    'activation_token_expires' => $activationExpires,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            } else {
+                $customers = load_json('storage/customers.json');
+                $customers[$customerId] = [
+                    'id' => $customerId,
+                    'username' => $username,
+                    'email' => $email,
+                    'password' => password_hash($password, PASSWORD_DEFAULT),
+                    'role' => 'customer',
+                    'activated' => false,
+                    'activation_token' => $activationToken,
+                    'activation_token_expires' => $activationExpires,
+                    'created' => date('Y-m-d H:i:s')
+                ];
+                
+                save_json('storage/customers.json', $customers);
+            }
             
             // Try to send activation email
             $emailSent = false;
@@ -109,6 +135,20 @@ if (isset($_POST['login'])) {
         $found = false;
         
         // Check administrators first
+        $adminRecord = null;
+        if (db_enabled()) {
+            $adminRecord = db_table('admins')->find('username', $username);
+        }
+
+        if ($adminRecord && password_verify($password, $adminRecord['password'])) {
+            $_SESSION['admin_user'] = $adminRecord['username'];
+            $_SESSION['user_role'] = 'admin';
+            $_SESSION['admin'] = true;
+            $_SESSION['user_id'] = $adminRecord['id'];
+            header('Location: admin/index.php');
+            exit;
+        }
+
         $admins = load_json('storage/admins.json');
         foreach ($admins as $admin) {
             if ($admin['username'] === $username && password_verify($password, $admin['password'])) {
@@ -122,21 +162,49 @@ if (isset($_POST['login'])) {
         }
         
         // Then check customers
-        $customers = load_json('storage/customers.json');
-        foreach ($customers as $customer) {
-            if ($customer['username'] === $username && password_verify($password, $customer['password'])) {
-                // Check if account is activated
-                if (isset($customer['activated']) && $customer['activated'] === false) {
-                    $error = __('auth.activation_required') . '. ' . __('auth.check_email_activation') . '.';
-                    break;
+        $customer = null;
+        if (db_enabled()) {
+            $customer = db_table('customers')->find('username', $username);
+            if ($customer && password_verify($password, $customer['password'])) {
+                $isActivated = true;
+                if (isset($customer['activated'])) {
+                    $isActivated = (bool)$customer['activated'];
+                } elseif (isset($customer['email_verified'])) {
+                    $isActivated = (bool)$customer['email_verified'];
+                } elseif (isset($customer['status'])) {
+                    $isActivated = $customer['status'] !== 'pending';
                 }
-                
-                $_SESSION['customer_id'] = $customer['id'];
-                $_SESSION['customer_user'] = $customer['username'];
-                $_SESSION['user_role'] = 'customer';
-                $found = true;
-                header('Location: index.php');
-                exit;
+
+                if (!$isActivated) {
+                    $error = __('auth.activation_required') . '. ' . __('auth.check_email_activation') . '.';
+                } else {
+                    $_SESSION['customer_id'] = $customer['id'];
+                    $_SESSION['customer_user'] = $customer['username'];
+                    $_SESSION['user_role'] = $customer['role'] ?? 'customer';
+                    $found = true;
+                    header('Location: index.php');
+                    exit;
+                }
+            }
+        }
+
+        if (!$found) {
+            $customers = load_json('storage/customers.json');
+            foreach ($customers as $customer) {
+                if ($customer['username'] === $username && password_verify($password, $customer['password'])) {
+                    // Check if account is activated
+                    if (isset($customer['activated']) && $customer['activated'] === false) {
+                        $error = __('auth.activation_required') . '. ' . __('auth.check_email_activation') . '.';
+                        break;
+                    }
+                    
+                    $_SESSION['customer_id'] = $customer['id'];
+                    $_SESSION['customer_user'] = $customer['username'];
+                    $_SESSION['user_role'] = 'customer';
+                    $found = true;
+                    header('Location: index.php');
+                    exit;
+                }
             }
         }
         

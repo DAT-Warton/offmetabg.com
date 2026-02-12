@@ -2,7 +2,7 @@
 /**
  * Customer Management Section
  */
-$customers = load_json('storage/customers.json');
+$customers = get_customers_data();
 $editId = $_GET['edit'] ?? null;
 $editCustomer = $editId ? ($customers[$editId] ?? null) : null;
 ?>

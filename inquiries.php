@@ -36,12 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_inquiry'])) {
     if (empty($subject) || empty($category) || empty($message_text)) {
         $error = __('inquiry.all_fields_required');
     } else {
-        // Load inquiries
-        $inquiries = load_json('storage/inquiries.json');
-        
         // Create new inquiry
         $inquiryId = uniqid('inq_');
-        $inquiries[$inquiryId] = [
+        save_inquiry_data([
             'id' => $inquiryId,
             'user_id' => $_SESSION['customer_id'] ?? $_SESSION['admin_user'],
             'username' => $_SESSION['customer_user'] ?? $_SESSION['admin_user'],
@@ -51,9 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_inquiry'])) {
             'status' => 'pending',
             'created' => date('Y-m-d H:i:s'),
             'updated' => date('Y-m-d H:i:s')
-        ];
-        
-        save_json('storage/inquiries.json', $inquiries);
+        ]);
         
         // Send email notification to admin (optional)
         require_once __DIR__ . '/includes/email.php';
@@ -69,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_inquiry'])) {
 
 // Get user's previous inquiries
 $user_inquiries = [];
-$all_inquiries = load_json('storage/inquiries.json');
+$all_inquiries = get_inquiries_data();
 $current_user = $_SESSION['customer_user'] ?? $_SESSION['admin_user'];
 
 foreach ($all_inquiries as $inquiry) {

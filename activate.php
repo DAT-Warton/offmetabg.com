@@ -33,48 +33,75 @@ if (empty($token)) {
 if (empty($token)) {
     $error = __('auth.invalid_activation_link');
 } else {
-    // Load customers
-    $customers = load_json('storage/customers.json');
-    $found = false;
-    
-    // Find customer with this token
-    foreach ($customers as $id => &$customer) {
-        if (isset($customer['activation_token']) && $customer['activation_token'] === $token) {
-            $found = true;
-            
-            // Check if token is expired
-            if (isset($customer['activation_token_expires'])) {
-                $expires = strtotime($customer['activation_token_expires']);
-                if ($expires < time()) {
-                    $error = __('auth.activation_link_expired');
+    if (db_enabled()) {
+        ensure_db_schema();
+        $customer = db_table('customers')->find('activation_token', $token);
+        if ($customer) {
+            $expires = $customer['activation_token_expires'] ?? null;
+            if ($expires && strtotime($expires) < time()) {
+                $error = __('auth.activation_link_expired');
+            } elseif (!empty($customer['activated']) || !empty($customer['email_verified'])) {
+                $message = __('auth.already_activated');
+                $success = true;
+            } else {
+                db_table('customers')->update($customer['id'], [
+                    'activated' => true,
+                    'email_verified' => true,
+                    'activated_at' => date('Y-m-d H:i:s'),
+                    'activation_token' => null,
+                    'activation_token_expires' => null,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+                $message = __('auth.activated_successfully');
+                $success = true;
+            }
+        } else {
+            $error = __('auth.activation_token_used');
+        }
+    } else {
+        // Load customers
+        $customers = load_json('storage/customers.json');
+        $found = false;
+        
+        // Find customer with this token
+        foreach ($customers as $id => &$customer) {
+            if (isset($customer['activation_token']) && $customer['activation_token'] === $token) {
+                $found = true;
+                
+                // Check if token is expired
+                if (isset($customer['activation_token_expires'])) {
+                    $expires = strtotime($customer['activation_token_expires']);
+                    if ($expires < time()) {
+                        $error = __('auth.activation_link_expired');
+                        break;
+                    }
+                }
+                
+                // Check if already activated
+                if (isset($customer['activated']) && $customer['activated'] === true) {
+                    $message = __('auth.already_activated');
+                    $success = true;
                     break;
                 }
-            }
-            
-            // Check if already activated
-            if (isset($customer['activated']) && $customer['activated'] === true) {
-                $message = __('auth.already_activated');
+                
+                // Activate the account
+                $customer['activated'] = true;
+                $customer['activated_at'] = date('Y-m-d H:i:s');
+                unset($customer['activation_token']);
+                unset($customer['activation_token_expires']);
+                
+                save_json('storage/customers.json', $customers);
+                
+                $message = __('auth.activated_successfully');
                 $success = true;
                 break;
             }
-            
-            // Activate the account
-            $customer['activated'] = true;
-            $customer['activated_at'] = date('Y-m-d H:i:s');
-            unset($customer['activation_token']);
-            unset($customer['activation_token_expires']);
-            
-            save_json('storage/customers.json', $customers);
-            
-            $message = __('auth.activated_successfully');
-            $success = true;
-            break;
         }
-    }
-    
-    // If not found, token has been used (deleted after successful activation) or is invalid
-    if (!$found) {
-        $error = __('auth.activation_token_used');
+        
+        // If not found, token has been used (deleted after successful activation) or is invalid
+        if (!$found) {
+            $error = __('auth.activation_token_used');
+        }
     }
 }
 ?>

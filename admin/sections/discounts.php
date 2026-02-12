@@ -3,7 +3,7 @@
  * Discounts & Coupon Codes Management Section
  */
 
-$discounts = load_json('storage/discounts.json');
+$discounts = get_discounts_data();
 $editDiscount = null;
 
 // Handle edit mode
