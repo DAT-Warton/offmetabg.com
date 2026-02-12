@@ -10,6 +10,9 @@ WORKDIR /app
 
 COPY . .
 
+# Make startup script executable
+RUN chmod +x start.sh
+
 EXPOSE 10000
 
-CMD ["php", "-S", "0.0.0.0:10000"]
+CMD ["./start.sh"]
