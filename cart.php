@@ -4,714 +4,314 @@
  */
 
 define('CMS_ROOT', __DIR__);
-require_once CMS_ROOT . '/includes/functions.php';
-require_once CMS_ROOT . '/includes/database.php';
-require_once CMS_ROOT . '/includes/language.php';
-require_once CMS_ROOT . '/includes/icons.php';
+require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/includes/database.php';
+require_once __DIR__ . '/includes/language.php';
+require_once __DIR__ . '/includes/icons.php';
+require_once __DIR__ . '/includes/email.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Initialize cart
-if (!isset($_SESSION['cart'])) {
+$message = '';
+$error = '';
+$show_success = false;
+$order = null;
+
+$is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user']);
+$current_user = $_SESSION['customer_user'] ?? $_SESSION['admin_user'] ?? '';
+
+function is_discount_usable($discount, $subtotal, $current_user) {
+    if (!$discount || !($discount['active'] ?? false)) {
+        return false;
+    }
+
+    $now = time();
+    if (!empty($discount['start_date']) && strtotime($discount['start_date']) > $now) {
+        return false;
+    }
+    if (!empty($discount['end_date']) && strtotime($discount['end_date']) < $now) {
+        return false;
+    }
+
+    if (!empty($discount['min_purchase']) && $subtotal < (float)$discount['min_purchase']) {
+        return false;
+    }
+
+    $maxUses = (int)($discount['max_uses'] ?? 0);
+    $usedCount = (int)($discount['used_count'] ?? 0);
+    if ($maxUses > 0 && $usedCount >= $maxUses) {
+        return false;
+    }
+
+    if (!empty($discount['first_purchase_only']) && $current_user !== '') {
+        $orders = load_json('storage/orders.json');
+        foreach ($orders as $order) {
+            $orderUser = $order['customer']['user'] ?? '';
+            if ($orderUser === $current_user) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
-// Initialize discount
-if (!isset($_SESSION['applied_discount'])) {
-    $_SESSION['applied_discount'] = null;
-}
+$cart = $_SESSION['cart'];
 
-// Check if showing success page
-$show_success = isset($_GET['action']) && $_GET['action'] === 'success' && isset($_SESSION['last_order_id']);
-
-if ($show_success) {
+// Handle order success display
+if (!empty($_GET['success']) && !empty($_SESSION['last_order_id'])) {
     $orders = load_json('storage/orders.json');
-    $order = $orders[$_SESSION['last_order_id']] ?? null;
+    $orderId = $_SESSION['last_order_id'];
+    if (isset($orders[$orderId])) {
+        $order = $orders[$orderId];
+        $show_success = true;
+    }
+    unset($_SESSION['last_order_id']);
 }
-
-$message = '';
-$products = load_json('storage/products.json');
 
 // Handle cart actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
-    
-    switch ($action) {
-        case 'add':
-            $product_id = $_POST['product_id'] ?? '';
-            if (isset($products[$product_id])) {
-                $found = false;
-                foreach ($_SESSION['cart'] as &$item) {
-                    if ($item['id'] === $product_id) {
-                        $item['quantity']++;
-                        $found = true;
-                        break;
-                    }
-                }
-                if (!$found) {
-                    $_SESSION['cart'][] = [
-                        'id' => $product_id,
-                        'name' => $products[$product_id]['name'],
-                        'price' => $products[$product_id]['price'],
-                        'quantity' => 1
-                    ];
-                }
-                $message = __('message.product_added');
+    $products = load_json('storage/products.json');
+
+    if ($action === 'add') {
+        $productId = sanitize($_POST['product_id'] ?? '');
+        $product = $products[$productId] ?? null;
+
+        if (!$product || ($product['status'] ?? 'published') !== 'published') {
+            $error = __('product.not_found') ?? 'Product not found.';
+        } else {
+            $stock = (int)($product['stock'] ?? 0);
+            $currentQty = (int)($cart[$productId]['quantity'] ?? 0);
+
+            if ($stock > 0 && $currentQty < $stock) {
+                $cart[$productId] = [
+                    'id' => $productId,
+                    'name' => $product['name'] ?? '',
+                    'price' => (float)($product['price'] ?? 0),
+                    'quantity' => $currentQty + 1
+                ];
+                $_SESSION['cart'] = $cart;
+                $message = __('cart_page.added_to_cart');
+            } else {
+                $error = __('product.out_of_stock') ?? 'Out of stock.';
             }
-            break;
-            
-        case 'update':
-            $product_id = $_POST['product_id'] ?? '';
-            $quantity = max(0, intval($_POST['quantity'] ?? 0));
-            
-            foreach ($_SESSION['cart'] as $key => &$item) {
-                if ($item['id'] === $product_id) {
-                    if ($quantity == 0) {
-                        unset($_SESSION['cart'][$key]);
-                    } else {
-                        $item['quantity'] = $quantity;
-                    }
-                    break;
-                }
+        }
+    }
+
+    if ($action === 'update') {
+        $productId = sanitize($_POST['product_id'] ?? '');
+        $quantity = max(0, (int)($_POST['quantity'] ?? 0));
+
+        if (isset($cart[$productId])) {
+            if ($quantity === 0) {
+                unset($cart[$productId]);
+            } else {
+                $cart[$productId]['quantity'] = $quantity;
             }
-            $_SESSION['cart'] = array_values($_SESSION['cart']);
-            $message = __('message.cart_updated');
-            break;
-            
-        case 'remove':
-            $product_id = $_POST['product_id'] ?? '';
-            foreach ($_SESSION['cart'] as $key => $item) {
-                if ($item['id'] === $product_id) {
-                    unset($_SESSION['cart'][$key]);
-                    break;
-                }
-            }
-            $_SESSION['cart'] = array_values($_SESSION['cart']);
-            $message = __('message.item_removed');
-            break;
-            
-        case 'apply_discount':
-            $discount_code = strtoupper(trim($_POST['discount_code'] ?? ''));
-            if (empty($discount_code)) {
-                $message = icon_x(16, '#ef4444') . ' Моля, въведете промокод!';
+            $_SESSION['cart'] = $cart;
+        }
+    }
+
+    if ($action === 'remove') {
+        $productId = sanitize($_POST['product_id'] ?? '');
+        if (isset($cart[$productId])) {
+            unset($cart[$productId]);
+            $_SESSION['cart'] = $cart;
+        }
+    }
+
+    if ($action === 'apply_discount') {
+        $code = strtoupper(trim($_POST['discount_code'] ?? ''));
+        $discounts = load_json('storage/discounts.json');
+        $discount = null;
+        foreach ($discounts as $disc) {
+            if (strtoupper($disc['code'] ?? '') === $code) {
+                $discount = $disc;
                 break;
             }
-            
-            $discounts = load_json('storage/discounts.json');
-            $found_discount = null;
-            
-            // Find discount by code
-            foreach ($discounts as $discount) {
-                if (strtoupper($discount['code']) === $discount_code) {
-                    $found_discount = $discount;
-                    break;
-                }
-            }
-            
-            if (!$found_discount) {
-                $message = icon_x(16, '#ef4444') . ' Невалиден промокод!';
-                break;
-            }
-            
-            // Validate discount
-            if (!$found_discount['active']) {
-                $message = icon_x(16, '#ef4444') . ' Този промокод вече не е активен!';
-                break;
-            }
-            
-            // Check dates
-            $now = time();
-            if (!empty($found_discount['start_date'])) {
-                $start = strtotime($found_discount['start_date']);
-                if ($now < $start) {
-                    $message = icon_x(16, '#ef4444') . ' Този промокод още не е активен!';
-                    break;
-                }
-            }
-            if (!empty($found_discount['end_date'])) {
-                $end = strtotime($found_discount['end_date']);
-                if ($now > $end) {
-                    $message = icon_x(16, '#ef4444') . ' Този промокод е изтекъл!';
-                    break;
-                }
-            }
-            
-            // Check minimum purchase
-            $subtotal = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $_SESSION['cart']));
-            if ($found_discount['min_purchase'] > 0 && $subtotal < $found_discount['min_purchase']) {
-                $message = icon_x(16, '#ef4444') . ' Минимална поръчка за този промокод: €' . number_format($found_discount['min_purchase'], 2);
-                break;
-            }
-            
-            // Check max uses
-            if ($found_discount['max_uses'] > 0 && $found_discount['used_count'] >= $found_discount['max_uses']) {
-                $message = icon_x(16, '#ef4444') . ' Този промокод е достигнал максималния брой използвания!';
-                break;
-            }
-            
-            // Check first purchase only (if user system is implemented)
-            if ($found_discount['first_purchase_only']) {
-                // TODO: Check if user has previous orders
-                // For now, allow it
-            }
-            
-            // Apply discount
-            $_SESSION['applied_discount'] = $found_discount;
-            $message = icon_check(16, '#27ae60') . ' Промокод приложен успешно: ' . $found_discount['code'];
-            break;
-            
-        case 'remove_discount':
-            $_SESSION['applied_discount'] = null;
-            $message = icon_check(16, '#27ae60') . ' Промокодът е премахнат!';
-            break;
-            
-        case 'checkout':
-            if (!isset($_SESSION['customer_user']) && !isset($_SESSION['admin_user'])) {
-                header('Location: ' . url('auth.php?action=login'));
-                exit;
-            }
-            
-            // Get shipping and payment details from POST
-            $first_name = sanitize($_POST['first_name'] ?? '');
-            $last_name = sanitize($_POST['last_name'] ?? '');
+        }
+
+        $currentSubtotal = 0;
+        foreach ($cart as $item) {
+            $currentSubtotal += ((float)$item['price']) * (int)$item['quantity'];
+        }
+
+        if (!is_discount_usable($discount, $currentSubtotal, $current_user)) {
+            $error = __('discount.invalid_code') ?? 'Invalid promo code.';
+        } else {
+            $_SESSION['applied_discount'] = $discount;
+        }
+    }
+
+    if ($action === 'remove_discount') {
+        unset($_SESSION['applied_discount']);
+    }
+
+    if ($action === 'checkout') {
+        if (!$is_logged_in) {
+            $error = __('cart_page.must_login');
+        } elseif (empty($cart)) {
+            $error = __('cart_page.empty');
+        } else {
+            $firstName = sanitize($_POST['first_name'] ?? '');
+            $lastName = sanitize($_POST['last_name'] ?? '');
             $phone = sanitize($_POST['phone'] ?? '');
             $email = sanitize($_POST['email'] ?? '');
             $address = sanitize($_POST['address'] ?? '');
             $city = sanitize($_POST['city'] ?? '');
-            $postal_code = sanitize($_POST['postal_code'] ?? '');
-            $courier = sanitize($_POST['courier'] ?? 'econt');
-            $payment_method = sanitize($_POST['payment_method'] ?? 'cod');
-            $receiver_name = sanitize($_POST['receiver_name'] ?? '');
-            $receiver_phone = sanitize($_POST['receiver_phone'] ?? '');
-            $delivery_notes = sanitize($_POST['delivery_notes'] ?? '');
-            
-            // Validate required fields
-            if (empty($first_name) || empty($last_name) || empty($phone) || empty($address) || empty($city)) {
-                $message = 'Please fill in all required fields!';
-                break;
-            }
-            
-            // Save order
-            $orders = load_json('storage/orders.json');
-            $order_id = uniqid('order_');
-            $orders[$order_id] = [
-                'id' => $order_id,
-                'customer' => [
-                    'user' => $_SESSION['customer_user'] ?? $_SESSION['admin_user'],
-                    'name' => $first_name . ' ' . $last_name,
-                    'email' => $email,
-                    'phone' => $phone
-                ],
-                'shipping' => [
-                    'first_name' => $first_name,
-                    'last_name' => $last_name,
-                    'address' => $address,
-                    'city' => $city,
-                    'postal_code' => $postal_code,
-                    'receiver_name' => $receiver_name ?: ($first_name . ' ' . $last_name),
-                    'receiver_phone' => $receiver_phone ?: $phone,
-                    'courier' => $courier,
-                    'delivery_notes' => $delivery_notes
-                ],
-                'payment' => [
-                    'method' => $payment_method,
-                    'cod' => ($payment_method === 'cod'),
-                    'status' => 'pending'
-                ],
-                'items' => $_SESSION['cart'],
-                'subtotal' => array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $_SESSION['cart'])),
-                'discount' => $_SESSION['applied_discount'] ?? null,
-                'discount_amount' => 0,
-                'total' => array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $_SESSION['cart'])),
-                'status' => 'pending',
-                'created' => date('Y-m-d H:i:s')
-            ];
-            // Calculate and apply discount
-            if (isset($_SESSION['applied_discount']) && $_SESSION['applied_discount']) {
-                $discount = $_SESSION['applied_discount'];
-                $discount_amount = 0;
-                
-                switch ($discount['type']) {
-                    case 'percentage':
-                        $discount_amount = $orders[$order_id]['subtotal'] * ($discount['value'] / 100);
-                        break;
-                    case 'fixed':
-                        $discount_amount = min($discount['value'], $orders[$order_id]['subtotal']);
-                        break;
-                    case 'free_shipping':
-                        // Shipping cost would be added here in real implementation
-                        $discount_amount = 0; // Placeholder
-                        break;
+            $postalCode = sanitize($_POST['postal_code'] ?? '');
+            $receiverName = sanitize($_POST['receiver_name'] ?? '');
+            $receiverPhone = sanitize($_POST['receiver_phone'] ?? '');
+            $courier = sanitize($_POST['courier'] ?? '');
+            $paymentMethod = sanitize($_POST['payment_method'] ?? '');
+            $deliveryNotes = sanitize($_POST['delivery_notes'] ?? '');
+
+            if ($firstName === '' || $lastName === '' || $phone === '' || $address === '' || $city === '' || $courier === '' || $paymentMethod === '') {
+                $error = __('auth.all_fields_required');
+            } else {
+                if ($receiverName === '') {
+                    $receiverName = $firstName . ' ' . $lastName;
                 }
-                
-                $orders[$order_id]['discount_amount'] = $discount_amount;
-                $orders[$order_id]['total'] -= $discount_amount;
-                
-                // Increment used count
-                $discounts = load_json('storage/discounts.json');
-                if (isset($discounts[$discount['id']])) {
-                    $discounts[$discount['id']]['used_count']++;
-                    save_json('storage/discounts.json', $discounts);
+                if ($receiverPhone === '') {
+                    $receiverPhone = $phone;
                 }
+
+                $items = array_values($cart);
+                $subtotal = 0;
+                foreach ($items as $item) {
+                    $subtotal += ((float)$item['price']) * (int)$item['quantity'];
+                }
+
+                $discountAmount = 0;
+                $discount = $_SESSION['applied_discount'] ?? null;
+                if (is_discount_usable($discount, $subtotal, $current_user)) {
+                    $type = $discount['type'] ?? 'percentage';
+                    $value = (float)($discount['value'] ?? 0);
+
+                    if ($type === 'percentage') {
+                        $discountAmount = $subtotal * ($value / 100);
+                    } elseif ($type === 'fixed') {
+                        $discountAmount = $value;
+                    } else {
+                        $discountAmount = 0;
+                    }
+
+                } else {
+                    $discount = null;
+                    $discountAmount = 0;
+                }
+
+                $total = max(0, $subtotal - $discountAmount);
+
+                $orderId = uniqid('order_');
+                $orders = load_json('storage/orders.json');
+
+                $orderData = [
+                    'id' => $orderId,
+                    'customer' => [
+                        'user' => $current_user,
+                        'name' => trim($firstName . ' ' . $lastName),
+                        'email' => $email,
+                        'phone' => $phone
+                    ],
+                    'shipping' => [
+                        'first_name' => $firstName,
+                        'last_name' => $lastName,
+                        'address' => $address,
+                        'city' => $city,
+                        'postal_code' => $postalCode,
+                        'receiver_name' => $receiverName,
+                        'receiver_phone' => $receiverPhone,
+                        'courier' => $courier,
+                        'delivery_notes' => $deliveryNotes
+                    ],
+                    'payment' => [
+                        'method' => $paymentMethod,
+                        'cod' => $paymentMethod === 'cod',
+                        'status' => 'pending'
+                    ],
+                    'items' => $items,
+                    'total' => $total,
+                    'status' => 'pending',
+                    'created' => date('Y-m-d H:i:s')
+                ];
+
+                $orders[$orderId] = $orderData;
+                save_json('storage/orders.json', $orders);
+
+                if ($discount) {
+                    $discounts = load_json('storage/discounts.json');
+                    foreach ($discounts as $id => $disc) {
+                        if (($disc['id'] ?? '') === ($discount['id'] ?? '')) {
+                            $discounts[$id]['used_count'] = (int)($disc['used_count'] ?? 0) + 1;
+                            save_json('storage/discounts.json', $discounts);
+                            break;
+                        }
+                    }
+                }
+
+                $_SESSION['cart'] = [];
+                unset($_SESSION['applied_discount']);
+
+                if (!empty($email)) {
+                    try {
+                        $emailSender = get_email_sender();
+                        $emailSender->sendOrderConfirmationEmail($email, $firstName, $orderData, current_lang());
+                    } catch (Exception $e) {
+                        error_log('Order email failed: ' . $e->getMessage());
+                    }
+                }
+
+                $_SESSION['last_order_id'] = $orderId;
+                header('Location: cart.php?success=1');
+                exit;
             }
-            
-            save_json('storage/orders.json', $orders);
-            
-            // Clear applied discount
-            $_SESSION['applied_discount'] = null;
-            
-            // Send order confirmation email (if email system is configured)
-            try {
-                require_once CMS_ROOT . '/includes/email.php';
-                require_once CMS_ROOT . '/config/email-config.php';
-                
-                $emailSender = new MailerSend\EmailSender(MAILERSEND_API_KEY);
-                $emailSender->sendOrderConfirmationEmail(
-                    $email,
-                    $first_name . ' ' . $last_name,
-                    $orders[$order_id],
-                    current_lang()
-                );
-            } catch (Exception $e) {
-                // Email sending failed, but order is saved
-            }
-            
-            $_SESSION['cart'] = [];
-            $_SESSION['last_order_id'] = $order_id;
-            header('Location: cart.php?action=success');
-            exit;
-            break;
+        }
     }
 }
 
 // Calculate totals
-$subtotal = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $_SESSION['cart']));
-$cart_count = array_sum(array_column($_SESSION['cart'], 'quantity'));
-
-// Calculate discount
-$discount_amount = 0;
-if (isset($_SESSION['applied_discount']) && $_SESSION['applied_discount']) {
-    $discount = $_SESSION['applied_discount'];
-    switch ($discount['type']) {
-        case 'percentage':
-            $discount_amount = $subtotal * ($discount['value'] / 100);
-            break;
-        case 'fixed':
-            $discount_amount = min($discount['value'], $subtotal);
-            break;
-        case 'free_shipping':
-            $discount_amount = 0; // Would affect shipping cost
-            break;
-    }
+$cart = $_SESSION['cart'] ?? [];
+$cart_count = array_sum(array_column($cart, 'quantity'));
+$subtotal = 0;
+foreach ($cart as $item) {
+    $subtotal += ((float)$item['price']) * (int)$item['quantity'];
 }
 
-$total = $subtotal - $discount_amount;
+$discount_amount = 0;
+$applied_discount = $_SESSION['applied_discount'] ?? null;
+if (is_discount_usable($applied_discount, $subtotal, $current_user)) {
+    $type = $applied_discount['type'] ?? 'percentage';
+    $value = (float)($applied_discount['value'] ?? 0);
+    if ($type === 'percentage') {
+        $discount_amount = $subtotal * ($value / 100);
+    } elseif ($type === 'fixed') {
+        $discount_amount = $value;
+    }
+} else {
+    unset($_SESSION['applied_discount']);
+}
 
-$is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user']);
+$total = max(0, $subtotal - $discount_amount);
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo current_lang(); ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo __('cart_page.title'); ?></title>
-    <link rel="stylesheet" href="assets/css/dark-theme.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg-primary, #f9fafb);
-            color: var(--text-primary, #1f2937);
-        }
-        header {
-            background: var(--bg-secondary, white);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 20px 0;
-        }
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo h1 {
-            font-size: 28px;
-            color: var(--primary, #3498db);
-        }
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        .btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-secondary {
-            background: var(--bg-secondary, #f5f5f5);
-            color: var(--text-primary, #333);
-            border: 2px solid var(--border-color, #e0e0e0);
-        }
-        .btn-secondary:hover {
-            border-color: var(--primary, #3498db);
-            color: var(--primary, #3498db);
-        }
-        .theme-toggle,
-        .lang-toggle {
-            background: var(--bg-secondary, white);
-            color: var(--primary, #3498db);
-            border: 2px solid var(--primary, #3498db);
-            padding: 8px 12px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .theme-toggle:hover,
-        .lang-toggle:hover {
-            background: var(--primary, #3498db);
-            color: white;
-            transform: scale(1.05);
-        }
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-        .message {
-            background: var(--success-bg, #d4edda);
-            border: 1px solid var(--success-border, #c3e6cb);
-            color: var(--success-text, #155724);
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-        }
-        .cart-items {
-            background: var(--bg-secondary, white);
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-        h2 {
-            color: var(--text-primary, #1f2937);
-            margin-bottom: 20px;
-        }
-        h3 {
-            color: var(--text-primary, #374151);
-            margin: 25px 0 15px;
-            font-size: 16px;
-        }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border-color, #e5e7eb);
-        }
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-        .item-info {
-            flex: 1;
-        }
-        .item-name {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        .item-price {
-            color: var(--primary, #3498db);
-            font-weight: 600;
-        }
-        .item-actions {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        .quantity-input {
-            width: 80px;
-            padding: 8px;
-            border: 1px solid var(--border-color, #d1d5db);
-            border-radius: 6px;
-            text-align: center;
-            background: var(--bg-secondary, white);
-            color: var(--text-primary, #333);
-        }
-        .btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        .btn-update {
-            background: var(--primary, #3498db);
-            color: white;
-        }
-        .btn-update:hover {
-            background: var(--primary-dark, #5568d3);
-        }
-        .btn-remove {
-            background: var(--danger, #ef4444);
-            color: white;
-        }
-        .btn-remove:hover {
-            background: var(--danger-dark, #dc2626);
-        }
-        .cart-summary {
-            background: var(--bg-secondary, white);
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        .summary-row.discount {
-            color: var(--success, #27ae60);
-            font-weight: 600;
-        }
-        .summary-total {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary, #3498db);
-            border-top: 2px solid var(--border-color, #e5e7eb);
-            padding-top: 15px;
-            margin-top: 15px;
-        }
-        .btn-checkout {
-            width: 100%;
-            padding: 15px;
-            background: var(--success, #27ae60);
-            color: white;
-            font-size: 18px;
-            margin-top: 20px;
-        }
-        .btn-checkout:hover {
-            background: var(--success-dark, #059669);
-        }
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: var(--bg-secondary, white);
-            color: var(--text-primary, #333);
-            text-decoration: none;
-            border: 2px solid var(--border-color, #e0e0e0);
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .btn-back:hover {
-            background: var(--bg-primary, #f5f5f5);
-            border-color: var(--primary, #3498db);
-            color: var(--primary, #3498db);
-            transform: translateY(-2px);
-        }
-        .btn-continue-shopping {\n            display: inline-block;\n            padding: 15px 30px;\n            text-decoration: none;\n            border-radius: 8px;\n            background: var(--primary, #3498db);\n            color: white;\n            font-weight: 600;\n            transition: all 0.3s ease;\n        }\n        .btn-continue-shopping:hover {\n            background: var(--primary-dark, #5568d3);\n            transform: translateY(-2px);\n            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);\n        }\n        .empty-cart {
-            text-align: center;
-            padding: 60px 20px;
-            background: var(--bg-secondary, white);
-            border-radius: 12px;
-        }
-        .empty-cart h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: var(--text-secondary, #6b7280);
-        }
-        
-        /* Promo Code */
-        .promo-code-box {
-            background: var(--bg-primary, #f9fafb);
-            border: 2px dashed var(--border-color, #d1d5db);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .promo-code-applied {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--success-bg, #d1fae5);
-            border: 1px solid var(--success, #27ae60);
-            padding: 12px 15px;
-            border-radius: 6px;
-        }
-        .promo-code-applied strong {
-            font-weight: 700;
-            color: var(--success-dark, #065f46);
-            font-size: 15px;
-        }
-        .promo-code-applied p {
-            margin: 5px 0 0 0;
-            font-size: 13px;
-            color: var(--success, #059669);
-        }
-        .promo-code-form {
-            display: flex;
-            gap: 10px;
-        }
-        .promo-code-form input {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid var(--border-color, #d1d5db);
-            border-radius: 6px;
-            text-transform: uppercase;
-            font-weight: 600;
-            background: var(--bg-secondary, white);
-            color: var(--text-primary, #333);
-        }
-        .btn-apply-promo {
-            background: var(--success, #27ae60);
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .btn-remove-promo {
-            background: transparent;
-            border: none;
-            color: var(--danger, #dc2626);
-            cursor: pointer;
-            font-size: 20px;
-            padding: 5px;
-        }
-        
-        /* Order Success */
-        .order-success {
-            text-align: center;
-            padding: 50px 30px;
-        }
-        .order-success h2 {
-            color: var(--success, #27ae60);
-            margin-bottom: 15px;
-        }
-        .order-success p {
-            font-size: 18px;
-            color: var(--text-secondary, #6b7280);
-            margin-bottom: 30px;
-        }
-        .order-success strong {
-            color: var(--primary, #3498db);
-        }
-        .order-details-box {
-            background: var(--bg-primary, #f9fafb);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 30px 0;
-            text-align: left;
-        }
-        .order-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .order-grid p {
-            color: var(--text-secondary, #6b7280);
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        .order-grid strong {
-            font-weight: 600;
-            color: var(--text-primary, #1f2937);
-        }
-        .order-divider {
-            border-top: 1px solid var(--border-color, #e5e7eb);
-            padding-top: 15px;
-            margin-top: 15px;
-        }
-        .order-divider p strong.total-amount {\n            color: var(--primary, #3498db);\n            font-size: 18px;\n        }\n        .info-box {
-            background: var(--warning-bg, #fef3c7);
-            border: 1px solid var(--warning, #fbbf24);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 25px 0;
-            text-align: left;
-        }
-        .info-box p {
-            color: var(--warning-dark, #92400e);
-            font-size: 14px;
-        }
-        .info-box strong {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        /* Checkout Form */
-        .checkout-section {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid var(--border-color, #e5e7eb);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        .form-grid-2-1 {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        .form-label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: var(--text-primary, #374151);
-        }
-        .form-input,
-        .form-select,
-        .form-textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color, #d1d5db);
-            border-radius: 6px;
-            background: var(--bg-secondary, white);
-            color: var(--text-primary, #333);
-            font-family: inherit;
-        }
-        .form-hint {
-            margin-top: 5px;
-            font-size: 13px;
-            color: var(--text-secondary, #6b7280);
-        }
-        .form-terms {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 13px;
-            color: var(--text-secondary, #6b7280);
-        }
-        .form-terms a {
-            color: var(--primary, #3498db);
-        }
-    </style>
+    <title><?php echo __('cart_page.title'); ?> - <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></title>
+    <link rel="stylesheet" href="assets/css/dark-theme.css" id="dark-theme-style" disabled>
+    <link rel="stylesheet" href="assets/css/cart.css">
 </head>
 <body>
-    <?php if ($show_success && $order): ?>
+<?php if ($show_success && $order): ?>
         <!-- Order Success Page -->
         <header>
             <div class="header-container">

@@ -1,0 +1,167 @@
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.stat-card {
+    background: var(--bg-secondary, white);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--shadow, rgba(0,0,0,0.1));
+    border-left: 4px solid #3498db;
+    transition: transform 0.2s;
+}
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow, rgba(0,0,0,0.15));
+}
+.stat-card h3 {
+    color: var(--text-secondary, #6b7280);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+.stat-card .number {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--text-primary, #1f2937);
+    margin-bottom: 5px;
+}
+.stat-card .subtitle {
+    color: var(--text-secondary, #9ca3af);
+    font-size: 14px;
+}
+.stat-card.revenue {
+    border-left-color: #27ae60;
+}
+.stat-card.orders {
+    border-left-color: #3b82f6;
+}
+.stat-card.customers {
+    border-left-color: #f59e0b;
+}
+.stat-card.profit {
+    border-left-color: #8b5cf6;
+}
+.stat-card.expenses {
+    border-left-color: #ef4444;
+}
+.stat-card.taxes {
+    border-left-color: #ec4899;
+}
+.stat-card.traffic {
+    border-left-color: #06b6d4;
+}
+.dashboard-section {
+    background: var(--bg-secondary, white);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--shadow, rgba(0,0,0,0.1));
+    margin-bottom: 25px;
+}
+.dashboard-section h2 {
+    color: var(--text-primary, #1f2937);
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-color, #e5e7eb);
+    padding-bottom: 10px;
+}
+.sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+.source-item {
+    padding: 15px;
+    background: var(--bg-primary, #f9fafb);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 8px;
+    text-align: center;
+}
+.source-item .source-name {
+    font-weight: 600;
+    color: var(--text-secondary, #6b7280);
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+.source-item .source-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3498db;
+}
+.recent-orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.recent-orders-table th {
+    background: var(--bg-primary, #f9fafb);
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-secondary, #6b7280);
+    border-bottom: 2px solid var(--border-color, #e5e7eb);
+}
+.recent-orders-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+    color: var(--text-primary, #1f2937);
+}
+.recent-orders-table tr:hover {
+    background: var(--bg-primary, #f9fafb);
+}
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.badge-pending { background: #fef3c7; color: #92400e; }
+.badge-confirmed { background: #dbeafe; color: #1e40af; }
+.badge-processing { background: #e0e7ff; color: #3730a3; }
+.badge-shipped { background: #d1fae5; color: #065f46; }
+.badge-delivered { background: #d1fae5; color: #065f46; }
+.badge-cancelled { background: #fee2e2; color: #991b1b; }
+.top-products-list {
+    list-style: none;
+    padding: 0;
+}
+.top-products-list li {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.top-products-list li:last-child {
+    border-bottom: none;
+}
+.product-name {
+    font-weight: 600;
+    color: var(--text-primary, #1f2937);
+}
+.product-stats {
+    text-align: right;
+    color: var(--text-secondary, #6b7280);
+    font-size: 14px;
+}
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+.quick-action-btn {
+    display: block;
+    padding: 15px;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+.quick-action-btn:hover {
+    transform: translateY(-2px);
+}

@@ -135,43 +135,7 @@ header('HTTP/1.1 404 Not Found');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Not Found - <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            text-align: center;
-            color: white;
-        }
-        h1 {
-            font-size: 72px;
-            margin-bottom: 20px;
-        }
-        p {
-            font-size: 24px;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-        a {
-            display: inline-block;
-            background: white;
-            color: #3498db;
-            padding: 12px 30px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s;
-        }
-        a:hover {
-            transform: scale(1.05);
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/404.css">
 </head>
 <body>
     <div class="container">

@@ -1,0 +1,9 @@
+# Runtime data
+storage/
+uploads/
+logs/
+cache/
+
+# OS files
+.DS_Store
+Thumbs.db
