@@ -8,7 +8,7 @@ require_once __DIR__ . '/../includes/language.php';
 require_once __DIR__ . '/../includes/icons.php';
 
 // Get products
-$products = load_json('storage/products.json');
+$products = get_products_data();
 $published_products = array_filter($products, function($p) {
     return ($p['status'] ?? 'published') === 'published';
 });
@@ -31,20 +31,33 @@ $cart = $_SESSION['cart'] ?? [];
 $cart_count = array_sum(array_column($cart, 'quantity'));
 
 // Get categories
-$categories = load_json('storage/categories.json');
+$categories = get_categories_data();
 $activeCategories = array_filter($categories, function($cat) {
     return $cat['active'] ?? true;
 });
 usort($activeCategories, function($a, $b) {
     return ($a['order'] ?? 0) <=> ($b['order'] ?? 0);
 });
+
+$site_title = htmlspecialchars(get_option('site_title', __('site_name')));
+$site_description = htmlspecialchars(get_option('site_description', __('homepage.meta_description')));
+$categoryLabelBySlug = [];
+foreach ($categories as $category) {
+    $slug = strtolower(trim($category['slug'] ?? ''));
+    if ($slug !== '') {
+        $categoryLabelBySlug[$slug] = $category['name'] ?? $slug;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo current_lang(); ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars(get_option('site_title', __('site_name'))); ?></title>
+    <title><?php echo $site_title; ?></title>
+    <meta name="description" content="<?php echo $site_description; ?>">
+    <meta property="og:title" content="<?php echo $site_title; ?>">
+    <meta property="og:description" content="<?php echo $site_description; ?>">
     <link rel="stylesheet" href="assets/css/home.css">
 </head>
 <body>
@@ -54,27 +67,27 @@ usort($activeCategories, function($a, $b) {
                 <h1><?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></h1>
             </div>
             <div class="nav-buttons">
-                <button type="button" id="themeToggle" class="theme-toggle" title="<?php echo __('theme.switch'); ?>">
+                <button type="button" id="themeToggle" class="theme-toggle" title="<?php echo __('theme.switch'); ?>" aria-label="<?php echo __('theme.switch'); ?>">
                     🌙
                 </button>
-                <a href="?lang=<?php echo opposite_lang(); ?>" class="lang-toggle" title="Switch Language">
+                <a href="?lang=<?php echo opposite_lang(); ?>" class="lang-toggle" title="Switch Language" aria-label="Switch Language">
                     <?php echo strtoupper(opposite_lang()); ?>
                 </a>
                 <?php if ($is_logged_in): ?>
                     <span class="user-info"><?php echo htmlspecialchars($user_name); ?></span>
                     <?php if ($user_role === 'admin'): ?>
-                        <a href="admin/index.php" class="btn btn-primary">Админ</a>
+                        <a href="admin/index.php" class="btn btn-primary"><?php echo __('admin_panel'); ?></a>
                     <?php endif; ?>
                     <a href="cart.php" class="btn btn-cart">
-                        Количка
+                        <?php echo __('cart_button'); ?>
                         <?php if ($cart_count > 0): ?>
                             <span class="cart-badge"><?php echo $cart_count; ?></span>
                         <?php endif; ?>
                     </a>
                 <?php else: ?>
-                    <a href="auth.php?action=login" class="btn btn-primary">Вход</a>
+                    <a href="auth.php?action=login" class="btn btn-primary"><?php echo __('login'); ?></a>
                     <a href="cart.php" class="btn btn-cart">
-                        Количка
+                        <?php echo __('cart_button'); ?>
                         <?php if ($cart_count > 0): ?>
                             <span class="cart-badge"><?php echo $cart_count; ?></span>
                         <?php endif; ?>
@@ -85,19 +98,30 @@ usort($activeCategories, function($a, $b) {
     </header>
 
     <div class="hero">
-        <h2>Добре дошли в <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>!</h2>
-        <p>Открийте нашата уникална колекция от ръчно изработени продукти</p>
+        <div class="hero-inner">
+            <p class="hero-kicker"><?php echo __('homepage.hero_kicker'); ?></p>
+            <h2><?php echo __('homepage.hero_title'); ?> <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>!</h2>
+            <p class="hero-subtitle"><?php echo __('homepage.hero_subtitle'); ?></p>
+            <div class="hero-actions">
+                <a class="btn btn-primary hero-cta" href="#products"><?php echo __('homepage.hero_cta_products'); ?></a>
+                <a class="btn btn-secondary hero-cta" href="#categories"><?php echo __('homepage.hero_cta_categories'); ?></a>
+            </div>
+            <p class="hero-meta"><?php echo __('homepage.hero_meta'); ?></p>
+        </div>
     </div>
 
     <?php if (!empty($activeCategories)): ?>
-    <section class="categories-section">
+    <section class="categories-section" id="categories">
         <div class="container">
-            <h2 class="section-title">Категории</h2>
+            <h2 class="section-title"><?php echo __('categories'); ?></h2>
             <div class="categories-grid">
                 <?php foreach ($activeCategories as $category): 
                     // Get the latest product from this category (from all products, not just the 6 shown)
                     $categoryProducts = array_filter($products, function($product) use ($category) {
-                        return ($product['category'] ?? '') === $category['slug'] && 
+                        $productCategory = strtolower(trim($product['category'] ?? ''));
+                        $categorySlug = strtolower(trim($category['slug'] ?? ''));
+                        $categoryName = strtolower(trim($category['name'] ?? ''));
+                        return in_array($productCategory, [$categorySlug, $categoryName], true) &&
                                ($product['status'] ?? 'published') === 'published';
                     });
                     
@@ -129,36 +153,41 @@ usort($activeCategories, function($a, $b) {
     </section>
     <?php endif; ?>
 
-    <section class="products-section">
+    <section class="products-section" id="products">
         <div class="container">
-            <h2 class="section-title">Нови Продукти</h2>
+            <h2 class="section-title"><?php echo __('homepage.new_products'); ?></h2>
             
             <?php if (empty($published_products)): ?>
                 <div class="empty-state">
-                    <h3>Все още няма продукти</h3>
-                    <p>Скоро ще добавим красиви изделия!</p>
+                    <h3><?php echo __('homepage.no_products_title'); ?></h3>
+                    <p><?php echo __('homepage.no_products_text'); ?></p>
                 </div>
             <?php else: ?>
                 <div class="products-grid">
                     <?php foreach ($published_products as $product): 
                         $stock = $product['stock'] ?? 0;
                         $price_eur = $product['price'] ?? 0;
+                        $productCategoryRaw = (string)($product['category'] ?? '');
+                        $productCategoryKey = strtolower(trim($productCategoryRaw));
+                        $productCategoryLabel = $categoryLabelBySlug[$productCategoryKey] ?? $productCategoryRaw;
                     ?>
                         <div class="product-card">
                             <div class="product-image">
                                 <?php if (!empty($product['image'])): ?>
                                     <img src="<?php echo htmlspecialchars($product['image']); ?>" 
-                                         alt="<?php echo htmlspecialchars($product['name']); ?>">
+                                         alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                         loading="lazy"
+                                         decoding="async">
                                 <?php else: ?>
                                     <div style="font-size: 80px; color: #c4b5d5;"></div>
                                 <?php endif; ?>
-                                <?php if (!empty($product['category'])): ?>
-                                    <span class="product-badge"><?php echo htmlspecialchars($product['category']); ?></span>
+                                <?php if (!empty($productCategoryLabel)): ?>
+                                    <span class="product-badge"><?php echo htmlspecialchars($productCategoryLabel); ?></span>
                                 <?php endif; ?>
                             </div>
                             <div class="product-info">
-                                <?php if (!empty($product['category'])): ?>
-                                    <span class="product-category"><?php echo htmlspecialchars($product['category']); ?></span>
+                                <?php if (!empty($productCategoryLabel)): ?>
+                                    <span class="product-category"><?php echo htmlspecialchars($productCategoryLabel); ?></span>
                                 <?php endif; ?>
                                 <h3 class="product-title"><?php echo htmlspecialchars($product['name']); ?></h3>
                                 <p class="product-description">

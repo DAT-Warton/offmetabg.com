@@ -4,9 +4,9 @@
  * Supports visual (banners/popups) and sales promotions (bundles/discounts)
  */
 
-$promotions = load_json('storage/promotions.json');
-$products = load_json('storage/products.json');
-$categories = load_json('storage/categories.json');
+$promotions = get_promotions_data();
+$products = get_products_data();
+$categories = get_categories_data();
 $editPromotion = null;
 
 // Handle edit mode

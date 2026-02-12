@@ -1,104 +1,69 @@
 // Theme and Language Switcher for OffMeta E-Commerce
 // Handles dark/light theme toggle and language switching
 
-console.log('Theme.js loaded');
-
-// Initialize theme on page load
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing theme');
     initTheme();
     initThemeToggle();
+    initSmoothScroll();
 });
 
-// Initialize theme from localStorage
 function initTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
-    console.log('Initializing theme:', savedTheme);
     applyTheme(savedTheme);
 }
 
-// Apply theme to document
 function applyTheme(theme) {
-    console.log('Applying theme:', theme);
     const root = document.documentElement;
     const body = document.body;
-    
+
     root.setAttribute('data-theme', theme);
     body.setAttribute('data-theme', theme);
-    
-    console.log('Theme attributes set. Root:', root.getAttribute('data-theme'), 'Body:', body.getAttribute('data-theme'));
-    
-    // Update theme toggle button icon
     updateThemeIcon(theme);
-    
-    // Save to localStorage
     localStorage.setItem('theme', theme);
 }
 
-// Toggle between light and dark theme
 function toggleTheme() {
-    console.log('Toggle theme clicked');
     const currentTheme = document.body.getAttribute('data-theme') || 'light';
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    
-    console.log('Current theme:', currentTheme, '-> New theme:', newTheme);
-    
+
     applyTheme(newTheme);
-    
-    // Add animation effect
     document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
 }
 
-// Update theme toggle button icon
 function updateThemeIcon(theme) {
-    console.log('Updating theme icon to:', theme);
     const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-        console.log('Theme toggle button found');
-        if (theme === 'dark') {
-            // Sun emoji for switching to light
-            themeToggle.innerHTML = '☀️';
-            themeToggle.title = 'Switch to Light Theme';
-        } else {
-            // Moon emoji for switching to dark
-            themeToggle.innerHTML = '🌙';
-            themeToggle.title = 'Switch to Dark Theme';
-        }
+    if (!themeToggle) {
+        return;
+    }
+
+    if (theme === 'dark') {
+        themeToggle.innerHTML = '☀️';
+        themeToggle.title = 'Switch to Light Theme';
     } else {
-        console.error('Theme toggle button NOT found!');
+        themeToggle.innerHTML = '🌙';
+        themeToggle.title = 'Switch to Dark Theme';
     }
 }
 
-// Initialize theme toggle button
 function initThemeToggle() {
-    console.log('Initializing theme toggle button');
     const themeToggle = document.getElementById('themeToggle');
     if (themeToggle) {
-        console.log('Adding click listener to theme toggle');
-        themeToggle.addEventListener('click', function(e) {
-            console.log('Theme button clicked!', e);
-            toggleTheme();
-        });
-    } else {
-        console.error('Theme toggle button NOT found during initialization!');
+        themeToggle.addEventListener('click', toggleTheme);
     }
 }
 
-// Get current theme
 function getCurrentTheme() {
     return document.body.getAttribute('data-theme') || 'light';
 }
 
-// Language switcher (handled via PHP GET parameter)
 function switchLanguage(lang) {
     const currentUrl = window.location.href.split('?')[0];
     window.location.href = currentUrl + '?lang=' + lang;
 }
 
-// Smooth scroll for anchor links
-document.addEventListener('DOMContentLoaded', function() {
+function initSmoothScroll() {
     const anchorLinks = document.querySelectorAll('a[href^="#"]');
-    
+
     anchorLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             const target = document.querySelector(this.getAttribute('href'));
@@ -111,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-});
+}
 
 // Add to cart animation
 function addToCartAnimation(button) {

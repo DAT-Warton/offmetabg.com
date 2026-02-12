@@ -40,6 +40,20 @@ $translations = [
     'continue' => 'Continue',
     'finish' => 'Finish',
     'back_to_website' => 'Back to Website',
+
+    // Homepage
+    'homepage' => [
+        'meta_description' => 'Handcrafted products and unique collections.',
+        'hero_kicker' => 'Handcrafted series',
+        'hero_title' => 'Welcome to',
+        'hero_subtitle' => 'Discover our unique collection of handmade products',
+        'hero_cta_products' => 'Browse products',
+        'hero_cta_categories' => 'Categories',
+        'hero_meta' => 'Limited series • Fast shipping from Bulgaria',
+        'new_products' => 'New Products',
+        'no_products_title' => 'No products yet',
+        'no_products_text' => 'We will add beautiful items soon!',
+    ],
     
     // Navigation
     'cart_button' => 'Cart',

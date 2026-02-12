@@ -97,13 +97,14 @@ if (strpos($path, 'blog/') === 0) {
 
 // Category page - products by category
 if (strpos($path, 'category/') === 0) {
-    $categorySlug = substr($path, 9);
-    $categories = load_json('storage/categories.json');
+    $categorySlug = strtolower(substr($path, 9));
+    $categories = get_categories_data();
     
     // Find category by slug
     $category = null;
     foreach ($categories as $cat) {
-        if ($cat['slug'] === $categorySlug && ($cat['active'] ?? true)) {
+        $catSlug = strtolower($cat['slug'] ?? '');
+        if ($catSlug === $categorySlug && ($cat['active'] ?? true)) {
             $category = $cat;
             break;
         }

@@ -96,7 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
 
         case 'save_product':
-            $products = load_json('storage/products.json');
             $product_id = $_POST['product_id'] ?: uniqid('prod_');
             
             // Handle image upload
@@ -120,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             
-            $products[$product_id] = [
+            save_product_data([
                 'id' => $product_id,
                 'name' => sanitize($_POST['name']),
                 'description' => sanitize($_POST['description']),
@@ -134,78 +133,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'tiktok' => sanitize($_POST['video_tiktok'] ?? ''),
                     'instagram' => sanitize($_POST['video_instagram'] ?? ''),
                 ],
-                'created' => $products[$product_id]['created'] ?? date('Y-m-d H:i:s'),
-                'updated' => date('Y-m-d H:i:s'),
-            ];
-            save_json('storage/products.json', $products);
-            
-            // Update category product counts
-            update_category_product_counts();
+            ]);
             
             $message = __('admin.product_saved');
             break;
 
         case 'delete_product':
-            $products = load_json('storage/products.json');
             $product_id = $_POST['product_id'] ?? '';
-            unset($products[$product_id]);
-            save_json('storage/products.json', $products);
-            
-            // Update category product counts
-            update_category_product_counts();
+            delete_product_data($product_id);
             
             $message = __('admin.product_deleted');
             break;
 
         case 'save_customer':
-            $customers = load_json('storage/customers.json');
             $customer_id = $_POST['customer_id'] ?: uniqid('cust_');
-            $customers[$customer_id] = [
+            $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : '';
+            save_customer_data([
                 'id' => $customer_id,
                 'username' => sanitize($_POST['username']),
                 'email' => sanitize($_POST['email']),
-                'password' => !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : ($customers[$customer_id]['password'] ?? ''),
+                'password' => $password,
                 'role' => sanitize($_POST['role'] ?? 'customer'),
                 'permissions' => $_POST['permissions'] ?? ['view_products', 'place_orders'],
-                'created' => $customers[$customer_id]['created'] ?? date('Y-m-d H:i:s'),
-                'updated' => date('Y-m-d H:i:s'),
-            ];
-            save_json('storage/customers.json', $customers);
+            ]);
             $message = __('admin.customer_saved');
             break;
 
         case 'delete_customer':
-            $customers = load_json('storage/customers.json');
             $customer_id = $_POST['customer_id'] ?? '';
-            unset($customers[$customer_id]);
-            save_json('storage/customers.json', $customers);
+            delete_customer_data($customer_id);
             $message = __('admin.customer_deleted');
             break;
 
         case 'update_order_status':
-            $orders = load_json('storage/orders.json');
             $order_id = $_POST['order_id'] ?? '';
-            if (isset($orders[$order_id])) {
-                $orders[$order_id]['status'] = $_POST['status'];
-                $orders[$order_id]['updated'] = date('Y-m-d H:i:s');
-                save_json('storage/orders.json', $orders);
-                $message = __('admin.order_status_updated');
-            }
+            update_order_status_data($order_id, $_POST['status'] ?? 'pending');
+            $message = __('admin.order_status_updated');
             break;
 
         case 'delete_order':
-            $orders = load_json('storage/orders.json');
             $order_id = $_POST['order_id'] ?? '';
-            unset($orders[$order_id]);
-            save_json('storage/orders.json', $orders);
+            delete_order_data($order_id);
             $message = __('admin.order_deleted');
             break;
 
         // Categories Management
         case 'save_category':
-            $categories = load_json('storage/categories.json');
             $category_id = $_POST['category_id'] ?: uniqid('cat_');
-            $categories[$category_id] = [
+            save_category_data([
                 'id' => $category_id,
                 'name' => sanitize($_POST['name']),
                 'slug' => sanitize($_POST['slug']),
@@ -214,33 +189,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'icon' => sanitize($_POST['icon'] ?? ''),
                 'order' => intval($_POST['order'] ?? 0),
                 'active' => isset($_POST['active']),
-                'product_count' => $categories[$category_id]['product_count'] ?? 0,
-                'created' => $categories[$category_id]['created'] ?? date('Y-m-d H:i:s'),
-                'updated' => date('Y-m-d H:i:s'),
-            ];
-            save_json('storage/categories.json', $categories);
-            
-            // Update product counts for all categories
-            update_category_product_counts();
+            ]);
             
             $message = 'Категорията е запазена успешно';
             break;
 
         case 'delete_category':
-            $categories = load_json('storage/categories.json');
             $category_id = $_POST['category_id'] ?? '';
-            unset($categories[$category_id]);
-            save_json('storage/categories.json', $categories);
-            
-            // Update product counts for remaining categories
-            update_category_product_counts();
+            delete_category_data($category_id);
             
             $message = 'Категорията е изтрита';
             break;
 
         // Promotions Management
         case 'save_promotion':
-            $promotions = load_json('storage/promotions.json');
             $promotion_id = $_POST['promotion_id'] ?: uniqid('promo_');
             
             // Base fields
@@ -253,7 +215,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'end_date' => sanitize($_POST['end_date'] ?? ''),
                 'order' => intval($_POST['order'] ?? 0),
                 'active' => isset($_POST['active']),
-                'created' => $promotions[$promotion_id]['created'] ?? date('Y-m-d H:i:s'),
                 'updated' => date('Y-m-d H:i:s'),
             ];
             
@@ -286,24 +247,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             
-            $promotions[$promotion_id] = $promotion;
-            save_json('storage/promotions.json', $promotions);
+            save_promotion_data($promotion);
             $message = 'Промоцията е запазена успешно';
             break;
 
         case 'delete_promotion':
-            $promotions = load_json('storage/promotions.json');
             $promotion_id = $_POST['promotion_id'] ?? '';
-            unset($promotions[$promotion_id]);
-            save_json('storage/promotions.json', $promotions);
+            delete_promotion_data($promotion_id);
             $message = 'Промоцията е изтрита';
             break;
 
         // Discounts Management
         case 'save_discount':
-            $discounts = load_json('storage/discounts.json');
+            $discounts = get_discounts_data();
             $discount_id = $_POST['discount_id'] ?: uniqid('disc_');
-            $discounts[$discount_id] = [
+            $existing = $discounts[$discount_id] ?? [];
+            save_discount_data([
                 'id' => $discount_id,
                 'code' => strtoupper(sanitize($_POST['code'])),
                 'description' => sanitize($_POST['description'] ?? ''),
@@ -311,42 +270,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'value' => floatval($_POST['value']),
                 'min_purchase' => floatval($_POST['min_purchase'] ?? 0),
                 'max_uses' => intval($_POST['max_uses'] ?? 0),
-                'used_count' => $discounts[$discount_id]['used_count'] ?? 0,
+                'used_count' => $existing['used_count'] ?? 0,
                 'start_date' => sanitize($_POST['start_date'] ?? ''),
                 'end_date' => sanitize($_POST['end_date'] ?? ''),
                 'active' => isset($_POST['active']),
                 'first_purchase_only' => isset($_POST['first_purchase_only']),
-                'created' => $discounts[$discount_id]['created'] ?? date('Y-m-d H:i:s'),
-                'updated' => date('Y-m-d H:i:s'),
-            ];
-            save_json('storage/discounts.json', $discounts);
+            ]);
             $message = 'Отстъпката е запазена успешно';
             break;
 
         case 'delete_discount':
-            $discounts = load_json('storage/discounts.json');
             $discount_id = $_POST['discount_id'] ?? '';
-            unset($discounts[$discount_id]);
-            save_json('storage/discounts.json', $discounts);
+            delete_discount_data($discount_id);
             $message = 'Отстъпката е изтрита';
             break;
         
         case 'update_inquiry_status':
-            $inquiries = load_json('storage/inquiries.json');
             $inquiry_id = $_POST['inquiry_id'] ?? '';
-            if (isset($inquiries[$inquiry_id])) {
-                $inquiries[$inquiry_id]['status'] = $_POST['status'];
-                $inquiries[$inquiry_id]['updated'] = date('Y-m-d H:i:s');
-                save_json('storage/inquiries.json', $inquiries);
-                $message = 'Статусът на запитването е актуализиран';
-            }
+            update_inquiry_status_data($inquiry_id, $_POST['status'] ?? 'pending');
+            $message = 'Статусът на запитването е актуализиран';
             break;
         
         case 'delete_inquiry':
-            $inquiries = load_json('storage/inquiries.json');
             $inquiry_id = $_POST['inquiry_id'] ?? '';
-            unset($inquiries[$inquiry_id]);
-            save_json('storage/inquiries.json', $inquiries);
+            delete_inquiry_data($inquiry_id);
             $message = 'Запитването е изтрито';
             break;
 

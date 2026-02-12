@@ -2,7 +2,7 @@
 /**
  * Inquiries Management Section - Admin
  */
-$inquiries = load_json('storage/inquiries.json');
+$inquiries = get_inquiries_data();
 $viewInquiry = $_GET['view'] ?? null;
 $inquiryDetails = $viewInquiry ? ($inquiries[$viewInquiry] ?? null) : null;
 

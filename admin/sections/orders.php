@@ -2,7 +2,7 @@
 /**
  * Orders Management Section - Detailed Order System
  */
-$orders = load_json('storage/orders.json');
+$orders = get_orders_data();
 $viewOrder = $_GET['view'] ?? null;
 $orderDetails = $viewOrder ? ($orders[$viewOrder] ?? null) : null;
 
@@ -38,7 +38,10 @@ $totalRevenue = array_sum(array_column($orders, 'total'));
             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 30px;">
                 <div>
                     <h3 style="margin-bottom: 10px; color: var(--text-primary, #1f2937);">Поръчка #<?php echo htmlspecialchars($orderDetails['id']); ?></h3>
-                    <p style="color: var(--text-secondary, #666); margin: 5px 0;"><?php echo __('order.customer'); ?>: <strong><?php echo htmlspecialchars($orderDetails['customer'] ?? __('admin.guest')); ?></strong></p>
+                    <?php
+                        $orderCustomerName = $orderDetails['customer']['name'] ?? ($orderDetails['customer_name'] ?? $orderDetails['customer'] ?? __('admin.guest'));
+                    ?>
+                    <p style="color: var(--text-secondary, #666); margin: 5px 0;"><?php echo __('order.customer'); ?>: <strong><?php echo htmlspecialchars($orderCustomerName); ?></strong></p>
                     <p style="color: var(--text-secondary, #666); margin: 5px 0;"><?php echo __('auth.email'); ?>: <strong><?php echo htmlspecialchars($orderDetails['email'] ?? __('admin.n_a')); ?></strong></p>
                     <p style="color: var(--text-secondary, #666); margin: 5px 0;"><?php echo __('order.date'); ?>: <strong><?php echo date('F d, Y H:i', strtotime($orderDetails['created'])); ?></strong></p>
                 </div>
@@ -164,7 +167,10 @@ $totalRevenue = array_sum(array_column($orders, 'total'));
                             <?php $status = $order['status'] ?? 'pending'; ?>
                             <tr style="transition: background 0.2s;">
                                 <td style="padding: 12px; border-bottom: 1px solid var(--border-color, #e5e7eb); font-family: monospace; color: var(--text-primary, #1f2937);">#<?php echo htmlspecialchars($order['id']); ?></td>
-                                <td style="padding: 12px; border-bottom: 1px solid var(--border-color, #e5e7eb); color: var(--text-primary, #1f2937);"><?php echo htmlspecialchars($order['customer'] ?? __('admin.guest')); ?></td>
+                                <?php
+                                    $listCustomerName = $order['customer_name'] ?? ($order['customer']['name'] ?? $order['customer'] ?? __('admin.guest'));
+                                ?>
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border-color, #e5e7eb); color: var(--text-primary, #1f2937);"><?php echo htmlspecialchars($listCustomerName); ?></td>
                                 <td style="padding: 12px; text-align: center; border-bottom: 1px solid var(--border-color, #e5e7eb); color: var(--text-primary, #1f2937);"><?php echo count($order['items']); ?></td>
                                 <td style="padding: 12px; text-align: right; border-bottom: 1px solid var(--border-color, #e5e7eb); font-weight: 600; color: var(--text-primary, #1f2937);">$<?php echo number_format($order['total'], 2); ?></td>
                                 <td style="padding: 12px; text-align: center; border-bottom: 1px solid var(--border-color, #e5e7eb);">

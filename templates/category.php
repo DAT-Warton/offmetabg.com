@@ -7,15 +7,19 @@ require_once CMS_ROOT . '/includes/language.php';
 require_once CMS_ROOT . '/includes/icons.php';
 
 // Load products
-$products = load_json('storage/products.json');
+$products = get_products_data();
 
 // Get category slug for comparison
-$categorySlug = $category['slug'];
+$categorySlug = strtolower(trim($category['slug']));
+$categoryName = strtolower(trim($category['name'] ?? ''));
 
 // Filter products by category - match product category with category slug
-$categoryProducts = array_filter($products, function($product) use ($categorySlug) {
-    $productCategory = $product['category'] ?? '';
-    return $productCategory === $categorySlug && 
+$categoryProducts = array_filter($products, function($product) use ($categorySlug, $categoryName) {
+    $productCategory = strtolower(trim($product['category'] ?? ''));
+    if ($productCategory === '') {
+        return false;
+    }
+    return in_array($productCategory, [$categorySlug, $categoryName], true) &&
            ($product['status'] ?? 'published') === 'published';
 });
 
