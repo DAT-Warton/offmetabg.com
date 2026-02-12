@@ -1,0 +1,35 @@
+{
+    "cust_698c96ab660c2": {
+        "id": "cust_698c96ab660c2",
+        "username": "Stefie",
+        "email": "Lubomirowa99@gmail.com",
+        "password": "$2y$12$nQrczVWpkpjIcYNAvYJFM.R.MNUSbtr8gpFKNOn8YIPAHVktDlWBO",
+        "role": "admin",
+        "permissions": [
+            "view_products",
+            "place_orders"
+        ],
+        "created": "2026-02-11 14:48:11",
+        "updated": "2026-02-11 14:48:11"
+    },
+    "cust_698dbba238853": {
+        "id": "cust_698dbba238853",
+        "username": "user1",
+        "email": "user1@mail.com",
+        "password": "$2y$12$TrG34GgcqAqhAbRZLbtrJeJO7Dkr2xit9Mu8Z9Hgu.6zGy2IL7bb2",
+        "role": "customer",
+        "activated": true,
+        "created": "2026-02-12 11:38:10",
+        "activated_at": "2026-02-12 11:38:27"
+    },
+    "cust_698dbc9284c69": {
+        "id": "cust_698dbc9284c69",
+        "username": "user2",
+        "email": "user2@mail.com",
+        "password": "$2y$12$jh6BvlBtGG8L15HGhKYGDe8wpPKwm07kO9KsZd0\/ffa\/gD3ecIIjW",
+        "role": "customer",
+        "activated": true,
+        "created": "2026-02-12 11:42:10",
+        "activated_at": "2026-02-12 11:45:43"
+    }
+}

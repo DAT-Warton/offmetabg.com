@@ -1,0 +1,177 @@
+<?php
+/**
+ * Single Blog Post Template
+ */
+$post = $post ?? [];
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo htmlspecialchars($post['title'] ?? 'Post'); ?> - <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars($post['meta_description'] ?? ''); ?>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f9fafb;
+            color: #1f2937;
+        }
+
+        header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        nav {
+            margin-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+        }
+
+        nav a {
+            display: inline-block;
+            margin-right: 20px;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .breadcrumb {
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .post-header {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .post-header h1 {
+            color: #1f2937;
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .post-meta {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .post-meta .category {
+            display: inline-block;
+            background: #f3f4f6;
+            color: #667eea;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+
+        .post-content {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: #667eea;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .post-content h3 {
+            color: #764ba2;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .post-content p {
+            margin-bottom: 15px;
+            color: #4b5563;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .post-content blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></h1>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/blog">Blog</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="/">Home</a> / <a href="/blog">Blog</a> / <span><?php echo htmlspecialchars($post['title'] ?? 'Post'); ?></span>
+        </div>
+
+        <div class="post-header">
+            <h1><?php echo htmlspecialchars($post['title'] ?? 'Untitled Post'); ?></h1>
+            <div class="post-meta">
+                <span><?php echo substr($post['created'], 0, 10); ?></span>
+                <span class="category"><?php echo htmlspecialchars($post['category'] ?? 'Uncategorized'); ?></span>
+            </div>
+        </div>
+
+        <div class="post-content">
+            <?php echo nl2br(htmlspecialchars($post['content'] ?? '')); ?>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?>. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
