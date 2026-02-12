@@ -1,0 +1,87 @@
+{
+    "prod_698cc60bdd3ee": {
+        "id": "prod_698cc60bdd3ee",
+        "name": "Test Item 1",
+        "description": "Massively Cool Test Item 1",
+        "price": 69,
+        "image": "",
+        "category": "Обеци тип Книга",
+        "stock": 100,
+        "status": "published",
+        "videos": {
+            "youtube": "",
+            "tiktok": "",
+            "instagram": ""
+        },
+        "created": "2026-02-11 18:10:19",
+        "updated": "2026-02-11 18:15:21"
+    },
+    "prod_698cc62e9d524": {
+        "id": "prod_698cc62e9d524",
+        "name": "Test Item 2",
+        "description": "Massively Cool Test Item 2",
+        "price": 12,
+        "image": "\/uploads\/product_prod_698cc62e9d524_1770833627.jpg",
+        "category": "Обеци Тип Книга",
+        "stock": 25,
+        "status": "published",
+        "videos": {
+            "youtube": "",
+            "tiktok": "",
+            "instagram": ""
+        },
+        "created": "2026-02-11 18:10:54",
+        "updated": "2026-02-11 18:13:47"
+    },
+    "prod_698cc7c7e23ff": {
+        "id": "prod_698cc7c7e23ff",
+        "name": "Test Item 3",
+        "description": "Massively Cool Test Item 3",
+        "price": 32,
+        "image": "",
+        "category": "general",
+        "stock": 123,
+        "status": "published",
+        "videos": {
+            "youtube": "",
+            "tiktok": "",
+            "instagram": ""
+        },
+        "created": "2026-02-11 18:17:43",
+        "updated": "2026-02-11 18:17:43"
+    },
+    "prod_698cc7f89472c": {
+        "id": "prod_698cc7f89472c",
+        "name": "Test Item 4",
+        "description": "Massively Cool Test Item 4",
+        "price": 321,
+        "image": "\/uploads\/product_prod_698cc7f89472c_1770833912.jpg",
+        "category": "general",
+        "stock": 6786,
+        "status": "published",
+        "videos": {
+            "youtube": "",
+            "tiktok": "",
+            "instagram": ""
+        },
+        "created": "2026-02-11 18:18:32",
+        "updated": "2026-02-11 18:21:18"
+    },
+    "prod_698cc810af01b": {
+        "id": "prod_698cc810af01b",
+        "name": "Test Item 5",
+        "description": "Massively Cool Test Item 5",
+        "price": 72,
+        "image": "\/uploads\/product_prod_698cc810af01b_1770833936.jpg",
+        "category": "general",
+        "stock": 67213,
+        "status": "published",
+        "videos": {
+            "youtube": "",
+            "tiktok": "",
+            "instagram": ""
+        },
+        "created": "2026-02-11 18:18:56",
+        "updated": "2026-02-11 18:19:40"
+    }
+}
