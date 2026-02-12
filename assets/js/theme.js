@@ -48,7 +48,10 @@ function updateThemeIcon(theme) {
 function initThemeToggle() {
     const themeToggle = document.getElementById('themeToggle');
     if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
+        themeToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleTheme();
+        });
     }
 }
 
