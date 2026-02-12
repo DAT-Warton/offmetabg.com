@@ -56,8 +56,9 @@ usort($activeCategories, function($a, $b) {
 
         /* Header */
         header {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(107, 70, 193, 0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -166,7 +167,7 @@ usort($activeCategories, function($a, $b) {
 
         /* Categories */
         .categories-section {
-            background: white;
+            background: linear-gradient(180deg, #faf9ff 0%, #f5f3ff 100%);
             padding: 30px 0;
         }
 
@@ -234,18 +235,20 @@ usort($activeCategories, function($a, $b) {
         }
 
         .product-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(107, 70, 193, 0.12);
             transition: all 0.4s;
-            border: 3px solid transparent;
+            border: 2px solid rgba(107, 70, 193, 0.1);
         }
 
         .product-card:hover {
             transform: translateY(-12px);
-            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
-            border-color: #667eea;
+            box-shadow: 0 20px 50px rgba(107, 70, 193, 0.25);
+            border-color: #6b46c1;
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .product-image {
@@ -409,9 +412,10 @@ usort($activeCategories, function($a, $b) {
         }
 
         .btn-secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            color: #6b46c1;
+            border: 2px solid #6b46c1;
         }
 
         .btn-secondary:hover {
@@ -433,9 +437,10 @@ usort($activeCategories, function($a, $b) {
         
         .theme-toggle,
         .lang-toggle {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            color: #6b46c1;
+            border: 2px solid #c084fc;
             padding: 8px 12px;
             font-size: 12px;
             cursor: pointer;
@@ -587,12 +592,13 @@ usort($activeCategories, function($a, $b) {
         }
 
         .product-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(107, 70, 193, 0.1);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid #f3f4f6;
+            border: 1px solid rgba(107, 70, 193, 0.15);
             position: relative;
         }
 
@@ -647,8 +653,9 @@ usort($activeCategories, function($a, $b) {
         }
 
         .btn-quick-view {
-            background: white;
-            color: #667eea;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            color: #6b46c1;
             border: none;
             padding: 12px 24px;
             border-radius: 8px;
@@ -666,7 +673,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .btn-quick-view:hover {
-            background: #667eea;
+            background: #6b46c1;
             color: white;
         }
 
@@ -863,9 +870,10 @@ usort($activeCategories, function($a, $b) {
         .empty-state {
             text-align: center;
             padding: 80px 40px;
-            background: white;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(107, 70, 193, 0.08);
         }
 
         .empty-state h3 {
@@ -982,16 +990,17 @@ usort($activeCategories, function($a, $b) {
 
         .category-card {
             position: relative;
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
             border-radius: 12px;
             text-decoration: none;
             color: #1f2937;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(107, 70, 193, 0.1);
             overflow: hidden;
-            border: 1px solid #e5e7eb;
+            border: 2px solid rgba(107, 70, 193, 0.15);
         }
 
         .category-card:hover {
@@ -1015,7 +1024,7 @@ usort($activeCategories, function($a, $b) {
 
         .category-info {
             padding: 16px;
-            background: white;
+            background: rgba(255, 255, 255, 0.5);
         }
 
         .category-name {
@@ -1287,8 +1296,8 @@ usort($activeCategories, function($a, $b) {
                 <h1><?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></h1>
             </div>
             <div class="nav-buttons">
-                <button type="button" onclick="toggleTheme()" class="theme-toggle" title="<?php echo __('theme.switch'); ?>">
-                    <span id="theme-icon">🌙</span>
+                <button type="button" id="themeToggle" class="theme-toggle" title="<?php echo __('theme.switch'); ?>">
+                    🌙
                 </button>
                 <a href="?lang=<?php echo opposite_lang(); ?>" class="lang-toggle" title="Switch Language">
                     <?php echo strtoupper(opposite_lang()); ?>
@@ -1436,32 +1445,6 @@ usort($activeCategories, function($a, $b) {
     </footer>
     
     <script src="assets/js/theme.js"></script>
-    <script>
-        // Initialize theme from localStorage or system preference
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            document.body.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.body.setAttribute('data-theme', 'dark');
-            updateThemeIcon('dark');
-        }
-        
-        function toggleTheme() {
-            const currentTheme = document.body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-        }
-        
-        function updateThemeIcon(theme) {
-            const icon = document.getElementById('theme-icon');
-            if (icon) {
-                icon.innerHTML = theme === 'dark' ? '☀️' : '🌙';
-            }
-        }
-    </script>
 </body>
 </html>
 
