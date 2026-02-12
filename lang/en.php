@@ -53,6 +53,11 @@ $translations = [
         'new_products' => 'New Arrivals',
         'no_products_title' => 'Products are coming soon',
         'no_products_text' => 'We are preparing a carefully curated collection. Please check back soon.',
+        'tagline' => 'Discover amazing products at great prices',
+        'featured_products' => 'Featured Products',
+        'check_back_soon' => 'Check back soon for new products!',
+        'product_videos' => 'Product Videos',
+        'trusted_store' => 'Your trusted online store for quality products.',
     ],
     
     // Navigation
@@ -617,15 +622,7 @@ $translations = [
         'information' => 'Information',
         'working_hours' => 'Mon-Fri 9:00-18:00',
     ],
-    
-    // Homepage
-    'homepage' => [
-        'tagline' => 'Discover amazing products at great prices',
-        'featured_products' => 'Featured Products',
-        'check_back_soon' => 'Check back soon for new products!',
-        'product_videos' => 'Product Videos',
-        'trusted_store' => 'Your trusted online store for quality products.',
-    ],
+
     
     // Password Reset
     'password_reset' => [
