@@ -85,73 +85,7 @@ if (empty($token)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $success ? __('auth.activation_success_title') : __('auth.activation_title'); ?> - OffMeta</title>
     <link rel="stylesheet" href="assets/css/dark-theme.css" id="dark-theme-style" disabled>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            width: 100%;
-            max-width: 500px;
-            text-align: center;
-        }
-        .icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-        }
-        h1 {
-            color: #3498db;
-            margin-bottom: 15px;
-        }
-        .message {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 20px 0;
-        }
-        .error {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 20px 0;
-        }
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            margin: 10px 5px;
-            transition: transform 0.2s;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-        .btn-secondary {
-            background: #6b7280;
-        }
-        p {
-            color: #6b7280;
-            margin: 15px 0;
-            line-height: 1.6;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/activate.css">
 </head>
 <body>
     <div class="container">

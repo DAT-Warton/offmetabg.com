@@ -110,41 +110,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
         </form>
     </div>
     
-    <script>
-    function updateDiscountFields() {
-        const type = document.getElementById('discount_type').value;
-        const valueField = document.getElementById('value_field');
-        const valueInput = document.getElementById('value_input');
-        const valueLabel = document.getElementById('value_label');
-        const valueHint = document.getElementById('value_hint');
-        
-        if (type === 'free_shipping') {
-            valueField.style.display = 'none';
-            valueInput.removeAttribute('required');
-            valueInput.value = '0';
-        } else {
-            valueField.style.display = 'block';
-            valueInput.setAttribute('required', 'required');
-            
-            if (type === 'percentage') {
-                valueLabel.textContent = 'Процент';
-                valueHint.textContent = 'Процент отстъпка (напр. 10 за 10%)';
-                valueInput.max = '100';
-                valueInput.placeholder = '10';
-            } else if (type === 'fixed') {
-                valueLabel.textContent = 'Сума (€)';
-                valueHint.textContent = 'Фиксирана сума в евро (напр. 5.00 за €5 отстъпка)';
-                valueInput.removeAttribute('max');
-                valueInput.placeholder = '5.00';
-            }
-        }
-    }
-    
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        updateDiscountFields();
-    });
-    </script>
+    <script src="assets/js/discounts.js"></script>
 <?php else: ?>
     <!-- Discounts List -->
     <div class="card">

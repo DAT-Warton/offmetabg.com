@@ -293,56 +293,5 @@ if ($action === 'edit' && isset($_GET['id'])) {
     </div>
 <?php endif; ?>
 
-<script>
-function updatePromotionFields() {
-    const type = document.getElementById('promotionType').value;
-    const visualFields = document.getElementById('visualFields');
-    const salesFields = document.getElementById('salesFields');
-    const productFields = document.getElementById('productFields');
-    const categoryFields = document.getElementById('categoryFields');
-    const buyXGetYFields = document.getElementById('buyXGetYFields');
-    
-    // Hide all first
-    if (visualFields) visualFields.style.display = 'none';
-    if (salesFields) salesFields.style.display = 'none';
-    if (productFields) productFields.style.display = 'none';
-    if (categoryFields) categoryFields.style.display = 'none';
-    if (buyXGetYFields) buyXGetYFields.style.display = 'none';
-    
-    // Visual promotions (banners, popups, notifications)
-    const visualTypes = ['banner', 'popup', 'notification', 'homepage'];
-    if (visualTypes.includes(type)) {
-        if (visualFields) visualFields.style.display = 'block';
-    }
-    
-    // Sales promotions (discounts, bundles, etc)
-    const salesTypes = ['bundle', 'buy_x_get_y', 'product_discount', 'category_discount', 'cart_discount'];
-    if (salesTypes.includes(type)) {
-        if (salesFields) salesFields.style.display = 'block';
-        
-        // Show specific fields per type
-        if (type === 'bundle' || type === 'product_discount') {
-            if (productFields) productFields.style.display = 'block';
-        }
-        
-        if (type === 'buy_x_get_y') {
-            if (productFields) productFields.style.display = 'block';
-            if (buyXGetYFields) buyXGetYFields.style.display = 'block';
-        }
-        
-        if (type === 'category_discount') {
-            if (categoryFields) categoryFields.style.display = 'block';
-        }
-        
-        // cart_discount doesn't need product/category selection
-    }
-}
-
-// Run on page load
-document.addEventListener('DOMContentLoaded', function() {
-    if (document.getElementById('promotionType')) {
-        updatePromotionFields();
-    }
-});
-</script>
+<script src="assets/js/promotions.js"></script>
 
