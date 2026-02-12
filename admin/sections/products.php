@@ -10,7 +10,7 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
 <div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2 style="color: var(--text-primary, #1f2937);">🛍️ <?php echo __('admin.manage_products'); ?></h2>
-        <a href="?section=products&action=new" style="padding: 10px 20px; background: var(--primary, #667eea); color: white; text-decoration: none; border-radius: 6px;">+ <?php echo __('admin.new_product'); ?></a>
+        <a href="?section=products&action=new" style="padding: 10px 20px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 6px;">+ <?php echo __('admin.new_product'); ?></a>
     </div>
 
     <?php if ($editProduct || $_GET['action'] === 'new'): ?>
@@ -65,7 +65,7 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
                 <?php if (empty($categories)): ?>
                     <input type="text" name="category" value="<?php echo htmlspecialchars($currentCategory); ?>" placeholder="general">
                     <small style="display: block; margin-top: 5px; color: #f59e0b;">
-                        ⚠️ Няма създадени категории. <a href="?section=categories&action=new" style="color: #667eea; font-weight: 600;">Създайте категория</a> или въведете име ръчно.
+                        ⚠️ Няма създадени категории. <a href="?section=categories&action=new" style="color: #3498db; font-weight: 600;">Създайте категория</a> или въведете име ръчно.
                     </small>
                 <?php else: ?>
                     <select name="category" required>
@@ -80,7 +80,7 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
                         <?php endforeach; ?>
                     </select>
                     <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">
-                        Изберете категория или <a href="?section=categories&action=new" style="color: #667eea; font-weight: 600;">създайте нова</a>
+                        Изберете категория или <a href="?section=categories&action=new" style="color: #3498db; font-weight: 600;">създайте нова</a>
                     </small>
                 <?php endif; ?>
             </div>
@@ -99,7 +99,7 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
                 </select>
             </div>
 
-            <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 10px;">📹 <?php echo __('admin.product_videos'); ?></h3>
+            <h3 style="margin-top: 30px; margin-bottom: 15px; color: #3498db; border-bottom: 2px solid #3498db; padding-bottom: 10px;">📹 <?php echo __('admin.product_videos'); ?></h3>
             <p style="color: #666; margin-bottom: 20px; font-size: 14px;"><?php echo __('admin.product_videos_hint'); ?></p>
 
             <div class="form-group">
@@ -151,7 +151,7 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
                         <td><?php echo ucfirst($product['status'] ?? 'published'); ?></td>
                         <td>
                             <div class="btn-group">
-                                <a href="?section=products&edit=<?php echo $id; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #667eea); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('edit'); ?></a>
+                                <a href="?section=products&edit=<?php echo $id; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('edit'); ?></a>
                                 <form method="POST" style="display: inline;">
                                     <input type="hidden" name="action" value="delete_product">
                                     <input type="hidden" name="product_id" value="<?php echo $id; ?>">
@@ -165,3 +165,4 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
         </tbody>
     </table>
 </div>
+

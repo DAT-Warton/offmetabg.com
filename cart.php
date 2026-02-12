@@ -159,12 +159,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Apply discount
             $_SESSION['applied_discount'] = $found_discount;
-            $message = icon_check(16, '#10b981') . ' Промокод приложен успешно: ' . $found_discount['code'];
+            $message = icon_check(16, '#27ae60') . ' Промокод приложен успешно: ' . $found_discount['code'];
             break;
             
         case 'remove_discount':
             $_SESSION['applied_discount'] = null;
-            $message = icon_check(16, '#10b981') . ' Промокодът е премахнат!';
+            $message = icon_check(16, '#27ae60') . ' Промокодът е премахнат!';
             break;
             
         case 'checkout':
@@ -340,7 +340,7 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
         }
         .logo h1 {
             font-size: 28px;
-            color: var(--primary, #667eea);
+            color: var(--primary, #3498db);
         }
         .nav-buttons {
             display: flex;
@@ -362,14 +362,14 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
             border: 2px solid var(--border-color, #e0e0e0);
         }
         .btn-secondary:hover {
-            border-color: var(--primary, #667eea);
-            color: var(--primary, #667eea);
+            border-color: var(--primary, #3498db);
+            color: var(--primary, #3498db);
         }
         .theme-toggle,
         .lang-toggle {
             background: var(--bg-secondary, white);
-            color: var(--primary, #667eea);
-            border: 2px solid var(--primary, #667eea);
+            color: var(--primary, #3498db);
+            border: 2px solid var(--primary, #3498db);
             padding: 8px 12px;
             font-size: 18px;
             cursor: pointer;
@@ -377,7 +377,7 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
         }
         .theme-toggle:hover,
         .lang-toggle:hover {
-            background: var(--primary, #667eea);
+            background: var(--primary, #3498db);
             color: white;
             transform: scale(1.05);
         }
@@ -429,7 +429,7 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
             margin-bottom: 5px;
         }
         .item-price {
-            color: var(--primary, #667eea);
+            color: var(--primary, #3498db);
             font-weight: 600;
         }
         .item-actions {
@@ -455,7 +455,7 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
             transition: all 0.2s;
         }
         .btn-update {
-            background: var(--primary, #667eea);
+            background: var(--primary, #3498db);
             color: white;
         }
         .btn-update:hover {
@@ -481,13 +481,13 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
             font-size: 18px;
         }
         .summary-row.discount {
-            color: var(--success, #10b981);
+            color: var(--success, #27ae60);
             font-weight: 600;
         }
         .summary-total {
             font-size: 24px;
             font-weight: bold;
-            color: var(--primary, #667eea);
+            color: var(--primary, #3498db);
             border-top: 2px solid var(--border-color, #e5e7eb);
             padding-top: 15px;
             margin-top: 15px;
@@ -495,7 +495,7 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
         .btn-checkout {
             width: 100%;
             padding: 15px;
-            background: var(--success, #10b981);
+            background: var(--success, #27ae60);
             color: white;
             font-size: 18px;
             margin-top: 20px;
@@ -519,11 +519,11 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
         }
         .btn-back:hover {
             background: var(--bg-primary, #f5f5f5);
-            border-color: var(--primary, #667eea);
-            color: var(--primary, #667eea);
+            border-color: var(--primary, #3498db);
+            color: var(--primary, #3498db);
             transform: translateY(-2px);
         }
-        .btn-continue-shopping {\n            display: inline-block;\n            padding: 15px 30px;\n            text-decoration: none;\n            border-radius: 8px;\n            background: var(--primary, #667eea);\n            color: white;\n            font-weight: 600;\n            transition: all 0.3s ease;\n        }\n        .btn-continue-shopping:hover {\n            background: var(--primary-dark, #5568d3);\n            transform: translateY(-2px);\n            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);\n        }\n        .empty-cart {
+        .btn-continue-shopping {\n            display: inline-block;\n            padding: 15px 30px;\n            text-decoration: none;\n            border-radius: 8px;\n            background: var(--primary, #3498db);\n            color: white;\n            font-weight: 600;\n            transition: all 0.3s ease;\n        }\n        .btn-continue-shopping:hover {\n            background: var(--primary-dark, #5568d3);\n            transform: translateY(-2px);\n            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);\n        }\n        .empty-cart {
             text-align: center;
             padding: 60px 20px;
             background: var(--bg-secondary, white);
@@ -548,7 +548,7 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
             align-items: center;
             justify-content: space-between;
             background: var(--success-bg, #d1fae5);
-            border: 1px solid var(--success, #10b981);
+            border: 1px solid var(--success, #27ae60);
             padding: 12px 15px;
             border-radius: 6px;
         }
@@ -577,7 +577,7 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
             color: var(--text-primary, #333);
         }
         .btn-apply-promo {
-            background: var(--success, #10b981);
+            background: var(--success, #27ae60);
             color: white;
             padding: 12px 20px;
             border: none;
@@ -601,7 +601,7 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
             padding: 50px 30px;
         }
         .order-success h2 {
-            color: var(--success, #10b981);
+            color: var(--success, #27ae60);
             margin-bottom: 15px;
         }
         .order-success p {
@@ -610,7 +610,7 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
             margin-bottom: 30px;
         }
         .order-success strong {
-            color: var(--primary, #667eea);
+            color: var(--primary, #3498db);
         }
         .order-details-box {
             background: var(--bg-primary, #f9fafb);
@@ -639,7 +639,7 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
             padding-top: 15px;
             margin-top: 15px;
         }
-        .order-divider p strong.total-amount {\n            color: var(--primary, #667eea);\n            font-size: 18px;\n        }\n        .info-box {
+        .order-divider p strong.total-amount {\n            color: var(--primary, #3498db);\n            font-size: 18px;\n        }\n        .info-box {
             background: var(--warning-bg, #fef3c7);
             border: 1px solid var(--warning, #fbbf24);
             border-radius: 8px;
@@ -706,7 +706,7 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
             color: var(--text-secondary, #6b7280);
         }
         .form-terms a {
-            color: var(--primary, #667eea);
+            color: var(--primary, #3498db);
         }
     </style>
 </head>
@@ -993,3 +993,4 @@ $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user
     <script src="assets/js/theme.js"></script>
 </body>
 </html>
+

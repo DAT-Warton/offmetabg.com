@@ -66,7 +66,7 @@ usort($activeCategories, function($a, $b) {
 
         .logo h1 {
             font-size: 26px;
-            color: #667eea;
+            color: #3498db;
             font-weight: 700;
         }
 
@@ -87,23 +87,24 @@ usort($activeCategories, function($a, $b) {
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #3498db;
             color: white;
         }
 
         .btn-primary:hover {
+            background: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
         }
 
         .btn-cart {
-            background: #10b981;
+            background: #27ae60;
             color: white;
             position: relative;
         }
 
         .btn-cart:hover {
-            background: #059669;
+            background: #229954;
         }
 
         .cart-badge {
@@ -124,7 +125,7 @@ usort($activeCategories, function($a, $b) {
 
         /* Hero */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #3498db;
             color: white;
             padding: 60px 30px;
             text-align: center;
@@ -170,31 +171,31 @@ usort($activeCategories, function($a, $b) {
         }
 
         .category-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #3498db;
             border-radius: 20px;
             padding: 40px 25px;
             text-align: center;
             text-decoration: none;
             color: white;
             transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
 
         .category-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 15px 40px rgba(52, 152, 219, 0.3);
         }
 
         .category-card:nth-child(2) {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: #e74c3c;
         }
 
         .category-card:nth-child(3) {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: #9b59b6;
         }
 
         .category-card:nth-child(4) {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            background: #27ae60;
         }
 
         .category-icon {
@@ -236,8 +237,8 @@ usort($activeCategories, function($a, $b) {
 
         .product-card:hover {
             transform: translateY(-12px);
-            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
-            border-color: #667eea;
+            box-shadow: 0 20px 50px rgba(52, 152, 219, 0.2);
+            border-color: #3498db;
         }
 
         .product-image {
@@ -266,7 +267,7 @@ usort($activeCategories, function($a, $b) {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #3498db;
             color: white;
             padding: 8px 16px;
             border-radius: 20px;
@@ -282,8 +283,8 @@ usort($activeCategories, function($a, $b) {
         .product-category {
             display: inline-block;
             padding: 6px 14px;
-            background: #e0e7ff;
-            color: #667eea;
+            background: #d6eaf8;
+            color: #2980b9;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 700;
@@ -315,9 +316,7 @@ usort($activeCategories, function($a, $b) {
         .product-price {
             font-size: 36px;
             font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #2c3e50;
         }
 
         .product-price .currency {
@@ -326,7 +325,7 @@ usort($activeCategories, function($a, $b) {
 
         .btn-buy {
             padding: 14px 28px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: #27ae60;
             color: white;
             border: none;
             border-radius: 12px;
@@ -334,12 +333,13 @@ usort($activeCategories, function($a, $b) {
             font-weight: 700;
             font-size: 16px;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
 
         .btn-buy:hover {
+            background: #229954;
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
         }
 
         .btn-buy:disabled {
@@ -351,7 +351,7 @@ usort($activeCategories, function($a, $b) {
             font-size: 13px;
             font-weight: 600;
             margin-top: 8px;
-            color: #10b981;
+            color: #27ae60;
         }
 
         .stock-indicator.low {
@@ -402,32 +402,33 @@ usort($activeCategories, function($a, $b) {
 
         .btn-secondary {
             background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
+            color: #3498db;
+            border: 2px solid #3498db;
         }
 
         .btn-secondary:hover {
-            background: #f3f4f6;
+            background: #3498db;
+            color: white;
         }
 
         .btn-cart {
             position: relative;
-            background: #10b981;
+            background: #27ae60;
             color: white;
             padding: 8px 12px;
             flex-shrink: 0;
         }
 
         .btn-cart:hover {
-            background: #059669;
+            background: #229954;
             transform: translateY(-1px);
         }
         
         .theme-toggle,
         .lang-toggle {
             background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
+            color: #3498db;
+            border: 2px solid #3498db;
             padding: 8px 12px;
             font-size: 12px;
             cursor: pointer;
@@ -445,10 +446,10 @@ usort($activeCategories, function($a, $b) {
         
         .theme-toggle:hover,
         .lang-toggle:hover {
-            background: #667eea;
+            background: #3498db;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
         }
 
         .cart-badge {
@@ -468,7 +469,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .user-info {
-            color: #667eea;
+            color: #3498db;
             font-weight: 600;
             font-size: 12px;
             display: inline-flex;
@@ -479,7 +480,7 @@ usort($activeCategories, function($a, $b) {
 
         /* Hero */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #3498db;
             color: white;
             padding: 40px 20px;
             text-align: center;
@@ -568,7 +569,7 @@ usort($activeCategories, function($a, $b) {
             transform: translateX(-50%);
             width: 80px;
             height: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #3498db;
             border-radius: 2px;
         }
 
@@ -591,7 +592,7 @@ usort($activeCategories, function($a, $b) {
         .product-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-            border-color: #667eea;
+            border-color: #3498db;
         }
 
         .product-badge {
@@ -610,7 +611,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .badge-video {
-            background: rgba(102, 126, 234, 0.95);
+            background: rgba(52, 152, 219, 0.95);
             color: white;
         }
 
@@ -640,7 +641,7 @@ usort($activeCategories, function($a, $b) {
 
         .btn-quick-view {
             background: white;
-            color: #667eea;
+            color: #3498db;
             border: none;
             padding: 12px 24px;
             border-radius: 8px;
@@ -658,7 +659,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .btn-quick-view:hover {
-            background: #667eea;
+            background: #3498db;
             color: white;
         }
 
@@ -685,7 +686,7 @@ usort($activeCategories, function($a, $b) {
         .product-category-badge {
             display: inline-block;
             padding: 4px 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #3498db;
             color: white;
             border-radius: 12px;
             font-size: 11px;
@@ -705,7 +706,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .stock-indicator.in-stock {
-            color: #10b981;
+            color: #27ae60;
         }
 
         .stock-indicator.out-of-stock {
@@ -730,18 +731,18 @@ usort($activeCategories, function($a, $b) {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #667eea;
+            color: #3498db;
             text-decoration: none;
             font-weight: 700;
             font-size: 16px;
             padding: 10px 20px;
             border-radius: 8px;
             transition: all 0.2s;
-            background: #f0f7ff;
+            background: #d6eaf8;
         }
 
         .view-all-link:hover {
-            background: #667eea;
+            background: #3498db;
             color: white;
             transform: translateX(4px);
         }
@@ -784,15 +785,12 @@ usort($activeCategories, function($a, $b) {
         .product-price {
             font-size: 28px;
             font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #2c3e50;
         }
 
         .btn-add-cart {
             padding: 10px 20px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: #27ae60;
             color: white;
             border: none;
             border-radius: 8px;
@@ -800,15 +798,16 @@ usort($activeCategories, function($a, $b) {
             font-weight: 700;
             font-size: 14px;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
 
         .btn-add-cart:hover:not(:disabled) {
+            background: #229954;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
         }
 
         .btn-add-cart:disabled {
@@ -823,10 +822,10 @@ usort($activeCategories, function($a, $b) {
 
         .product-videos summary {
             cursor: pointer;
-            color: #667eea;
+            color: #3498db;
             font-weight: 600;
             padding: 10px;
-            background: #f0f7ff;
+            background: #d6eaf8;
             border-radius: 6px;
             list-style: none;
             display: flex;
@@ -836,7 +835,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .product-videos summary:hover {
-            background: #dbeafe;
+            background: #aed6f1;
         }
 
         .product-videos summary::-webkit-details-marker {
@@ -974,7 +973,7 @@ usort($activeCategories, function($a, $b) {
 
         .category-card {
             position: relative;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #3498db;
             border-radius: 10px;
             padding: 16px 12px;
             text-align: center;
@@ -985,7 +984,7 @@ usort($activeCategories, function($a, $b) {
             flex-direction: column;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 2px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 2px 12px rgba(52, 152, 219, 0.3);
             overflow: hidden;
         }
 

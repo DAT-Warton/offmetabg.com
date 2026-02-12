@@ -119,7 +119,7 @@ $config = require '../config/email-config.php';
         .back-link {
             display: inline-block;
             margin-bottom: 20px;
-            color: #667eea;
+            color: #3498db;
             text-decoration: none;
         }
         .config-info {
@@ -127,7 +127,7 @@ $config = require '../config/email-config.php';
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 30px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #3498db;
         }
         .config-info h3 {
             margin-bottom: 15px;
@@ -207,7 +207,7 @@ $config = require '../config/email-config.php';
             gap: 15px;
         }
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
             padding: 12px 30px;
             border: none;
@@ -273,15 +273,15 @@ $config = require '../config/email-config.php';
             </div>
             <div class="config-row">
                 <div class="config-label">Email Verification:</div>
-                <div class="config-value"><?= $config['enable_email_verification'] ? icon_check(16, '#10b981') . ' Enabled' : icon_x(16, '#ef4444') . ' Disabled' ?></div>
+                <div class="config-value"><?= $config['enable_email_verification'] ? icon_check(16, '#27ae60') . ' Enabled' : icon_x(16, '#ef4444') . ' Disabled' ?></div>
             </div>
             <div class="config-row">
                 <div class="config-label">Password Reset:</div>
-                <div class="config-value"><?= $config['enable_password_reset'] ? icon_check(16, '#10b981') . ' Enabled' : icon_x(16, '#ef4444') . ' Disabled' ?></div>
+                <div class="config-value"><?= $config['enable_password_reset'] ? icon_check(16, '#27ae60') . ' Enabled' : icon_x(16, '#ef4444') . ' Disabled' ?></div>
             </div>
             <div class="config-row">
                 <div class="config-label">Order Confirmation:</div>
-                <div class="config-value"><?= $config['enable_order_confirmation'] ? icon_check(16, '#10b981') . ' Enabled' : icon_x(16, '#ef4444') . ' Disabled' ?></div>
+                <div class="config-value"><?= $config['enable_order_confirmation'] ? icon_check(16, '#27ae60') . ' Enabled' : icon_x(16, '#ef4444') . ' Disabled' ?></div>
             </div>
         </div>
         
@@ -332,3 +332,4 @@ $config = require '../config/email-config.php';
     </div>
 </body>
 </html>
+

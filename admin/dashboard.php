@@ -376,7 +376,7 @@ $stats = get_dashboard_stats();
             --text-secondary: #666666;
             --border-color: #e0e0e0;
             --shadow: rgba(0, 0, 0, 0.05);
-            --primary: #667eea;
+            --primary: #3498db;
             --primary-hover: #5568d3;
             --danger: #dc3545;
             --success-bg: #d4edda;
@@ -585,10 +585,10 @@ $stats = get_dashboard_stats();
             background: rgba(102, 126, 234, 0.1);
         }
         input[type="datetime-local"]:hover {
-            border-color: var(--primary, #667eea);
+            border-color: var(--primary, #3498db);
         }
         input[type="datetime-local"]:focus {
-            border-color: var(--primary, #667eea);
+            border-color: var(--primary, #3498db);
             box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
             background: var(--bg-secondary, white);
         }
@@ -656,7 +656,7 @@ $stats = get_dashboard_stats();
             align-items: center;
             gap: 8px;
             padding: 12px 24px;
-            background: linear-gradient(135deg, var(--primary, #667eea) 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary, #3498db) 0%, #2980b9 100%);
             color: white;
             text-decoration: none;
             border: none;
@@ -692,8 +692,8 @@ $stats = get_dashboard_stats();
         }
         .btn-secondary:hover {
             background: var(--bg-primary, #ebebeb);
-            border-color: var(--primary, #667eea);
-            color: var(--primary, #667eea);
+            border-color: var(--primary, #3498db);
+            color: var(--primary, #3498db);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
@@ -707,7 +707,7 @@ $stats = get_dashboard_stats();
         .btn-small {
             padding: 6px 12px;
             font-size: 12px;
-            background: var(--primary, #667eea);
+            background: var(--primary, #3498db);
             color: white;
             border: none;
             border-radius: 4px;
@@ -754,7 +754,7 @@ $stats = get_dashboard_stats();
             <!-- Overview Section -->
             <div class="sidebar-section">
                 <ul>
-                    <li><a href="../" style="background: rgba(102, 126, 234, 0.2); border-left-color: var(--primary, #667eea);"><?php echo icon_home(18); ?> <?php echo __('menu.back_to_site'); ?></a></li>
+                    <li><a href="../" style="background: rgba(102, 126, 234, 0.2); border-left-color: var(--primary, #3498db);"><?php echo icon_home(18); ?> <?php echo __('menu.back_to_site'); ?></a></li>
                     <li><a href="?section=dashboard" class="<?php echo $section === 'dashboard' ? 'active' : ''; ?>"><?php echo icon_package(18); ?> <?php echo __('menu.dashboard'); ?></a></li>
                 </ul>
             </div>
@@ -921,3 +921,4 @@ $stats = get_dashboard_stats();
     </script>
 </body>
 </html>
+

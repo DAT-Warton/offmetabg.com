@@ -129,7 +129,7 @@ if (isset($_POST['save_database_config'])) {
 
     <div style="background: var(--bg-primary, #f8f9fa); padding: 15px; border-radius: 6px; margin-bottom: 20px;">
         <strong>Current Mode:</strong> 
-        <span style="color: <?php echo $currentDriver === 'mysql' ? '#28a745' : '#667eea'; ?>; font-weight: bold;">
+        <span style="color: <?php echo $currentDriver === 'mysql' ? '#28a745' : '#3498db'; ?>; font-weight: bold;">
             <?php echo $currentDriver === 'mysql' ? '🗄️ MySQL Database' : '📄 JSON File Storage'; ?>
         </span>
     </div>
@@ -145,7 +145,7 @@ if (isset($_POST['save_database_config'])) {
         </div>
 
         <div id="mysql-fields" style="display: <?php echo $currentDriver === 'mysql' ? 'block' : 'none'; ?>;">
-            <h3 style="margin: 20px 0 15px; color: var(--primary, #667eea);">MySQL Connection Details</h3>
+            <h3 style="margin: 20px 0 15px; color: var(--primary, #3498db);">MySQL Connection Details</h3>
             <p style="color: var(--text-secondary, #666); margin-bottom: 15px;">📋 Get these credentials from cPanel → MySQL Databases</p>
 
             <div class="form-group">
@@ -212,3 +212,4 @@ function toggleMySQLFields() {
     mysqlFields.style.display = driver === 'mysql' ? 'block' : 'none';
 }
 </script>
+

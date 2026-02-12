@@ -6,7 +6,7 @@
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f5f5f5; margin: 0; padding: 0; }
         .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px 20px; text-align: center; }
+        .header { background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); padding: 30px 20px; text-align: center; }
         .header h1 { color: #ffffff; margin: 0; font-size: 24px; }
         .content { padding: 30px 20px; }
         .content h2 { color: #333; margin-top: 0; }
@@ -14,8 +14,8 @@
         .button { display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff !important; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0; font-size: 16px; }
         .button:hover { opacity: 0.9; }
         .footer { background: #f9f9f9; padding: 20px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #eee; }
-        .token-box { background: #f0f7ff; border: 2px dashed #667eea; padding: 20px; margin: 20px 0; text-align: center; border-radius: 8px; }
-        .token { font-size: 18px; font-weight: bold; color: #667eea; letter-spacing: 2px; }
+        .token-box { background: #f0f7ff; border: 2px dashed #3498db; padding: 20px; margin: 20px 0; text-align: center; border-radius: 8px; }
+        .token { font-size: 18px; font-weight: bold; color: #3498db; letter-spacing: 2px; }
         .warning-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; }
     </style>
 </head>
@@ -69,3 +69,4 @@
     </div>
 </body>
 </html>
+

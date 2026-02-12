@@ -89,7 +89,7 @@ if (empty($token)) {
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -110,7 +110,7 @@ if (empty($token)) {
             margin-bottom: 20px;
         }
         h1 {
-            color: #667eea;
+            color: #3498db;
             margin-bottom: 15px;
         }
         .message {
@@ -132,7 +132,7 @@ if (empty($token)) {
         .btn {
             display: inline-block;
             padding: 12px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
             text-decoration: none;
             border-radius: 6px;
@@ -156,7 +156,7 @@ if (empty($token)) {
 <body>
     <div class="container">
         <?php if ($success): ?>
-            <div class="icon"><?php echo icon_check_circle(64, '#10b981'); ?></div>
+            <div class="icon"><?php echo icon_check_circle(64, '#27ae60'); ?></div>
             <h1><?php echo __('auth.activation_success'); ?></h1>
             <div class="message"><?php echo htmlspecialchars($message); ?></div>
             <p><?php echo __('auth.you_can_login_now'); ?></p>
@@ -173,3 +173,4 @@ if (empty($token)) {
     </div>
 </body>
 </html>
+

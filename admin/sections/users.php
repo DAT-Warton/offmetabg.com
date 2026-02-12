@@ -89,7 +89,7 @@ $editCustomer = $editId ? ($customers[$editId] ?? null) : null;
                                     'admin' => ['bg' => '#dc3545', 'label' => 'Admin'],
                                     'manager' => ['bg' => '#fbbf24', 'label' => 'Manager'],
                                     'employee' => ['bg' => '#3b82f6', 'label' => 'Employee'],
-                                    'customer' => ['bg' => '#10b981', 'label' => 'Customer']
+                                    'customer' => ['bg' => '#27ae60', 'label' => 'Customer']
                                 ];
                                 $roleData = $roleColors[$role] ?? $roleColors['customer'];
                             ?>
@@ -115,3 +115,4 @@ $editCustomer = $editId ? ($customers[$editId] ?? null) : null;
     </table>
     </div>
 </div>
+
