@@ -1310,14 +1310,20 @@ usort($activeCategories, function($a, $b) {
             <h2 class="section-title">Категории</h2>
             <div class="categories-grid">
                 <?php foreach ($activeCategories as $category): 
-                    // Get one sample product from this category
-                    $sampleProduct = null;
-                    foreach ($published_products as $product) {
-                        if (($product['category'] ?? '') === $category['slug']) {
-                            $sampleProduct = $product;
-                            break;
-                        }
-                    }
+                    // Get the latest product from this category (from all products, not just the 6 shown)
+                    $categoryProducts = array_filter($products, function($product) use ($category) {
+                        return ($product['category'] ?? '') === $category['slug'] && 
+                               ($product['status'] ?? 'published') === 'published';
+                    });
+                    
+                    // Sort by created date (newest first)
+                    usort($categoryProducts, function($a, $b) {
+                        $dateA = $a['created'] ?? '2000-01-01';
+                        $dateB = $b['created'] ?? '2000-01-01';
+                        return strtotime($dateB) - strtotime($dateA);
+                    });
+                    
+                    $sampleProduct = !empty($categoryProducts) ? reset($categoryProducts) : null;
                 ?>
                     <a href="/category/<?php echo urlencode($category['slug']); ?>" class="category-card">
                         <?php if ($sampleProduct && !empty($sampleProduct['image'])): ?>
