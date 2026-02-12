@@ -50,7 +50,7 @@ usort($activeCategories, function($a, $b) {
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #f5f7fa;
+            background: #fff5f5;
             color: #2c3e50;
         }
 
@@ -64,17 +64,17 @@ usort($activeCategories, function($a, $b) {
         }
 
         .header-container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
-            padding: 20px 30px;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo h1 {
-            font-size: 26px;
-            color: #667eea;
+            font-size: 22px;
+            color: #ff6b6b;
             font-weight: 700;
         }
 
@@ -95,23 +95,23 @@ usort($activeCategories, function($a, $b) {
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
             color: white;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
         }
 
         .btn-cart {
-            background: #10b981;
+            background: #ffa94d;
             color: white;
             position: relative;
         }
 
         .btn-cart:hover {
-            background: #059669;
+            background: #ff8c42;
         }
 
         .cart-badge {
@@ -132,20 +132,20 @@ usort($activeCategories, function($a, $b) {
 
         /* Hero */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa94d 100%);
             color: white;
-            padding: 60px 30px;
+            padding: 40px 30px;
             text-align: center;
         }
 
         .hero h2 {
-            font-size: 42px;
-            margin-bottom: 15px;
+            font-size: 36px;
+            margin-bottom: 12px;
             font-weight: 700;
         }
 
         .hero p {
-            font-size: 18px;
+            font-size: 16px;
             opacity: 0.95;
         }
 
@@ -157,9 +157,9 @@ usort($activeCategories, function($a, $b) {
         }
 
         .section-title {
-            font-size: 32px;
+            font-size: 26px;
             font-weight: 700;
-            margin-bottom: 40px;
+            margin-bottom: 24px;
             text-align: center;
             color: #2c3e50;
         }
@@ -167,7 +167,7 @@ usort($activeCategories, function($a, $b) {
         /* Categories */
         .categories-section {
             background: white;
-            padding: 50px 0;
+            padding: 30px 0;
         }
 
         .categories-grid {
@@ -229,15 +229,15 @@ usort($activeCategories, function($a, $b) {
 
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 35px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
         }
 
         .product-card {
             background: white;
-            border-radius: 20px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             transition: all 0.4s;
             border: 3px solid transparent;
         }
@@ -800,7 +800,7 @@ usort($activeCategories, function($a, $b) {
 
         .btn-add-cart {
             padding: 10px 20px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -808,7 +808,7 @@ usort($activeCategories, function($a, $b) {
             font-weight: 700;
             font-size: 14px;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -816,7 +816,7 @@ usort($activeCategories, function($a, $b) {
 
         .btn-add-cart:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
         }
 
         .btn-add-cart:disabled {
@@ -974,9 +974,9 @@ usort($activeCategories, function($a, $b) {
 
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
@@ -996,13 +996,13 @@ usort($activeCategories, function($a, $b) {
 
         .category-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(102, 126, 234, 0.15);
-            border-color: #667eea;
+            box-shadow: 0 12px 24px rgba(255, 107, 107, 0.15);
+            border-color: #ff6b6b;
         }
 
         .category-preview-image {
             width: 100%;
-            height: 180px;
+            height: 160px;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -1270,13 +1270,13 @@ usort($activeCategories, function($a, $b) {
             </div>
             <div class="nav-buttons">
                 <button type="button" onclick="toggleTheme()" class="theme-toggle" title="<?php echo __('theme.switch'); ?>">
-                    <span id="theme-icon"><?php echo icon_moon(18); ?></span>
+                    <span id="theme-icon">🌙</span>
                 </button>
                 <a href="?lang=<?php echo opposite_lang(); ?>" class="lang-toggle" title="Switch Language">
-                    <?php echo lang_flag(opposite_lang()); ?> <?php echo strtoupper(opposite_lang()); ?>
+                    <?php echo strtoupper(opposite_lang()); ?>
                 </a>
                 <?php if ($is_logged_in): ?>
-                    <span class="user-info"><?php echo icon_user(16); ?> <?php echo htmlspecialchars($user_name); ?></span>
+                    <span class="user-info"><?php echo htmlspecialchars($user_name); ?></span>
                     <?php if ($user_role === 'admin'): ?>
                         <a href="admin/index.php" class="btn btn-primary">Админ</a>
                     <?php endif; ?>
@@ -1329,7 +1329,7 @@ usort($activeCategories, function($a, $b) {
                         <?php if ($sampleProduct && !empty($sampleProduct['image'])): ?>
                             <div class="category-preview-image" style="background-image: url('<?php echo htmlspecialchars($sampleProduct['image']); ?>');"></div>
                         <?php else: ?>
-                            <div class="category-preview-image" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);"></div>
+                            <div class="category-preview-image" style="background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(255, 169, 77, 0.2) 100%);"></div>
                         <?php endif; ?>
                         <div class="category-info">
                             <div class="category-name"><?php echo htmlspecialchars($category['name']); ?></div>
@@ -1440,7 +1440,7 @@ usort($activeCategories, function($a, $b) {
         function updateThemeIcon(theme) {
             const icon = document.getElementById('theme-icon');
             if (icon) {
-                icon.innerHTML = theme === 'dark' ? '<?php echo icon_sun(18); ?>' : '<?php echo icon_moon(18); ?>';
+                icon.innerHTML = theme === 'dark' ? '☀️' : '🌙';
             }
         }
     </script>
