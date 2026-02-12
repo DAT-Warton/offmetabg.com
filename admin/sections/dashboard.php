@@ -119,7 +119,7 @@ $top_products = array_slice($product_sales, 0, 5);
         padding: 25px;
         border-radius: 12px;
         box-shadow: 0 2px 8px var(--shadow, rgba(0,0,0,0.1));
-        border-left: 4px solid #667eea;
+        border-left: 4px solid #3498db;
         transition: transform 0.2s;
     }
     .stat-card:hover {
@@ -144,7 +144,7 @@ $top_products = array_slice($product_sales, 0, 5);
         font-size: 14px;
     }
     .stat-card.revenue {
-        border-left-color: #10b981;
+        border-left-color: #27ae60;
     }
     .stat-card.orders {
         border-left-color: #3b82f6;
@@ -198,7 +198,7 @@ $top_products = array_slice($product_sales, 0, 5);
     .source-item .source-value {
         font-size: 24px;
         font-weight: bold;
-        color: #667eea;
+        color: #3498db;
     }
     .recent-orders-table {
         width: 100%;
@@ -264,7 +264,7 @@ $top_products = array_slice($product_sales, 0, 5);
     .quick-action-btn {
         display: block;
         padding: 15px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
         color: white;
         text-decoration: none;
         border-radius: 8px;
@@ -338,7 +338,7 @@ $top_products = array_slice($product_sales, 0, 5);
                 <div class="number"><?php echo $pending_orders; ?></div>
             </div>
             <div class="stat-card">
-                <h3><?php echo icon_check_circle(20, '#10b981'); ?> <?php echo __('order.confirmed'); ?></h3>
+                <h3><?php echo icon_check_circle(20, '#27ae60'); ?> <?php echo __('order.confirmed'); ?></h3>
                 <div class="number"><?php echo $confirmed_orders; ?></div>
             </div>
             <div class="stat-card">
@@ -473,3 +473,4 @@ $top_products = array_slice($product_sales, 0, 5);
         </div>
     </div>
 </div>
+

@@ -10,7 +10,7 @@ $editPost = $editSlug ? get_post($editSlug) : null;
 <div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2>📝 Блог статии</h2>
-        <a href="?section=posts&action=new" style="padding: 10px 20px; background: var(--primary, #667eea); color: white; text-decoration: none; border-radius: 6px;">+ Нова статия</a>
+        <a href="?section=posts&action=new" style="padding: 10px 20px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 6px;">+ Нова статия</a>
     </div>
 
     <?php if ($editPost || $_GET['action'] === 'new'): ?>
@@ -74,7 +74,7 @@ $editPost = $editSlug ? get_post($editSlug) : null;
                     <td><?php echo substr($post['created'], 0, 10); ?></td>
                     <td>
                         <div class="btn-group">
-                            <a href="?section=posts&edit=<?php echo $slug; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #667eea); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('edit'); ?></a>
+                            <a href="?section=posts&edit=<?php echo $slug; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('edit'); ?></a>
                             <form method="POST" style="display: inline;">
                                 <input type="hidden" name="action" value="delete_post">
                                 <input type="hidden" name="slug" value="<?php echo $slug; ?>">
@@ -87,3 +87,4 @@ $editPost = $editSlug ? get_post($editSlug) : null;
         </tbody>
     </table>
 </div>
+

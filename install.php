@@ -194,7 +194,7 @@ if (PHP_SAPI !== 'cli') {
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body {
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
                 min-height: 100vh;
                 display: flex;
                 align-items: center;
@@ -210,7 +210,7 @@ if (PHP_SAPI !== 'cli') {
                 width: 100%;
             }
             h1 {
-                color: #667eea;
+                color: #3498db;
                 margin-bottom: 20px;
                 text-align: center;
             }
@@ -241,7 +241,7 @@ if (PHP_SAPI !== 'cli') {
                 display: block;
                 width: 100%;
                 padding: 12px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
                 color: white;
                 border: none;
                 border-radius: 6px;
@@ -295,10 +295,11 @@ if (PHP_SAPI !== 'cli') {
             </div>
             
             <a href="admin/" class="btn">Влез в Админ Панела</a>
-            <a href="index.php" class="btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); margin-top: 10px;">Виж Сайта</a>
+            <a href="index.php" class="btn" style="background: linear-gradient(135deg, #27ae60 0%, #059669 100%); margin-top: 10px;">Виж Сайта</a>
         </div>
     </body>
     </html>
     <?php
 }
 ?>
+

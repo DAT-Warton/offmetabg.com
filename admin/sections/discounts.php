@@ -184,7 +184,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
                                 $typeData = [
                                     'percentage' => ['icon' => '📊', 'label' => 'Процент', 'color' => '#8b5cf6'],
                                     'fixed' => ['icon' => '💶', 'label' => 'Фиксирана', 'color' => '#f97316'],
-                                    'free_shipping' => ['icon' => '🚚', 'label' => 'Безплатна доставка', 'color' => '#10b981']
+                                    'free_shipping' => ['icon' => '🚚', 'label' => 'Безплатна доставка', 'color' => '#27ae60']
                                 ];
                                 $type = $typeData[$discount['type']] ?? ['icon' => '🏷️', 'label' => $discount['type'], 'color' => '#6b7280'];
                                 ?>
@@ -193,7 +193,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
                                 </span>
                             </td>
                             <td>
-                                <strong style="color: var(--primary, #667eea); font-size: 16px;">
+                                <strong style="color: var(--primary, #3498db); font-size: 16px;">
                                     <?php 
                                     if ($discount['type'] === 'percentage') {
                                         echo $discount['value'] . '%';
@@ -223,7 +223,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
                             </td>
                             <td>
                                 <?php if ($discount['active'] ?? true): ?>
-                                    <span style="display: inline-flex; align-items: center; gap: 6px; background: #10b98115; color: #10b981; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; border: 1px solid #10b98130;">
+                                    <span style="display: inline-flex; align-items: center; gap: 6px; background: #27ae6015; color: #27ae60; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; border: 1px solid #27ae6030;">
                                         <?php echo icon_check_circle(14); ?> Активна
                                     </span>
                                 <?php else: ?>
@@ -253,3 +253,4 @@ if ($action === 'edit' && isset($_GET['id'])) {
         </table>
     </div>
 <?php endif; ?>
+

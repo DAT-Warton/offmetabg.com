@@ -228,3 +228,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
     <script src="assets/js/theme.js"></script>
 </body>
 </html>
+

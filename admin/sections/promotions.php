@@ -235,10 +235,10 @@ if ($action === 'edit' && isset($_GET['id'])) {
                                 <?php 
                                 $typeIcons = [
                                     // Visual promotions
-                                    'banner' => ['icon' => '🖼️', 'label' => 'Банер', 'color' => '#667eea'],
+                                    'banner' => ['icon' => '🖼️', 'label' => 'Банер', 'color' => '#3498db'],
                                     'popup' => ['icon' => '💬', 'label' => 'Popup', 'color' => '#f97316'],
                                     'notification' => ['icon' => '🔔', 'label' => 'Известие', 'color' => '#06b6d4'],
-                                    'homepage' => ['icon' => '🏠', 'label' => 'Начална', 'color' => '#10b981'],
+                                    'homepage' => ['icon' => '🏠', 'label' => 'Начална', 'color' => '#27ae60'],
                                     // Sales promotions
                                     'bundle' => ['icon' => '📦', 'label' => 'Бъндъл', 'color' => '#8b5cf6'],
                                     'buy_x_get_y' => ['icon' => '🎁', 'label' => 'Купи X Вземи Y', 'color' => '#ec4899'],
@@ -262,7 +262,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
                             </td>
                             <td>
                                 <?php if ($promotion['active'] ?? true): ?>
-                                    <span style="display: inline-flex; align-items: center; gap: 6px; background: #10b98115; color: #10b981; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; border: 1px solid #10b98130;">
+                                    <span style="display: inline-flex; align-items: center; gap: 6px; background: #27ae6015; color: #27ae60; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; border: 1px solid #27ae6030;">
                                         <?php echo icon_check_circle(14); ?> Активна
                                     </span>
                                 <?php else: ?>
@@ -345,3 +345,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+

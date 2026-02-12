@@ -97,7 +97,7 @@ $categories = [
 $status_labels = [
     'pending' => ['label' => __('inquiry.pending'), 'color' => '#fbbf24'],
     'in_progress' => ['label' => __('inquiry.in_progress'), 'color' => '#3b82f6'],
-    'resolved' => ['label' => __('inquiry.resolved'), 'color' => '#10b981'],
+    'resolved' => ['label' => __('inquiry.resolved'), 'color' => '#27ae60'],
     'closed' => ['label' => __('inquiry.closed'), 'color' => '#6b7280']
 ];
 ?>
@@ -134,7 +134,7 @@ $status_labels = [
         }
         .logo h1 {
             font-size: 28px;
-            color: #667eea;
+            color: #3498db;
         }
         .nav-buttons {
             display: flex;
@@ -151,7 +151,7 @@ $status_labels = [
             cursor: pointer;
         }
         .btn-primary {
-            background: #667eea;
+            background: #3498db;
             color: white;
         }
         .btn-primary:hover {
@@ -160,8 +160,8 @@ $status_labels = [
         }
         .btn-secondary {
             background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
+            color: #3498db;
+            border: 2px solid #3498db;
         }
         
         /* Container */
@@ -319,7 +319,7 @@ $status_labels = [
         <h1><?php echo icon_mail(24); ?> <?php echo __('inquiry.send_inquiry'); ?></h1>
         
         <?php if ($success): ?>
-            <div class="message"><?php echo icon_check(16, '#10b981'); ?> <?php echo htmlspecialchars($message); ?></div>
+            <div class="message"><?php echo icon_check(16, '#27ae60'); ?> <?php echo htmlspecialchars($message); ?></div>
         <?php endif; ?>
         
         <?php if ($error): ?>
@@ -389,3 +389,4 @@ $status_labels = [
     <script src="assets/js/theme.js"></script>
 </body>
 </html>
+
