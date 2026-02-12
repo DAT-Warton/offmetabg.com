@@ -179,19 +179,19 @@ usort($activeCategories, function($a, $b) {
         }
 
         .category-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #7c3aed 100%);
             border-radius: 20px;
             padding: 40px 25px;
             text-align: center;
             text-decoration: none;
             color: white;
             transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 20px rgba(107, 70, 193, 0.3);
         }
 
         .category-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 15px 40px rgba(107, 70, 193, 0.5);
         }
 
         .category-card:nth-child(2) {
@@ -225,7 +225,7 @@ usort($activeCategories, function($a, $b) {
 
         /* Products */
         .products-section {
-            background: #f5f7fa;
+            background: #f8f7ff;
         }
 
         .products-grid {
@@ -254,7 +254,7 @@ usort($activeCategories, function($a, $b) {
         .product-image {
             width: 100%;
             height: 300px;
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            background: linear-gradient(135deg, #f5f3ff 0%, #e8e4f0 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -277,7 +277,7 @@ usort($activeCategories, function($a, $b) {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #7c3aed 100%);
             color: white;
             padding: 8px 16px;
             border-radius: 20px;
@@ -293,8 +293,8 @@ usort($activeCategories, function($a, $b) {
         .product-category {
             display: inline-block;
             padding: 6px 14px;
-            background: #e0e7ff;
-            color: #667eea;
+            background: rgba(192, 132, 252, 0.15);
+            color: #6b46c1;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 700;
@@ -320,13 +320,13 @@ usort($activeCategories, function($a, $b) {
             justify-content: space-between;
             align-items: center;
             padding-top: 20px;
-            border-top: 2px solid #f3f4f6;
+            border-top: 2px solid rgba(107, 70, 193, 0.1);
         }
 
         .product-price {
             font-size: 36px;
             font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #7c3aed 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -375,7 +375,7 @@ usort($activeCategories, function($a, $b) {
 
         /* Footer */
         footer {
-            background: #2c3e50;
+            background: #1a1625;
             color: white;
             padding: 40px 30px;
             text-align: center;
@@ -419,7 +419,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .btn-secondary:hover {
-            background: #f3f4f6;
+            background: rgba(255, 255, 255, 0.95);
         }
 
         .btn-cart {
@@ -458,10 +458,10 @@ usort($activeCategories, function($a, $b) {
         
         .theme-toggle:hover,
         .lang-toggle:hover {
-            background: #667eea;
+            background: #6b46c1;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 2px 8px rgba(107, 70, 193, 0.3);
         }
 
         .cart-badge {
@@ -481,7 +481,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .user-info {
-            color: #667eea;
+            color: #6b46c1;
             font-weight: 600;
             font-size: 12px;
             display: inline-flex;
@@ -492,7 +492,7 @@ usort($activeCategories, function($a, $b) {
 
         /* Hero */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #7c3aed 100%);
             color: white;
             padding: 40px 20px;
             text-align: center;
@@ -581,7 +581,7 @@ usort($activeCategories, function($a, $b) {
             transform: translateX(-50%);
             width: 80px;
             height: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #7c3aed 100%);
             border-radius: 2px;
         }
 
@@ -605,7 +605,7 @@ usort($activeCategories, function($a, $b) {
         .product-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-            border-color: #667eea;
+            border-color: #6b46c1;
         }
 
         .product-badge {
@@ -624,7 +624,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .badge-video {
-            background: rgba(102, 126, 234, 0.95);
+            background: rgba(107, 70, 193, 0.95);
             color: white;
         }
 
@@ -680,7 +680,7 @@ usort($activeCategories, function($a, $b) {
         .product-image {
             width: 100%;
             height: 250px;
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            background: linear-gradient(135deg, #f5f3ff 0%, #e8e4f0 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -700,7 +700,7 @@ usort($activeCategories, function($a, $b) {
         .product-category-badge {
             display: inline-block;
             padding: 4px 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #7c3aed 100%);
             color: white;
             border-radius: 12px;
             font-size: 11px;
@@ -745,18 +745,18 @@ usort($activeCategories, function($a, $b) {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #667eea;
+            color: #6b46c1;
             text-decoration: none;
             font-weight: 700;
             font-size: 16px;
             padding: 10px 20px;
             border-radius: 8px;
             transition: all 0.2s;
-            background: #f0f7ff;
+            background: #f8f7ff;
         }
 
         .view-all-link:hover {
-            background: #667eea;
+            background: #6b46c1;
             color: white;
             transform: translateX(4px);
         }
@@ -793,13 +793,13 @@ usort($activeCategories, function($a, $b) {
             justify-content: space-between;
             align-items: flex-end;
             padding-top: 16px;
-            border-top: 1px solid #f3f4f6;
+            border-top: 1px solid rgba(107, 70, 193, 0.1);
         }
 
         .product-price {
             font-size: 28px;
             font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #7c3aed 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -838,10 +838,10 @@ usort($activeCategories, function($a, $b) {
 
         .product-videos summary {
             cursor: pointer;
-            color: #667eea;
+            color: #6b46c1;
             font-weight: 600;
             padding: 10px;
-            background: #f0f7ff;
+            background: #f8f7ff;
             border-radius: 6px;
             list-style: none;
             display: flex;
@@ -950,7 +950,7 @@ usort($activeCategories, function($a, $b) {
 
         /* Categories Section */
         .categories-section {
-            background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%);
+            background: linear-gradient(180deg, #faf9ff 0%, #f5f3ff 100%);
             padding: 25px 0;
         }
 
@@ -1042,7 +1042,7 @@ usort($activeCategories, function($a, $b) {
 
         .category-count {
             font-size: 11px;
-            color: #667eea;
+            color: #6b46c1;
             font-weight: 600;
             margin-top: 8px;
             display: inline-block;
@@ -1392,7 +1392,7 @@ usort($activeCategories, function($a, $b) {
                                     <img src="<?php echo htmlspecialchars($product['image']); ?>" 
                                          alt="<?php echo htmlspecialchars($product['name']); ?>">
                                 <?php else: ?>
-                                    <div style="font-size: 80px; color: #d1d5db;"></div>
+                                    <div style="font-size: 80px; color: #c4b5d5;"></div>
                                 <?php endif; ?>
                                 <?php if (!empty($product['category'])): ?>
                                     <span class="product-badge"><?php echo htmlspecialchars($product['category']); ?></span>
