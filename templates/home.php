@@ -50,8 +50,8 @@ usort($activeCategories, function($a, $b) {
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #fff5f5;
-            color: #2c3e50;
+            background: #f8f7ff;
+            color: #2d1b4e;
         }
 
         /* Header */
@@ -74,7 +74,7 @@ usort($activeCategories, function($a, $b) {
 
         .logo h1 {
             font-size: 22px;
-            color: #ff6b6b;
+            color: #6b46c1;
             font-weight: 700;
         }
 
@@ -95,23 +95,23 @@ usort($activeCategories, function($a, $b) {
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #7c3aed 100%);
             color: white;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+            box-shadow: 0 4px 12px rgba(107, 70, 193, 0.4);
         }
 
         .btn-cart {
-            background: #ffa94d;
+            background: #c084fc;
             color: white;
             position: relative;
         }
 
         .btn-cart:hover {
-            background: #ff8c42;
+            background: #a855f7;
         }
 
         .cart-badge {
@@ -132,7 +132,7 @@ usort($activeCategories, function($a, $b) {
 
         /* Hero */
         .hero {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ffa94d 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #4338ca 100%);
             color: white;
             padding: 40px 30px;
             text-align: center;
@@ -800,7 +800,7 @@ usort($activeCategories, function($a, $b) {
 
         .btn-add-cart {
             padding: 10px 20px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #7c3aed 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -808,7 +808,7 @@ usort($activeCategories, function($a, $b) {
             font-weight: 700;
             font-size: 14px;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+            box-shadow: 0 2px 8px rgba(107, 70, 193, 0.3);
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -816,7 +816,7 @@ usort($activeCategories, function($a, $b) {
 
         .btn-add-cart:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+            box-shadow: 0 6px 16px rgba(107, 70, 193, 0.4);
         }
 
         .btn-add-cart:disabled {
@@ -996,8 +996,8 @@ usort($activeCategories, function($a, $b) {
 
         .category-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(255, 107, 107, 0.15);
-            border-color: #ff6b6b;
+            box-shadow: 0 12px 24px rgba(107, 70, 193, 0.15);
+            border-color: #6b46c1;
         }
 
         .category-preview-image {
@@ -1163,21 +1163,21 @@ usort($activeCategories, function($a, $b) {
 
         /* Dark Theme Styles */
         body[data-theme="dark"] {
-            background: #1a1a1a !important;
-            color: #f5f5f5 !important;
+            background: #0f0a1a !important;
+            color: #e8e4f0 !important;
         }
 
         body[data-theme="dark"] header {
-            background: #2d2d2d !important;
-            border-bottom: 1px solid #404040 !important;
+            background: #1a1625 !important;
+            border-bottom: 1px solid #2d1b4e !important;
         }
 
         body[data-theme="dark"] .logo h1 {
-            color: #4a9eff !important;
+            color: #c084fc !important;
         }
 
         body[data-theme="dark"] .hero {
-            background: linear-gradient(135deg, #1a1f4b 0%, #2d1f42 100%) !important;
+            background: linear-gradient(135deg, #2d1b4e 0%, #1e1b4b 100%) !important;
         }
 
         body[data-theme="dark"] .container {
@@ -1185,80 +1185,98 @@ usort($activeCategories, function($a, $b) {
         }
 
         body[data-theme="dark"] .section-title {
-            color: #f5f5f5 !important;
+            color: #e8e4f0 !important;
         }
 
         body[data-theme="dark"] .product-card {
-            background: #2d2d2d !important;
-            border-color: #404040 !important;
+            background: #1a1625 !important;
+            border-color: #2d1b4e !important;
         }
 
         body[data-theme="dark"] .product-title {
-            color: #f5f5f5 !important;
+            color: #e8e4f0 !important;
         }
 
         body[data-theme="dark"] .product-description {
-            color: #d4d4d4 !important;
+            color: #c8c0d8 !important;
         }
 
         body[data-theme="dark"] .empty-state {
-            background: #2d2d2d !important;
-            color: #f5f5f5 !important;
+            background: #1a1625 !important;
+            color: #e8e4f0 !important;
         }
 
         body[data-theme="dark"] .empty-state h3 {
-            color: #f5f5f5 !important;
+            color: #e8e4f0 !important;
         }
 
         body[data-theme="dark"] .empty-state p {
-            color: #d4d4d4 !important;
+            color: #c8c0d8 !important;
         }
 
         body[data-theme="dark"] .categories-section {
-            background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+            background: linear-gradient(180deg, #0f0a1a 0%, #1a1625 100%) !important;
         }
 
         body[data-theme="dark"] .category-card {
-            background: #2d2d2d !important;
-            border-color: #404040 !important;
+            background: #1a1625 !important;
+            border-color: #2d1b4e !important;
         }
 
         body[data-theme="dark"] .category-info {
-            background: #2d2d2d !important;
+            background: #1a1625 !important;
         }
 
         body[data-theme="dark"] .category-name {
-            color: #f5f5f5 !important;
+            color: #e8e4f0 !important;
         }
 
         body[data-theme="dark"] .category-desc {
-            color: #d4d4d4 !important;
+            color: #c8c0d8 !important;
         }
 
         body[data-theme="dark"] .category-card:hover {
-            border-color: #667eea !important;
+            border-color: #6b46c1 !important;
+            box-shadow: 0 12px 24px rgba(192, 132, 252, 0.15) !important;
         }
 
         body[data-theme="dark"] .btn-secondary {
-            background: #2d2d2d !important;
-            color: #4a9eff !important;
-            border-color: #4a9eff !important;
+            background: #1a1625 !important;
+            color: #c084fc !important;
+            border-color: #6b46c1 !important;
+        }
+
+        body[data-theme="dark"] .btn-primary {
+            background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%) !important;
+        }
+
+        body[data-theme="dark"] .btn-cart {
+            background: #fbbf24 !important;
+            color: #0f0a1a !important;
+        }
+
+        body[data-theme="dark"] .btn-cart:hover {
+            background: #f59e0b !important;
+        }
+
+        body[data-theme="dark"] .btn-add-cart {
+            background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%) !important;
         }
 
         body[data-theme="dark"] .theme-toggle,
         body[data-theme="dark"] .lang-toggle {
-            background: #2d2d2d !important;
-            color: #4a9eff !important;
-            border-color: #4a9eff !important;
+            background: #1a1625 !important;
+            color: #c084fc !important;
+            border-color: #6b46c1 !important;
         }
 
         body[data-theme="dark"] .user-info {
-            color: #4a9eff !important;
+            color: #c084fc !important;
         }
 
         body[data-theme="dark"] .view-all-link {
-            background: #2d2d2d !important;
-            color: #4a9eff !important;
+            background: #1a1625 !important;
+            color: #c084fc !important;
         }
     </style>
 </head>
@@ -1329,7 +1347,7 @@ usort($activeCategories, function($a, $b) {
                         <?php if ($sampleProduct && !empty($sampleProduct['image'])): ?>
                             <div class="category-preview-image" style="background-image: url('<?php echo htmlspecialchars($sampleProduct['image']); ?>');"></div>
                         <?php else: ?>
-                            <div class="category-preview-image" style="background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(255, 169, 77, 0.2) 100%);"></div>
+                            <div class="category-preview-image" style="background: linear-gradient(135deg, rgba(107, 70, 193, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);"></div>
                         <?php endif; ?>
                         <div class="category-info">
                             <div class="category-name"><?php echo htmlspecialchars($category['name']); ?></div>
