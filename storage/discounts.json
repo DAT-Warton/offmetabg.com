@@ -1,0 +1,18 @@
+{
+    "disc_698cd53045454": {
+        "id": "disc_698cd53045454",
+        "code": "TEST5",
+        "description": "Максимални използвания - 1\r\nМинимална поръчка - 20 €",
+        "type": "percentage",
+        "value": 5,
+        "min_purchase": 20,
+        "max_uses": 1,
+        "used_count": 0,
+        "start_date": "2026-02-11T21:14",
+        "end_date": "",
+        "active": true,
+        "first_purchase_only": true,
+        "created": "2026-02-11 19:14:56",
+        "updated": "2026-02-11 20:00:37"
+    }
+}

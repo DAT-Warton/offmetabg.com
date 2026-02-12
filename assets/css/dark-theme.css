@@ -1,0 +1,567 @@
+/* Dark Theme Styles for OffMeta E-Commerce */
+/* Automatically loaded when dark theme is active */
+
+:root[data-theme="dark"] {
+    /* Color Variables */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #3a3a3a;
+    --bg-hover: #404040;
+    
+    --text-primary: #f5f5f5;
+    --text-secondary: #d4d4d4;
+    --text-muted: #a8a8a8;
+    
+    --border-color: #404040;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    
+    --primary-color: #4a9eff;
+    --primary-hover: #3a8eef;
+    --success-color: #4caf50;
+    --danger-color: #f44336;
+    --warning-color: #ff9800;
+    --warning: #ffc107;
+    --warning-bg: #3d3520;
+    --info-color: #2196f3;
+}
+
+/* Dark Theme Styles */
+body[data-theme="dark"] {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Auth page specific background */
+body[data-theme="dark"].auth-page {
+    background: linear-gradient(135deg, #1a1f4b 0%, #2d1f42 100%);
+}
+
+/* Header */
+body[data-theme="dark"] header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+body[data-theme="dark"] header .logo h1 {
+    color: var(--text-primary);
+}
+
+body[data-theme="dark"] header nav a {
+    color: var(--text-primary);
+}
+
+body[data-theme="dark"] header nav a:hover {
+    color: var(--primary-color);
+}
+
+/* User Info */
+body[data-theme="dark"] .user-info {
+    color: var(--primary-color);
+}
+
+/* Buttons */
+body[data-theme="dark"] .btn {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+body[data-theme="dark"] .btn:hover {
+    background: var(--bg-hover);
+}
+
+body[data-theme="dark"] .btn-primary {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+body[data-theme="dark"] .btn-primary:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+body[data-theme="dark"] .btn-success {
+    background: var(--success-color);
+    border-color: var(--success-color);
+}
+
+body[data-theme="dark"] .btn-danger {
+    background: var(--danger-color);
+    border-color: var(--danger-color);
+}
+
+/* Cards */
+body[data-theme="dark"] .card,
+body[data-theme="dark"] .product-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+body[data-theme="dark"] .card:hover,
+body[data-theme="dark"] .product-card:hover {
+    box-shadow: 0 4px 16px var(--shadow-color);
+    border-color: var(--primary-color);
+}
+
+body[data-theme="dark"] .card h3,
+body[data-theme="dark"] .product-card h3 {
+    color: var(--text-primary);
+}
+
+body[data-theme="dark"] .card p,
+body[data-theme="dark"] .product-card p {
+    color: var(--text-secondary);
+}
+
+/* Section Titles */
+body[data-theme="dark"] .section-title {
+    color: var(--text-primary);
+}
+
+/* Empty State */
+body[data-theme="dark"] .empty-state {
+    color: var(--text-secondary);
+}
+
+body[data-theme="dark"] .empty-state h3 {
+    color: var(--text-primary);
+}
+
+body[data-theme="dark"] h1,
+body[data-theme="dark"] h2,
+body[data-theme="dark"] h3,
+body[data-theme="dark"] h4,
+body[data-theme="dark"] h5,
+body[data-theme="dark"] h6 {
+    color: var(--text-primary);
+}
+
+/* Forms */
+body[data-theme="dark"] input,
+body[data-theme="dark"] textarea,
+body[data-theme="dark"] select {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+body[data-theme="dark"] input:focus,
+body[data-theme="dark"] textarea:focus,
+body[data-theme="dark"] select:focus {
+    border-color: var(--primary-color);
+    background: var(--bg-secondary);
+}
+
+body[data-theme="dark"] input::placeholder,
+body[data-theme="dark"] textarea::placeholder {
+    color: var(--text-muted);
+}
+
+/* Tables */
+body[data-theme="dark"] table {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+body[data-theme="dark"] table thead {
+    background: var(--bg-tertiary);
+}
+
+body[data-theme="dark"] table th {
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+}
+
+body[data-theme="dark"] table td {
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+body[data-theme="dark"] table tr:hover {
+    background: var(--bg-hover);
+}
+
+/* Admin Panel */
+[data-theme="dark"] .sidebar {
+    background: #1f1f1f;
+    border-right: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .sidebar h2 {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .sidebar a {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .sidebar a:hover {
+    background: rgba(102, 126, 234, 0.3);
+}
+
+[data-theme="dark"] .sidebar a.active {
+    background: #667eea;
+    color: white;
+}
+
+[data-theme="dark"] .admin-sidebar {
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .admin-sidebar a {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .admin-sidebar a:hover,
+[data-theme="dark"] .admin-sidebar a.active {
+    background: var(--bg-hover);
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .admin-content {
+    background: var(--bg-primary);
+}
+
+[data-theme="dark"] .header {
+    background: var(--bg-secondary);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+[data-theme="dark"] .stat-card {
+    background: var(--bg-secondary);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+[data-theme="dark"] .content {
+    background: var(--bg-secondary);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+[data-theme="dark"] .message {
+    background: #2d4a2d;
+    border-color: #3d5a3d;
+    color: #a8d4a8;
+}
+
+[data-theme="dark"] label {
+    color: var(--text-primary);
+}
+
+/* Cart */
+body[data-theme="dark"] .cart-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+body[data-theme="dark"] .cart-summary {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+/* Product Grid */
+body[data-theme="dark"] .product-grid {
+    background: transparent;
+}
+
+body[data-theme="dark"] .product-title {
+    color: var(--text-primary);
+}
+
+body[data-theme="dark"] .product-price {
+    color: var(--primary-color);
+}
+
+body[data-theme="dark"] .product-description {
+    color: var(--text-secondary);
+}
+
+/* Badges */
+body[data-theme="dark"] .badge {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+body[data-theme="dark"] .badge.badge-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+body[data-theme="dark"] .badge.badge-success {
+    background: var(--success-color);
+}
+
+body[data-theme="dark"] .badge.badge-danger {
+    background: var(--danger-color);
+}
+
+/* Alerts */
+body[data-theme="dark"] .alert {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+body[data-theme="dark"] .alert-success {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+body[data-theme="dark"] .alert-danger {
+    background: rgba(244, 67, 54, 0.2);
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+body[data-theme="dark"] .alert-info {
+    background: rgba(33, 150, 243, 0.2);
+    border-color: var(--info-color);
+    color: var(--info-color);
+}
+
+/* Modal */
+body[data-theme="dark"] .modal-content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+body[data-theme="dark"] .modal-header {
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+body[data-theme="dark"] .modal-title {
+    color: var(--text-primary);
+}
+
+body[data-theme="dark"] .modal-body {
+    color: var(--text-secondary);
+}
+
+body[data-theme="dark"] .modal-footer {
+    border-top: 1px solid var(--border-color);
+}
+
+/* Scrollbar */
+body[data-theme="dark"]::-webkit-scrollbar {
+    width: 12px;
+}
+
+body[data-theme="dark"]::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+body[data-theme="dark"]::-webkit-scrollbar-thumb {
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+}
+
+body[data-theme="dark"]::-webkit-scrollbar-thumb:hover {
+    background: var(--bg-hover);
+}
+
+/* Links */
+body[data-theme="dark"] a {
+    color: var(--primary-color);
+}
+
+body[data-theme="dark"] a:hover {
+    color: var(--primary-hover);
+}
+
+/* Auth Pages */
+body[data-theme="dark"] .auth-container,
+body[data-theme="dark"] .container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+body[data-theme="dark"] .auth-form h2,
+body[data-theme="dark"] .container h1 {
+    color: var(--text-primary);
+}
+
+body[data-theme="dark"] .subtitle {
+    color: var(--text-secondary);
+}
+
+body[data-theme="dark"] .error {
+    background: rgba(244, 67, 54, 0.2);
+    border-color: var(--danger-color);
+    color: #ff8a80;
+}
+
+body[data-theme="dark"] .message {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: var(--success-color);
+    color: #a5d6a7;
+}
+
+body[data-theme="dark"] .info-text {
+    color: var(--text-secondary);
+}
+
+body[data-theme="dark"] .switch,
+body[data-theme="dark"] .back-home {
+    color: var(--text-secondary);
+}
+
+body[data-theme="dark"] .switch a,
+body[data-theme="dark"] .back-home a,
+body[data-theme="dark"] .forgot-password-link a {
+    color: var(--primary-color);
+}
+
+body[data-theme="dark"] .switch a:hover,
+body[data-theme="dark"] .back-home a:hover,
+body[data-theme="dark"] .forgot-password-link a:hover {
+    color: var(--primary-hover);
+}
+
+/* Auth page buttons */
+body[data-theme="dark"] .container button[type="submit"] {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #6b4ba2 100%);
+}
+
+body[data-theme="dark"] .container button[type="submit"]:hover {
+    background: linear-gradient(135deg, var(--primary-hover) 0%, #5b3b92 100%);
+}
+
+/* Auth page navigation actions */
+body[data-theme="dark"] .theme-toggle,
+body[data-theme="dark"] .lang-toggle {
+    background: var(--bg-secondary);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+body[data-theme="dark"] .theme-toggle:hover,
+body[data-theme="dark"] .lang-toggle:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Auth page navigation button links */
+body[data-theme="dark"] .btn-link {
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+body[data-theme="dark"] .btn-link:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Price Display */
+body[data-theme="dark"] .price {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* Status Badges */
+body[data-theme="dark"] .status-published {
+    background: rgba(76, 175, 80, 0.2);
+    color: var(--success-color);
+}
+
+body[data-theme="dark"] .status-draft {
+    background: rgba(255, 152, 0, 0.2);
+    color: var(--warning-color);
+}
+
+body[data-theme="dark"] .status-out-of-stock {
+    background: rgba(244, 67, 54, 0.2);
+    color: var(--danger-color);
+}
+
+/* Footer */
+body[data-theme="dark"] footer {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color);
+}
+
+body[data-theme="dark"] .footer-section h3 {
+    color: var(--text-primary);
+}
+
+body[data-theme="dark"] .footer-section a {
+    color: var(--text-secondary);
+}
+
+body[data-theme="dark"] .footer-section a:hover {
+    color: var(--primary-color);
+}
+
+body[data-theme="dark"] .footer-section p,
+body[data-theme="dark"] .footer-section ul li {
+    color: var(--text-secondary);
+}
+
+body[data-theme="dark"] .footer-bottom {
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+}
+
+/* Smooth Transition */
+body,
+header,
+.card,
+.btn,
+input,
+textarea,
+select,
+table,
+.modal-content {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 20px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-hover);
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+/* Language Toggle Button */
+.lang-toggle {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.lang-toggle:hover {
+    background: var(--bg-hover);
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
