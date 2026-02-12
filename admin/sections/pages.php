@@ -10,7 +10,7 @@ $editPage = $editSlug ? get_page($editSlug) : null;
 <div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2><?php echo icon_home(24); ?> Управление на страници</h2>
-        <a href="?section=pages&action=new" style="padding: 10px 20px; background: var(--primary, #667eea); color: white; text-decoration: none; border-radius: 6px;">+ Нова страница</a>
+        <a href="?section=pages&action=new" style="padding: 10px 20px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 6px;">+ Нова страница</a>
     </div>
 
     <?php if ($editPage || $_GET['action'] === 'new'): ?>
@@ -62,7 +62,7 @@ $editPage = $editSlug ? get_page($editSlug) : null;
                     <td><?php echo $page['updated']; ?></td>
                     <td>
                         <div class="btn-group">
-                            <a href="?section=pages&edit=<?php echo $slug; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #667eea); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('edit'); ?></a>
+                            <a href="?section=pages&edit=<?php echo $slug; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('edit'); ?></a>
                             <form method="POST" style="display: inline;">
                                 <input type="hidden" name="action" value="delete_page">
                                 <input type="hidden" name="slug" value="<?php echo $slug; ?>">
@@ -75,3 +75,4 @@ $editPage = $editSlug ? get_page($editSlug) : null;
         </tbody>
     </table>
 </div>
+

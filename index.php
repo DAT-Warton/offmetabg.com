@@ -139,7 +139,7 @@ header('HTTP/1.1 404 Not Found');
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -161,7 +161,7 @@ header('HTTP/1.1 404 Not Found');
         a {
             display: inline-block;
             background: white;
-            color: #667eea;
+            color: #3498db;
             padding: 12px 30px;
             border-radius: 6px;
             text-decoration: none;
@@ -181,3 +181,4 @@ header('HTTP/1.1 404 Not Found');
     </div>
 </body>
 </html>
+

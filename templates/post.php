@@ -34,7 +34,7 @@ $post = $post ?? [];
 
         header h1 {
             font-size: 24px;
-            color: #667eea;
+            color: #3498db;
         }
 
         nav {
@@ -46,7 +46,7 @@ $post = $post ?? [];
         nav a {
             display: inline-block;
             margin-right: 20px;
-            color: #667eea;
+            color: #3498db;
             text-decoration: none;
         }
 
@@ -57,7 +57,7 @@ $post = $post ?? [];
         }
 
         .breadcrumb a {
-            color: #667eea;
+            color: #3498db;
             text-decoration: none;
         }
 
@@ -83,7 +83,7 @@ $post = $post ?? [];
         .post-meta .category {
             display: inline-block;
             background: #f3f4f6;
-            color: #667eea;
+            color: #3498db;
             padding: 4px 12px;
             border-radius: 20px;
             margin-right: 10px;
@@ -99,14 +99,14 @@ $post = $post ?? [];
         }
 
         .post-content h2 {
-            color: #667eea;
+            color: #3498db;
             margin-top: 30px;
             margin-bottom: 15px;
             font-size: 24px;
         }
 
         .post-content h3 {
-            color: #764ba2;
+            color: #2980b9;
             margin-top: 20px;
             margin-bottom: 10px;
         }
@@ -124,7 +124,7 @@ $post = $post ?? [];
         }
 
         .post-content blockquote {
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #3498db;
             padding-left: 20px;
             margin: 20px 0;
             color: #6b7280;

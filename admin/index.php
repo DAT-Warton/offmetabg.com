@@ -69,7 +69,7 @@ if (!$isLoggedIn) {
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body {
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
                 min-height: 100vh;
                 display: flex;
                 align-items: center;
@@ -105,13 +105,13 @@ if (!$isLoggedIn) {
             }
             input:focus {
                 outline: none;
-                border-color: #667eea;
+                border-color: #3498db;
                 box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
             }
             button {
                 width: 100%;
                 padding: 12px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
                 color: white;
                 border: none;
                 border-radius: 6px;
@@ -129,7 +129,7 @@ if (!$isLoggedIn) {
                 margin-top: 20px;
                 padding: 12px;
                 background: #f0f4ff;
-                border-left: 4px solid #667eea;
+                border-left: 4px solid #3498db;
                 color: #555;
                 font-size: 13px;
             }
@@ -169,3 +169,4 @@ if (!$isLoggedIn) {
 
 // If logged in, load dashboard
 require_once 'dashboard.php';
+

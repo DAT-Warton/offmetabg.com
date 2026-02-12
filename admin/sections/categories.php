@@ -145,14 +145,14 @@ if ($action === 'edit' && isset($_GET['id'])) {
                             </td>
                             <td>
                                 <?php if ($category['active'] ?? true): ?>
-                                    <span style="color: #10b981; font-weight: 600;"><?php echo icon_check_circle(16); ?> <?php echo __('admin.active'); ?></span>
+                                    <span style="color: #27ae60; font-weight: 600;"><?php echo icon_check_circle(16); ?> <?php echo __('admin.active'); ?></span>
                                 <?php else: ?>
                                     <span style="color: #6b7280;"><?php echo icon_x_circle(16); ?> <?php echo __('admin.inactive'); ?></span>
                                 <?php endif; ?>
                             </td>
                             <td>
                                 <a href="?section=categories&action=edit&id=<?php echo urlencode($category['id']); ?>" 
-                                   style="padding: 6px 12px; background: var(--primary, #667eea); color: white; text-decoration: none; border-radius: 4px; font-weight: 600; font-size: 13px; display: inline-block; transition: all 0.2s;">
+                                   style="padding: 6px 12px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 4px; font-weight: 600; font-size: 13px; display: inline-block; transition: all 0.2s;">
                                     <?php echo __('admin.edit'); ?>
                                 </a>
                                 <form method="POST" style="display: inline;" onsubmit="return confirm('<?php echo __('admin.confirm_delete_category'); ?>');">
@@ -168,3 +168,4 @@ if ($action === 'edit' && isset($_GET['id'])) {
         </table>
     </div>
 <?php endif; ?>
+

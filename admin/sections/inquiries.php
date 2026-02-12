@@ -20,7 +20,7 @@ $categories = [
 $status_labels = [
     'pending' => ['label' => __('inquiry.pending'), 'color' => '#fbbf24'],
     'in_progress' => ['label' => __('inquiry.in_progress'), 'color' => '#3b82f6'],
-    'resolved' => ['label' => __('inquiry.resolved'), 'color' => '#10b981'],
+    'resolved' => ['label' => __('inquiry.resolved'), 'color' => '#27ae60'],
     'closed' => ['label' => __('inquiry.closed'), 'color' => '#6b7280']
 ];
 
@@ -72,7 +72,7 @@ $resolvedInquiries = count(array_filter($inquiries, fn($i) => ($i['status'] ?? '
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <button type="submit" style="padding: 10px 30px; background: var(--primary, #667eea); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;"><?php echo __('inquiry.update'); ?></button>
+                    <button type="submit" style="padding: 10px 30px; background: var(--primary, #3498db); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;"><?php echo __('inquiry.update'); ?></button>
                 </div>
             </form>
 
@@ -94,7 +94,7 @@ $resolvedInquiries = count(array_filter($inquiries, fn($i) => ($i['status'] ?? '
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
             <div style="background: var(--bg-secondary, white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px var(--shadow, rgba(0,0,0,0.1));">
                 <h4 style="color: var(--text-secondary, #666); font-size: 14px; margin-bottom: 10px;"><?php echo __('inquiry.total_inquiries'); ?></h4>
-                <p style="font-size: 32px; font-weight: bold; color: #667eea;"><?php echo $totalInquiries; ?></p>
+                <p style="font-size: 32px; font-weight: bold; color: #3498db;"><?php echo $totalInquiries; ?></p>
             </div>
             <div style="background: var(--bg-secondary, white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px var(--shadow, rgba(0,0,0,0.1));">
                 <h4 style="color: var(--text-secondary, #666); font-size: 14px; margin-bottom: 10px;">⌛ <?php echo __('inquiry.pending'); ?></h4>
@@ -105,8 +105,8 @@ $resolvedInquiries = count(array_filter($inquiries, fn($i) => ($i['status'] ?? '
                 <p style="font-size: 32px; font-weight: bold; color: #3b82f6;"><?php echo $inProgressInquiries; ?></p>
             </div>
             <div style="background: var(--bg-secondary, white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px var(--shadow, rgba(0,0,0,0.1));">
-                <h4 style="color: var(--text-secondary, #666); font-size: 14px; margin-bottom: 10px;"><?php echo icon_check_circle(16, '#10b981'); ?> <?php echo __('inquiry.resolved'); ?></h4>
-                <p style="font-size: 32px; font-weight: bold; color: #10b981;"><?php echo $resolvedInquiries; ?></p>
+                <h4 style="color: var(--text-secondary, #666); font-size: 14px; margin-bottom: 10px;"><?php echo icon_check_circle(16, '#27ae60'); ?> <?php echo __('inquiry.resolved'); ?></h4>
+                <p style="font-size: 32px; font-weight: bold; color: #27ae60;"><?php echo $resolvedInquiries; ?></p>
             </div>
         </div>
 
@@ -145,7 +145,7 @@ $resolvedInquiries = count(array_filter($inquiries, fn($i) => ($i['status'] ?? '
                                 </td>
                                 <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;"><?php echo date('d.m.Y H:i', strtotime($inquiry['created'])); ?></td>
                                 <td style="padding: 12px; text-align: center; border-bottom: 1px solid #e5e7eb;">
-                                    <a href="?section=inquiries&view=<?php echo $id; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #667eea); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('inquiry.view_details'); ?></a>
+                                    <a href="?section=inquiries&view=<?php echo $id; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('inquiry.view_details'); ?></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -155,3 +155,4 @@ $resolvedInquiries = count(array_filter($inquiries, fn($i) => ($i['status'] ?? '
         <?php endif; ?>
     <?php endif; ?>
 </div>
+

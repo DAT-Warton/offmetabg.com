@@ -12,7 +12,7 @@ $orderStatuses = [
     'confirmed' => ['label' => __('order.confirmed'), 'color' => '#3b82f6', 'icon' => '✓'],
     'processing' => ['label' => __('order.processing'), 'color' => '#8b5cf6', 'icon' => '⚙️'],
     'shipped' => ['label' => __('order.shipped'), 'color' => '#06b6d4', 'icon' => '🚚'],
-    'delivered' => ['label' => __('order.delivered'), 'color' => '#10b981', 'icon' => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>'],
+    'delivered' => ['label' => __('order.delivered'), 'color' => '#27ae60', 'icon' => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>'],
     'cancelled' => ['label' => __('order.cancelled'), 'color' => '#ef4444', 'icon' => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'],
 ];
 
@@ -65,7 +65,7 @@ $totalRevenue = array_sum(array_column($orders, 'total'));
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <button type="submit" style="padding: 10px 30px; background: var(--primary, #667eea); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;"><?php echo __('admin.update_status'); ?></button>
+                    <button type="submit" style="padding: 10px 30px; background: var(--primary, #3498db); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;"><?php echo __('admin.update_status'); ?></button>
                 </div>
             </form>
 
@@ -91,7 +91,7 @@ $totalRevenue = array_sum(array_column($orders, 'total'));
                     <?php endforeach; ?>
                     <tr>
                         <td colspan="3" style="padding: 12px; text-align: right; font-weight: 600; font-size: 18px; color: var(--text-primary, #1f2937);"><?php echo __('cart_page.total'); ?>:</td>
-                        <td style="padding: 12px; text-align: right; font-weight: 700; font-size: 18px; color: #667eea;">$<?php echo number_format($orderDetails['total'], 2); ?></td>
+                        <td style="padding: 12px; text-align: right; font-weight: 700; font-size: 18px; color: #3498db;">$<?php echo number_format($orderDetails['total'], 2); ?></td>
                     </tr>
                 </tbody>
             </table>
@@ -119,7 +119,7 @@ $totalRevenue = array_sum(array_column($orders, 'total'));
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
             <div style="background: var(--bg-secondary, white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px var(--shadow, rgba(0,0,0,0.1));">
                 <h4 style="color: var(--text-secondary, #666); font-size: 14px; margin-bottom: 10px;"><?php echo __('order.total_orders'); ?></h4>
-                <p style="font-size: 32px; font-weight: bold; color: #667eea;"><?php echo $totalOrders; ?></p>
+                <p style="font-size: 32px; font-weight: bold; color: #3498db;"><?php echo $totalOrders; ?></p>
             </div>
             <div style="background: var(--bg-secondary, white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px var(--shadow, rgba(0,0,0,0.1));">
                 <h4 style="color: var(--text-secondary, #666); font-size: 14px; margin-bottom: 10px;">⏳ <?php echo __('order.pending'); ?></h4>
@@ -130,12 +130,12 @@ $totalRevenue = array_sum(array_column($orders, 'total'));
                 <p style="font-size: 32px; font-weight: bold; color: #8b5cf6;"><?php echo $processingOrders; ?></p>
             </div>
             <div style="background: var(--bg-secondary, white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px var(--shadow, rgba(0,0,0,0.1));">
-                <h4 style="color: var(--text-secondary, #666); font-size: 14px; margin-bottom: 10px;"><?php echo icon_check_circle(16, '#10b981'); ?> <?php echo __('order.completed'); ?></h4>
-                <p style="font-size: 32px; font-weight: bold; color: #10b981;"><?php echo $completedOrders; ?></p>
+                <h4 style="color: var(--text-secondary, #666); font-size: 14px; margin-bottom: 10px;"><?php echo icon_check_circle(16, '#27ae60'); ?> <?php echo __('order.completed'); ?></h4>
+                <p style="font-size: 32px; font-weight: bold; color: #27ae60;"><?php echo $completedOrders; ?></p>
             </div>
             <div style="background: var(--bg-secondary, white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px var(--shadow, rgba(0,0,0,0.1));">
                 <h4 style="color: var(--text-secondary, #666); font-size: 14px; margin-bottom: 10px;">💰 <?php echo __('order.revenue'); ?></h4>
-                <p style="font-size: 32px; font-weight: bold; color: #10b981;">$<?php echo number_format($totalRevenue, 2); ?></p>
+                <p style="font-size: 32px; font-weight: bold; color: #27ae60;">$<?php echo number_format($totalRevenue, 2); ?></p>
             </div>
         </div>
 
@@ -174,7 +174,7 @@ $totalRevenue = array_sum(array_column($orders, 'total'));
                                 </td>
                                 <td style="padding: 12px; border-bottom: 1px solid var(--border-color, #e5e7eb); color: var(--text-primary, #1f2937);"><?php echo date('M d, Y H:i', strtotime($order['created'])); ?></td>
                                 <td style="padding: 12px; text-align: center; border-bottom: 1px solid var(--border-color, #e5e7eb);">
-                                    <a href="?section=orders&view=<?php echo $id; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #667eea); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('order.view_details'); ?></a>
+                                    <a href="?section=orders&view=<?php echo $id; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('order.view_details'); ?></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -190,7 +190,7 @@ $totalRevenue = array_sum(array_column($orders, 'total'));
     <div style="background: var(--bg-secondary, white); padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: var(--text-primary, #1f2937);">
         <h3 style="margin-bottom: 20px; color: var(--text-primary, #1f2937);">Order Items</h3>
         <div id="orderItems"></div>
-        <button onclick="closeOrderModal()" style="margin-top: 20px; padding: 10px 20px; background: var(--primary, #667eea); color: white; border: none; border-radius: 6px; cursor: pointer;">Close</button>
+        <button onclick="closeOrderModal()" style="margin-top: 20px; padding: 10px 20px; background: var(--primary, #3498db); color: white; border: none; border-radius: 6px; cursor: pointer;">Close</button>
     </div>
 </div>
 
@@ -212,3 +212,4 @@ function closeOrderModal() {
     document.getElementById('orderModal').style.display = 'none';
 }
 </script>
+
