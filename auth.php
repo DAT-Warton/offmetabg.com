@@ -163,7 +163,7 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #3498db;
+            background: #667eea;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -179,7 +179,7 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
             max-width: 400px;
         }
         h1 {
-            color: #3498db;
+            color: #667eea;
             margin-bottom: 10px;
             text-align: center;
         }
@@ -207,12 +207,12 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
         }
         input:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: #667eea;
         }
         button {
             width: 100%;
             padding: 12px;
-            background: #3498db;
+            background: #667eea;
             color: white;
             border: none;
             border-radius: 6px;
@@ -246,7 +246,7 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
             color: #6b7280;
         }
         .switch a {
-            color: #3498db;
+            color: #667eea;
             text-decoration: none;
             font-weight: 600;
         }
@@ -258,15 +258,15 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
             display: inline-block;
             padding: 10px 20px;
             background: white;
-            color: #3498db;
+            color: #667eea;
             text-decoration: none;
-            border: 2px solid #3498db;
+            border: 2px solid #667eea;
             border-radius: 6px;
             font-weight: 600;
             transition: all 0.2s;
         }
         .btn-link:hover {
-            background: #3498db;
+            background: #667eea;
             color: white;
             transform: translateY(-2px);
         }
@@ -281,7 +281,7 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
         }
         .forgot-password-link a {
             font-size: 14px;
-            color: var(--primary, #3498db);
+            color: var(--primary, #667eea);
             text-decoration: none;
         }
         .nav-actions {
@@ -297,13 +297,13 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
             padding: 8px 12px;
             border-radius: 8px;
             background: white;
-            border: 2px solid #3498db;
-            color: #3498db;
+            border: 2px solid #667eea;
+            color: #667eea;
             font-size: 18px;
             transition: all 0.3s ease;
         }
         .theme-toggle:hover, .lang-toggle:hover {
-            background: #3498db;
+            background: #667eea;
             color: white;
             transform: scale(1.05);
         }
@@ -363,7 +363,7 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
                     </p>
                     <div style="background: #f3f4f6; padding: 15px; border-radius: 6px; word-break: break-all; margin: 15px 0;">
                         <a href="<?php echo $site_url ?? 'http://localhost:8000'; ?>/activate/<?php echo htmlspecialchars($activationToken); ?>" 
-                           style="color: #3498db; text-decoration: none;">
+                           style="color: #667eea; text-decoration: none;">
                             <?php echo $site_url ?? 'http://localhost:8000'; ?>/activate/<?php echo htmlspecialchars($activationToken); ?>
                         </a>
                     </div>
@@ -430,3 +430,4 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
     <script src="assets/js/theme.js"></script>
 </body>
 </html>
+

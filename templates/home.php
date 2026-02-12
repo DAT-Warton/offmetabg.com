@@ -66,7 +66,7 @@ usort($activeCategories, function($a, $b) {
 
         .logo h1 {
             font-size: 26px;
-            color: #3498db;
+            color: #667eea;
             font-weight: 700;
         }
 
@@ -87,24 +87,23 @@ usort($activeCategories, function($a, $b) {
         }
 
         .btn-primary {
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
         .btn-cart {
-            background: #27ae60;
+            background: #10b981;
             color: white;
             position: relative;
         }
 
         .btn-cart:hover {
-            background: #229954;
+            background: #059669;
         }
 
         .cart-badge {
@@ -125,7 +124,7 @@ usort($activeCategories, function($a, $b) {
 
         /* Hero */
         .hero {
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 60px 30px;
             text-align: center;
@@ -171,31 +170,31 @@ usort($activeCategories, function($a, $b) {
         }
 
         .category-card {
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 20px;
             padding: 40px 25px;
             text-align: center;
             text-decoration: none;
             color: white;
             transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
         }
 
         .category-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
         }
 
         .category-card:nth-child(2) {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
         .category-card:nth-child(3) {
-            background: #9b59b6;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         }
 
         .category-card:nth-child(4) {
-            background: #27ae60;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
         }
 
         .category-icon {
@@ -237,8 +236,8 @@ usort($activeCategories, function($a, $b) {
 
         .product-card:hover {
             transform: translateY(-12px);
-            box-shadow: 0 20px 50px rgba(52, 152, 219, 0.2);
-            border-color: #3498db;
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
         }
 
         .product-image {
@@ -267,7 +266,7 @@ usort($activeCategories, function($a, $b) {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 8px 16px;
             border-radius: 20px;
@@ -283,8 +282,8 @@ usort($activeCategories, function($a, $b) {
         .product-category {
             display: inline-block;
             padding: 6px 14px;
-            background: #d6eaf8;
-            color: #2980b9;
+            background: #e0e7ff;
+            color: #667eea;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 700;
@@ -316,7 +315,9 @@ usort($activeCategories, function($a, $b) {
         .product-price {
             font-size: 36px;
             font-weight: 800;
-            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .product-price .currency {
@@ -325,7 +326,7 @@ usort($activeCategories, function($a, $b) {
 
         .btn-buy {
             padding: 14px 28px;
-            background: #27ae60;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -333,13 +334,12 @@ usort($activeCategories, function($a, $b) {
             font-weight: 700;
             font-size: 16px;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
 
         .btn-buy:hover {
-            background: #229954;
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
         }
 
         .btn-buy:disabled {
@@ -351,7 +351,7 @@ usort($activeCategories, function($a, $b) {
             font-size: 13px;
             font-weight: 600;
             margin-top: 8px;
-            color: #27ae60;
+            color: #10b981;
         }
 
         .stock-indicator.low {
@@ -402,33 +402,32 @@ usort($activeCategories, function($a, $b) {
 
         .btn-secondary {
             background: white;
-            color: #3498db;
-            border: 2px solid #3498db;
+            color: #667eea;
+            border: 2px solid #667eea;
         }
 
         .btn-secondary:hover {
-            background: #3498db;
-            color: white;
+            background: #f3f4f6;
         }
 
         .btn-cart {
             position: relative;
-            background: #27ae60;
+            background: #10b981;
             color: white;
             padding: 8px 12px;
             flex-shrink: 0;
         }
 
         .btn-cart:hover {
-            background: #229954;
+            background: #059669;
             transform: translateY(-1px);
         }
         
         .theme-toggle,
         .lang-toggle {
             background: white;
-            color: #3498db;
-            border: 2px solid #3498db;
+            color: #667eea;
+            border: 2px solid #667eea;
             padding: 8px 12px;
             font-size: 12px;
             cursor: pointer;
@@ -446,10 +445,10 @@ usort($activeCategories, function($a, $b) {
         
         .theme-toggle:hover,
         .lang-toggle:hover {
-            background: #3498db;
+            background: #667eea;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
 
         .cart-badge {
@@ -469,7 +468,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .user-info {
-            color: #3498db;
+            color: #667eea;
             font-weight: 600;
             font-size: 12px;
             display: inline-flex;
@@ -480,7 +479,7 @@ usort($activeCategories, function($a, $b) {
 
         /* Hero */
         .hero {
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 40px 20px;
             text-align: center;
@@ -569,7 +568,7 @@ usort($activeCategories, function($a, $b) {
             transform: translateX(-50%);
             width: 80px;
             height: 4px;
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 2px;
         }
 
@@ -592,7 +591,7 @@ usort($activeCategories, function($a, $b) {
         .product-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-            border-color: #3498db;
+            border-color: #667eea;
         }
 
         .product-badge {
@@ -611,7 +610,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .badge-video {
-            background: rgba(52, 152, 219, 0.95);
+            background: rgba(102, 126, 234, 0.95);
             color: white;
         }
 
@@ -641,7 +640,7 @@ usort($activeCategories, function($a, $b) {
 
         .btn-quick-view {
             background: white;
-            color: #3498db;
+            color: #667eea;
             border: none;
             padding: 12px 24px;
             border-radius: 8px;
@@ -659,7 +658,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .btn-quick-view:hover {
-            background: #3498db;
+            background: #667eea;
             color: white;
         }
 
@@ -686,7 +685,7 @@ usort($activeCategories, function($a, $b) {
         .product-category-badge {
             display: inline-block;
             padding: 4px 12px;
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 12px;
             font-size: 11px;
@@ -706,7 +705,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .stock-indicator.in-stock {
-            color: #27ae60;
+            color: #10b981;
         }
 
         .stock-indicator.out-of-stock {
@@ -731,18 +730,18 @@ usort($activeCategories, function($a, $b) {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #3498db;
+            color: #667eea;
             text-decoration: none;
             font-weight: 700;
             font-size: 16px;
             padding: 10px 20px;
             border-radius: 8px;
             transition: all 0.2s;
-            background: #d6eaf8;
+            background: #f0f7ff;
         }
 
         .view-all-link:hover {
-            background: #3498db;
+            background: #667eea;
             color: white;
             transform: translateX(4px);
         }
@@ -785,12 +784,15 @@ usort($activeCategories, function($a, $b) {
         .product-price {
             font-size: 28px;
             font-weight: 800;
-            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .btn-add-cart {
             padding: 10px 20px;
-            background: #27ae60;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -798,16 +800,15 @@ usort($activeCategories, function($a, $b) {
             font-weight: 700;
             font-size: 14px;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
 
         .btn-add-cart:hover:not(:disabled) {
-            background: #229954;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
         }
 
         .btn-add-cart:disabled {
@@ -822,10 +823,10 @@ usort($activeCategories, function($a, $b) {
 
         .product-videos summary {
             cursor: pointer;
-            color: #3498db;
+            color: #667eea;
             font-weight: 600;
             padding: 10px;
-            background: #d6eaf8;
+            background: #f0f7ff;
             border-radius: 6px;
             list-style: none;
             display: flex;
@@ -835,7 +836,7 @@ usort($activeCategories, function($a, $b) {
         }
 
         .product-videos summary:hover {
-            background: #aed6f1;
+            background: #dbeafe;
         }
 
         .product-videos summary::-webkit-details-marker {
@@ -973,7 +974,7 @@ usort($activeCategories, function($a, $b) {
 
         .category-card {
             position: relative;
-            background: #3498db;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 10px;
             padding: 16px 12px;
             text-align: center;
@@ -1294,15 +1295,22 @@ usort($activeCategories, function($a, $b) {
     <header>
         <div class="header-container">
             <div class="logo">
-                <h1>🛍️ <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></h1>
+                <h1><?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></h1>
             </div>
             <div class="nav-buttons">
+                <button type="button" onclick="toggleTheme()" class="theme-toggle" title="<?php echo __('theme.switch'); ?>">
+                    <span id="theme-icon"><?php echo icon_moon(18); ?></span>
+                </button>
+                <a href="?lang=<?php echo opposite_lang(); ?>" class="lang-toggle" title="Switch Language">
+                    <?php echo lang_flag(opposite_lang()); ?> <?php echo strtoupper(opposite_lang()); ?>
+                </a>
                 <?php if ($is_logged_in): ?>
+                    <span class="user-info"><?php echo icon_user(16); ?> <?php echo htmlspecialchars($user_name); ?></span>
                     <?php if ($user_role === 'admin'): ?>
-                        <a href="admin/index.php" class="btn btn-primary">⚙️ Админ</a>
+                        <a href="admin/index.php" class="btn btn-primary">Админ</a>
                     <?php endif; ?>
                     <a href="cart.php" class="btn btn-cart">
-                        🛒 Количка
+                        Количка
                         <?php if ($cart_count > 0): ?>
                             <span class="cart-badge"><?php echo $cart_count; ?></span>
                         <?php endif; ?>
@@ -1310,7 +1318,7 @@ usort($activeCategories, function($a, $b) {
                 <?php else: ?>
                     <a href="auth.php?action=login" class="btn btn-primary">Вход</a>
                     <a href="cart.php" class="btn btn-cart">
-                        🛒 Количка
+                        Количка
                         <?php if ($cart_count > 0): ?>
                             <span class="cart-badge"><?php echo $cart_count; ?></span>
                         <?php endif; ?>
@@ -1328,11 +1336,11 @@ usort($activeCategories, function($a, $b) {
     <?php if (!empty($activeCategories)): ?>
     <section class="categories-section">
         <div class="container">
-            <h2 class="section-title">🏷️ Нашите категории</h2>
+            <h2 class="section-title">Нашите категории</h2>
             <div class="categories-grid">
                 <?php foreach ($activeCategories as $category): ?>
                     <a href="/category/<?php echo urlencode($category['slug']); ?>" class="category-card">
-                        <div class="category-icon"><?php echo !empty($category['icon']) ? $category['icon'] : '✨'; ?></div>
+                        <div class="category-icon"><?php echo !empty($category['icon']) ? $category['icon'] : '📁'; ?></div>
                         <div class="category-name"><?php echo htmlspecialchars($category['name']); ?></div>
                         <?php if (!empty($category['description'])): ?>
                             <div class="category-desc"><?php echo nl2br(htmlspecialchars($category['description'])); ?></div>
@@ -1346,7 +1354,7 @@ usort($activeCategories, function($a, $b) {
 
     <section class="products-section">
         <div class="container">
-            <h2 class="section-title">✨ Нашите продукти</h2>
+            <h2 class="section-title">Нашите продукти</h2>
             
             <?php if (empty($published_products)): ?>
                 <div class="empty-state">
@@ -1365,7 +1373,7 @@ usort($activeCategories, function($a, $b) {
                                     <img src="<?php echo htmlspecialchars($product['image']); ?>" 
                                          alt="<?php echo htmlspecialchars($product['name']); ?>">
                                 <?php else: ?>
-                                    <div style="font-size: 80px; color: #d1d5db;">📦</div>
+                                    <div style="font-size: 80px; color: #d1d5db;"></div>
                                 <?php endif; ?>
                                 <?php if (!empty($product['category'])): ?>
                                     <span class="product-badge"><?php echo htmlspecialchars($product['category']); ?></span>
@@ -1416,5 +1424,34 @@ usort($activeCategories, function($a, $b) {
     <footer>
         <p>&copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>. Всички права запазени.</p>
     </footer>
+    
+    <script src="assets/js/theme.js"></script>
+    <script>
+        // Initialize theme from localStorage or system preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.body.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.setAttribute('data-theme', 'dark');
+            updateThemeIcon('dark');
+        }
+        
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+        
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('theme-icon');
+            if (icon) {
+                icon.innerHTML = theme === 'dark' ? '<?php echo icon_sun(18); ?>' : '<?php echo icon_moon(18); ?>';
+            }
+        }
+    </script>
 </body>
 </html>
+

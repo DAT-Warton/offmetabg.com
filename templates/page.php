@@ -34,7 +34,7 @@ $page = $page ?? [];
 
         header h1 {
             font-size: 24px;
-            color: #3498db;
+            color: #667eea;
         }
 
         nav {
@@ -46,7 +46,7 @@ $page = $page ?? [];
         nav a {
             display: inline-block;
             margin-right: 20px;
-            color: #3498db;
+            color: #667eea;
             text-decoration: none;
         }
 
@@ -57,7 +57,7 @@ $page = $page ?? [];
         }
 
         .breadcrumb a {
-            color: #3498db;
+            color: #667eea;
             text-decoration: none;
         }
 
@@ -77,14 +77,14 @@ $page = $page ?? [];
         }
 
         .page-content h2 {
-            color: #3498db;
+            color: #667eea;
             margin-top: 30px;
             margin-bottom: 15px;
             font-size: 24px;
         }
 
         .page-content h3 {
-            color: #2980b9;
+            color: #764ba2;
             margin-top: 20px;
             margin-bottom: 10px;
         }
