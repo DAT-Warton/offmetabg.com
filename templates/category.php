@@ -9,15 +9,13 @@ require_once CMS_ROOT . '/includes/icons.php';
 // Load products
 $products = load_json('storage/products.json');
 
-// Get category name for comparison
-$categoryName = $category['name'];
-$normalizedCategoryName = mb_strtolower(trim($categoryName));
+// Get category slug for comparison
+$categorySlug = $category['slug'];
 
-// Filter products by category - normalize both category names for comparison
-$categoryProducts = array_filter($products, function($product) use ($normalizedCategoryName) {
+// Filter products by category - match product category with category slug
+$categoryProducts = array_filter($products, function($product) use ($categorySlug) {
     $productCategory = $product['category'] ?? '';
-    $normalizedProductCategory = mb_strtolower(trim($productCategory));
-    return $normalizedProductCategory === $normalizedCategoryName && 
+    return $productCategory === $categorySlug && 
            ($product['status'] ?? 'published') === 'published';
 });
 
