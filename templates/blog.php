@@ -37,7 +37,7 @@ arsort($publishedPosts);
 
         header h1 {
             font-size: 24px;
-            color: #3498db;
+            color: #667eea;
         }
 
         nav {
@@ -49,7 +49,7 @@ arsort($publishedPosts);
         nav a {
             display: inline-block;
             margin-right: 20px;
-            color: #3498db;
+            color: #667eea;
             text-decoration: none;
         }
 
@@ -78,11 +78,11 @@ arsort($publishedPosts);
             margin-bottom: 20px;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border-left: 4px solid #3498db;
+            border-left: 4px solid #667eea;
         }
 
         .post-item h3 {
-            color: #3498db;
+            color: #667eea;
             margin-bottom: 10px;
             font-size: 24px;
         }
@@ -96,7 +96,7 @@ arsort($publishedPosts);
         .post-item .category {
             display: inline-block;
             background: #f3f4f6;
-            color: #3498db;
+            color: #667eea;
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 12px;
@@ -110,7 +110,7 @@ arsort($publishedPosts);
         }
 
         .post-item a {
-            color: #3498db;
+            color: #667eea;
             text-decoration: none;
             font-weight: 500;
         }
@@ -174,3 +174,4 @@ arsort($publishedPosts);
     </footer>
 </body>
 </html>
+
