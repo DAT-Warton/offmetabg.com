@@ -1,0 +1,20 @@
+{
+    "admin_warton": {
+        "id": "admin_warton",
+        "username": "Warton",
+        "email": "datwarton@gmail.com",
+        "password": "$2y$12$7vZ8QX.Lz3qHxK5PmVGDa.LKJqH8X9pB7RwQy6xZj9vNkZ7qZJ8sO",
+        "role": "admin",
+        "permissions": ["full_access"],
+        "created": "2026-02-11 00:00:00"
+    },
+    "admin_stefie": {
+        "id": "admin_stefie",
+        "username": "Stefie",
+        "email": "Lubomirowa99@gmail.com",
+        "password": "$2y$12$nQrczVWpkpjIcYNAvYJFM.R.MNUSbtr8gpFKNOn8YIPAHVktDlWBO",
+        "role": "admin",
+        "permissions": ["full_access"],
+        "created": "2026-02-11 14:48:11"
+    }
+}
