@@ -74,7 +74,7 @@ $pageTitle = htmlspecialchars($category['name']);
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary, #3498db);
+            color: var(--primary, #667eea);
             text-decoration: none;
         }
 
@@ -98,7 +98,7 @@ $pageTitle = htmlspecialchars($category['name']);
         }
 
         .btn-primary {
-            background: #3498db;
+            background: #667eea;
             color: white;
         }
 
@@ -153,7 +153,7 @@ $pageTitle = htmlspecialchars($category['name']);
         }
 
         .breadcrumb a {
-            color: var(--primary, #3498db);
+            color: var(--primary, #667eea);
             text-decoration: none;
         }
 
@@ -225,11 +225,11 @@ $pageTitle = htmlspecialchars($category['name']);
         .product-price {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary, #3498db);
+            color: var(--primary, #667eea);
         }
 
         .add-to-cart {
-            background: #3498db;
+            background: #667eea;
             color: white;
             border: none;
             padding: 8px 16px;
@@ -290,7 +290,7 @@ $pageTitle = htmlspecialchars($category['name']);
                     <a href="/cart.php" class="btn btn-primary">
                         <?php echo icon_cart(18); ?> <?php echo __('cart_button'); ?>
                         <?php if ($cart_count > 0): ?>
-                            <span style="background: white; color: #3498db; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 700;">
+                            <span style="background: white; color: #667eea; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 700;">
                                 <?php echo $cart_count; ?>
                             </span>
                         <?php endif; ?>
@@ -387,3 +387,4 @@ $pageTitle = htmlspecialchars($category['name']);
     <script src="/assets/js/theme.js"></script>
 </body>
 </html>
+
