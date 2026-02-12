@@ -36,7 +36,20 @@ if (!$isLoggedIn && isset($_POST['login'])) {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // Admin credentials
+    // Check admins.json first
+    $admins = load_json('storage/admins.json');
+    foreach ($admins as $admin) {
+        if ($admin['username'] === $username && password_verify($password, $admin['password'])) {
+            $_SESSION['admin_user'] = $admin['username'];
+            $_SESSION['user_role'] = 'admin';
+            $_SESSION['admin'] = true;
+            $_SESSION['user_id'] = $admin['id'];
+            redirect('admin/dashboard');
+            break;
+        }
+    }
+
+    // Fallback: hardcoded admin credentials
     if ($username === 'Warton' && $password === 'Warton2026') {
         $_SESSION['admin_user'] = $username;
         $_SESSION['user_role'] = 'admin';
