@@ -13,6 +13,14 @@ $published_products = array_filter($products, function($p) {
     return ($p['status'] ?? 'published') === 'published';
 });
 
+// Sort by created date (newest first) and limit to 6
+usort($published_products, function($a, $b) {
+    $dateA = $a['created'] ?? '2000-01-01';
+    $dateB = $b['created'] ?? '2000-01-01';
+    return strtotime($dateB) - strtotime($dateA);
+});
+$published_products = array_slice($published_products, 0, 6);
+
 // Get customer info if logged in
 $is_logged_in = isset($_SESSION['customer_user']) || isset($_SESSION['admin_user']);
 $user_name = $_SESSION['customer_user'] ?? $_SESSION['admin_user'] ?? 'Guest';
@@ -1299,7 +1307,7 @@ usort($activeCategories, function($a, $b) {
     <?php if (!empty($activeCategories)): ?>
     <section class="categories-section">
         <div class="container">
-            <h2 class="section-title">Нашите категории</h2>
+            <h2 class="section-title">Категории</h2>
             <div class="categories-grid">
                 <?php foreach ($activeCategories as $category): 
                     // Get one sample product from this category
@@ -1332,7 +1340,7 @@ usort($activeCategories, function($a, $b) {
 
     <section class="products-section">
         <div class="container">
-            <h2 class="section-title">Нашите продукти</h2>
+            <h2 class="section-title">Нови Продукти</h2>
             
             <?php if (empty($published_products)): ?>
                 <div class="empty-state">
