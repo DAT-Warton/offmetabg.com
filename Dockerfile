@@ -10,9 +10,7 @@ WORKDIR /app
 
 COPY . .
 
-# Make startup script executable
-RUN chmod +x start.sh
-
 EXPOSE 10000
 
-CMD ["./start.sh"]
+# Run auto-migration then start server
+CMD php migrations/auto-migrate.php && php -S 0.0.0.0:${PORT:-10000}
