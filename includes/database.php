@@ -5,16 +5,29 @@
 
 class Database {
     private static $instance = null;
-    private $driver = 'json'; // 'json' or 'mysql'
+    private $driver = 'json'; // 'json', 'mysql', or 'pgsql'
     private $pdo = null;
 
     private function __construct() {
-        // Check if MySQL is configured
+        // Check for DATABASE_URL environment variable first (Render PostgreSQL)
+        $databaseUrl = getenv('DATABASE_URL');
+        if ($databaseUrl) {
+            $this->driver = 'pgsql';
+            $this->connectFromUrl($databaseUrl);
+            return;
+        }
+
+        // Check if database is configured via config file
         $config = load_json('config/database.json');
 
-        if (!empty($config['driver']) && $config['driver'] === 'mysql') {
-            $this->driver = 'mysql';
-            $this->connectMySQL($config);
+        if (!empty($config['driver'])) {
+            if ($config['driver'] === 'mysql') {
+                $this->driver = 'mysql';
+                $this->connectMySQL($config);
+            } elseif ($config['driver'] === 'pgsql' || $config['driver'] === 'postgresql') {
+                $this->driver = 'pgsql';
+                $this->connectPostgreSQL($config);
+            }
         }
     }
 
@@ -36,6 +49,41 @@ class Database {
         }
     }
 
+    private function connectPostgreSQL($config) {
+        try {
+            $dsn = "pgsql:host={$config['host']};dbname={$config['database']}";
+            if (!empty($config['port'])) {
+                $dsn .= ";port={$config['port']}";
+            }
+            $this->pdo = new PDO($dsn, $config['user'], $config['password']);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('PostgreSQL connection failed: ' . $e->getMessage());
+            $this->driver = 'json'; // Fallback to JSON
+        }
+    }
+
+    private function connectFromUrl($url) {
+        try {
+            // Parse DATABASE_URL (format: postgres://user:pass@host:port/database)
+            $parts = parse_url($url);
+            $host = $parts['host'] ?? 'localhost';
+            $port = $parts['port'] ?? 5432;
+            $database = ltrim($parts['path'] ?? '', '/');
+            $user = $parts['user'] ?? '';
+            $password = $parts['pass'] ?? '';
+
+            $dsn = "pgsql:host={$host};port={$port};dbname={$database}";
+            $this->pdo = new PDO($dsn, $user, $password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('DATABASE_URL connection failed: ' . $e->getMessage());
+            $this->driver = 'json'; // Fallback to JSON
+        }
+    }
+
     public function getDriver() {
         return $this->driver;
     }
@@ -46,8 +94,8 @@ class Database {
 
     // Table operations
     public function table($name) {
-        if ($this->driver === 'mysql' && $this->pdo) {
-            return new DatabaseTable($name, $this->pdo);
+        if (($this->driver === 'mysql' || $this->driver === 'pgsql') && $this->pdo) {
+            return new DatabaseTable($name, $this->pdo, $this->driver);
         } else {
             return new JSONTable($name);
         }
@@ -133,12 +181,14 @@ class JSONTable {
 class DatabaseTable {
     private $name;
     private $pdo;
+    private $driver;
     private $query;
     private $params = [];
 
-    public function __construct($name, $pdo) {
+    public function __construct($name, $pdo, $driver = 'mysql') {
         $this->name = $name;
         $this->pdo = $pdo;
+        $this->driver = $driver;
     }
 
     public function all() {
