@@ -304,23 +304,23 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
         <?php elseif ($action === 'register'): ?>
             <form method="POST">
                 <div class="form-group">
-                    <label><?php echo __('auth.username'); ?></label>
-                    <input type="text" name="username" required autofocus>
+                    <label for="reg_username"><?php echo __('auth.username'); ?></label>
+                    <input type="text" id="reg_username" name="username" required autofocus>
                 </div>
                 
                 <div class="form-group">
-                    <label><?php echo __('auth.email'); ?></label>
-                    <input type="email" name="email" required>
+                    <label for="reg_email"><?php echo __('auth.email'); ?></label>
+                    <input type="email" id="reg_email" name="email" required>
                 </div>
                 
                 <div class="form-group">
-                    <label><?php echo __('auth.password'); ?></label>
-                    <input type="password" name="password" required>
+                    <label for="reg_password"><?php echo __('auth.password'); ?></label>
+                    <input type="password" id="reg_password" name="password" required>
                 </div>
                 
                 <div class="form-group">
-                    <label><?php echo __('auth.confirm_password'); ?></label>
-                    <input type="password" name="confirm_password" required>
+                    <label for="reg_confirm"><?php echo __('auth.confirm_password'); ?></label>
+                    <input type="password" id="reg_confirm" name="confirm_password" required>
                 </div>
                 
                 <button type="submit" name="register"><?php echo __('auth.register_button'); ?></button>
@@ -332,13 +332,13 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
         <?php else: ?>
             <form method="POST">
                 <div class="form-group">
-                    <label><?php echo __('auth.username'); ?></label>
-                    <input type="text" name="username" required autofocus>
+                    <label for="login_username"><?php echo __('auth.username'); ?></label>
+                    <input type="text" id="login_username" name="username" required autofocus>
                 </div>
                 
                 <div class="form-group">
-                    <label><?php echo __('auth.password'); ?></label>
-                    <input type="password" name="password" required>
+                    <label for="login_password"><?php echo __('auth.password'); ?></label>
+                    <input type="password" id="login_password" name="password" required>
                     <div class="forgot-password-link">
                         <a href="password-reset.php">
                             <?php echo __('auth.forgot_password'); ?>

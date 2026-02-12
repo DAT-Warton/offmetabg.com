@@ -2,6 +2,7 @@
 // Handles dark/light theme toggle and language switching
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('=== THEME.JS LOADED ===');
     initTheme();
     initThemeToggle();
     initSmoothScroll();
@@ -9,6 +10,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
+    console.log(`🎨 initTheme - saved theme: ${savedTheme}`);
+    
+    // Make sure to set the attribute on page load
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.body.setAttribute('data-theme', savedTheme);
+    
+    console.log(`✓ Initial data-theme attributes set to: ${savedTheme}`);
+    
     applyTheme(savedTheme);
 }
 
@@ -16,42 +25,66 @@ function applyTheme(theme) {
     const root = document.documentElement;
     const body = document.body;
 
+    console.log(`📝 applyTheme called with theme: ${theme}`);
+    
     root.setAttribute('data-theme', theme);
     body.setAttribute('data-theme', theme);
+    
+    console.log(`✓ HTML data-theme: ${root.getAttribute('data-theme')}`);
+    console.log(`✓ Body data-theme: ${body.getAttribute('data-theme')}`);
+    
     updateThemeIcon(theme);
     localStorage.setItem('theme', theme);
+    
+    console.log(`✓ Theme saved to localStorage: ${theme}`);
 }
 
 function toggleTheme() {
     const currentTheme = document.body.getAttribute('data-theme') || 'light';
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
-    applyTheme(newTheme);
+    console.log(`🔄 Toggling theme: ${currentTheme} → ${newTheme}`);
+    
+    // Enable transition before applying theme
     document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+    document.documentElement.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+    
+    applyTheme(newTheme);
 }
 
 function updateThemeIcon(theme) {
     const themeToggle = document.getElementById('themeToggle');
     if (!themeToggle) {
+        console.error('❌ updateThemeIcon: button not found');
         return;
     }
 
+    console.log(`🎯 updateThemeIcon - setting to theme: ${theme}`);
+    
     if (theme === 'dark') {
         themeToggle.innerHTML = '☀️';
         themeToggle.title = 'Switch to Light Theme';
+        console.log('☀️ Icon set to sun');
     } else {
         themeToggle.innerHTML = '🌙';
         themeToggle.title = 'Switch to Dark Theme';
+        console.log('🌙 Icon set to moon');
     }
 }
 
 function initThemeToggle() {
     const themeToggle = document.getElementById('themeToggle');
+    console.log('🔍 Looking for themeToggle button...', themeToggle);
+    
     if (themeToggle) {
         themeToggle.addEventListener('click', function(e) {
+            console.log('🔘 BUTTON CLICKED!', e);
             e.preventDefault();
             toggleTheme();
         });
+        console.log('✅ Theme toggle listener attached');
+    } else {
+        console.error('❌ Theme toggle button NOT FOUND');
     }
 }
 

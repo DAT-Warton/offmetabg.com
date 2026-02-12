@@ -111,8 +111,8 @@ $pageTitle = htmlspecialchars($category['name']);
                 <?php foreach ($categoryProducts as $id => $product): ?>
                     <div class="product-card">
                         <?php if (!empty($product['image'])): ?>
-                            <img src="<?php echo htmlspecialchars($product['image']); ?>" 
-                                 alt="<?php echo htmlspecialchars($product['name']); ?>" 
+                            <img src="<?php echo htmlspecialchars($product['image']); ?>"
+                                 alt="<?php echo htmlspecialchars($product['name']); ?>"
                                  class="product-image">
                         <?php else: ?>
                             <div class="product-image" style="display: flex; align-items: center; justify-content: center;">
