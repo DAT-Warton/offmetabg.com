@@ -966,119 +966,69 @@ usort($activeCategories, function($a, $b) {
 
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            max-width: 800px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         .category-card {
             position: relative;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            padding: 16px 12px;
-            text-align: center;
+            background: white;
+            border-radius: 12px;
             text-decoration: none;
-            color: white;
+            color: #1f2937;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 2px 12px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             overflow: hidden;
-        }
-
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-            opacity: 0;
-            transition: opacity 0.3s;
+            border: 1px solid #e5e7eb;
         }
 
         .category-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 10px 35px rgba(102, 126, 234, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(102, 126, 234, 0.15);
+            border-color: #667eea;
         }
 
-        .category-card:hover::before {
-            opacity: 1;
-        }
-
-        .category-card:nth-child(2) {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            box-shadow: 0 4px 20px rgba(245, 87, 108, 0.3);
-        }
-
-        .category-card:nth-child(2):hover {
-            box-shadow: 0 10px 35px rgba(245, 87, 108, 0.5);
-        }
-
-        .category-card:nth-child(3) {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            box-shadow: 0 2px 12px rgba(79, 172, 254, 0.3);
-        }
-
-        .category-card:nth-child(3):hover {
-            box-shadow: 0 10px 35px rgba(79, 172, 254, 0.5);
-        }
-
-        .category-card:nth-child(4) {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            box-shadow: 0 2px 12px rgba(67, 233, 123, 0.3);
-        }
-
-        .category-card:nth-child(4):hover {
-            box-shadow: 0 10px 35px rgba(67, 233, 123, 0.5);
-        }
-
-        .category-card:nth-child(5) {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            box-shadow: 0 2px 12px rgba(250, 112, 154, 0.3);
-        }
-
-        .category-card:nth-child(5):hover {
-            box-shadow: 0 10px 35px rgba(250, 112, 154, 0.5);
-        }
-
-        .category-card:nth-child(6) {
-            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
-            box-shadow: 0 2px 12px rgba(48, 207, 208, 0.3);
-        }
-
-        .category-card:nth-child(6):hover {
-            box-shadow: 0 10px 35px rgba(48, 207, 208, 0.5);
-        }
-
-        .category-icon {
-            font-size: 28px;
-            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+        .category-preview-image {
+            width: 100%;
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             transition: transform 0.3s;
         }
 
-        .category-card:hover .category-icon {
-            transform: scale(1.1) rotate(5deg);
+        .category-card:hover .category-preview-image {
+            transform: scale(1.05);
+        }
+
+        .category-info {
+            padding: 16px;
+            background: white;
         }
 
         .category-name {
             font-weight: 700;
-            font-size: 14px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            line-height: 1.2;
+            font-size: 16px;
+            color: #1f2937;
+            margin-bottom: 6px;
+        }
+
+        .category-desc {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.4;
         }
 
         .category-count {
             font-size: 11px;
-            opacity: 0.9;
-            background: rgba(255,255,255,0.2);
-            padding: 2px 8px;
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 8px;
+            display: inline-block;
         }
 
         .no-categories {
@@ -1148,19 +1098,23 @@ usort($activeCategories, function($a, $b) {
             }
 
             .categories-grid {
-                grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-                gap: 10px;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
             }
 
-            .category-card {
-                padding: 12px 10px;
+            .category-preview-image {
+                height: 140px;
             }
 
-            .category-icon {
-                font-size: 24px;
+            .category-info {
+                padding: 12px;
             }
 
             .category-name {
+                font-size: 14px;
+            }
+
+            .category-desc {
                 font-size: 12px;
             }
 
@@ -1256,16 +1210,25 @@ usort($activeCategories, function($a, $b) {
             background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%) !important;
         }
 
-        body[data-theme="dark"] .categories-header h3 {
+        body[data-theme="dark"] .category-card {
+            background: #2d2d2d !important;
+            border-color: #404040 !important;
+        }
+
+        body[data-theme="dark"] .category-info {
+            background: #2d2d2d !important;
+        }
+
+        body[data-theme="dark"] .category-name {
             color: #f5f5f5 !important;
         }
 
-        body[data-theme="dark"] .categories-header p {
+        body[data-theme="dark"] .category-desc {
             color: #d4d4d4 !important;
         }
 
-        body[data-theme="dark"] .category-subtitle {
-            color: #d4d4d4 !important;
+        body[data-theme="dark"] .category-card:hover {
+            border-color: #667eea !important;
         }
 
         body[data-theme="dark"] .btn-secondary {
@@ -1338,13 +1301,28 @@ usort($activeCategories, function($a, $b) {
         <div class="container">
             <h2 class="section-title">Нашите категории</h2>
             <div class="categories-grid">
-                <?php foreach ($activeCategories as $category): ?>
+                <?php foreach ($activeCategories as $category): 
+                    // Get one sample product from this category
+                    $sampleProduct = null;
+                    foreach ($published_products as $product) {
+                        if (($product['category'] ?? '') === $category['slug']) {
+                            $sampleProduct = $product;
+                            break;
+                        }
+                    }
+                ?>
                     <a href="/category/<?php echo urlencode($category['slug']); ?>" class="category-card">
-                        <div class="category-icon"><?php echo !empty($category['icon']) ? $category['icon'] : '📁'; ?></div>
-                        <div class="category-name"><?php echo htmlspecialchars($category['name']); ?></div>
-                        <?php if (!empty($category['description'])): ?>
-                            <div class="category-desc"><?php echo nl2br(htmlspecialchars($category['description'])); ?></div>
+                        <?php if ($sampleProduct && !empty($sampleProduct['image'])): ?>
+                            <div class="category-preview-image" style="background-image: url('<?php echo htmlspecialchars($sampleProduct['image']); ?>');"></div>
+                        <?php else: ?>
+                            <div class="category-preview-image" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);"></div>
                         <?php endif; ?>
+                        <div class="category-info">
+                            <div class="category-name"><?php echo htmlspecialchars($category['name']); ?></div>
+                            <?php if (!empty($category['description'])): ?>
+                                <div class="category-desc"><?php echo htmlspecialchars(mb_substr($category['description'], 0, 50)) . (mb_strlen($category['description']) > 50 ? '...' : ''); ?></div>
+                            <?php endif; ?>
+                        </div>
                     </a>
                 <?php endforeach; ?>
             </div>
