@@ -369,32 +369,32 @@ $stats = get_dashboard_stats();
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
-            --bg-primary: #f5f7fa;
-            --bg-secondary: #ffffff;
-            --bg-sidebar: #2c3e50;
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --border-color: #e0e0e0;
-            --shadow: rgba(0, 0, 0, 0.05);
-            --primary: #3498db;
-            --primary-hover: #5568d3;
+            --bg-primary: #f8f7ff;
+            --bg-secondary: rgba(255, 255, 255, 0.7);
+            --bg-sidebar: #6b46c1;
+            --text-primary: #2d1b4e;
+            --text-secondary: #6b7280;
+            --border-color: rgba(107, 70, 193, 0.15);
+            --shadow: rgba(107, 70, 193, 0.08);
+            --primary: #6b46c1;
+            --primary-hover: #7c3aed;
             --danger: #dc3545;
-            --success-bg: #d4edda;
-            --success-border: #c3e6cb;
-            --success-text: #155724;
+            --success-bg: #f0fdf4;
+            --success-border: #86efac;
+            --success-text: #166534;
         }
         
         [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --bg-sidebar: #1f1f1f;
-            --text-primary: #f5f5f5;
-            --text-secondary: #d4d4d4;
-            --border-color: #404040;
-            --shadow: rgba(0, 0, 0, 0.5);
-            --success-bg: #1e4620;
-            --success-border: #2d5a2f;
-            --success-text: #7bc67e;
+            --bg-primary: #0f0a1a;
+            --bg-secondary: rgba(26, 22, 37, 0.9);
+            --bg-sidebar: #1a1625;
+            --text-primary: #e8e4f0;
+            --text-secondary: #c8c0d8;
+            --border-color: #2d1b4e;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --success-bg: #1e3a2e;
+            --success-border: #2d5a3f;
+            --success-text: #86efac;
         }
         
         body {
@@ -412,7 +412,7 @@ $stats = get_dashboard_stats();
             background: var(--bg-sidebar);
             color: white;
             padding: 20px 0;
-            box-shadow: 0 2px 10px var(--shadow);
+            box-shadow: 2px 0 20px rgba(107, 70, 193, 0.12);
             transition: background-color 0.3s ease;
         }
         .sidebar h2 {
@@ -452,8 +452,9 @@ $stats = get_dashboard_stats();
             font-size: 14px;
         }
         .sidebar a:hover {
-            background: rgba(102, 126, 234, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
+            padding-left: 24px;
         }
         .sidebar a.active {
             background: var(--primary);
@@ -466,14 +467,16 @@ $stats = get_dashboard_stats();
         }
         .header {
             background: var(--bg-secondary);
+            backdrop-filter: blur(10px);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px var(--shadow);
-            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 12px var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
         h1 { font-size: 28px; color: var(--text-primary); transition: color 0.3s ease; }
         h2, h3, h4 { color: var(--text-primary); transition: color 0.3s ease; }
@@ -500,9 +503,11 @@ $stats = get_dashboard_stats();
         }
         .stat-card {
             background: var(--bg-secondary);
+            backdrop-filter: blur(10px);
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px var(--shadow);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px var(--shadow);
+            border: 2px solid var(--border-color);
             border-left: 4px solid var(--primary);
             transition: all 0.3s ease;
         }
@@ -514,10 +519,12 @@ $stats = get_dashboard_stats();
         .stat-card .number { font-size: 32px; font-weight: bold; color: var(--primary); }
         .content {
             background: var(--bg-secondary);
+            backdrop-filter: blur(10px);
             padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px var(--shadow);
-            transition: background-color 0.3s ease;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
         .message {
             padding: 15px;

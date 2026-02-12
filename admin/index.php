@@ -82,7 +82,7 @@ if (!$isLoggedIn) {
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body {
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-                background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+                background: linear-gradient(135deg, #6b46c1 0%, #4338ca 100%);
                 min-height: 100vh;
                 display: flex;
                 align-items: center;
@@ -90,15 +90,16 @@ if (!$isLoggedIn) {
                 padding: 20px;
             }
             .login-container {
-                background: white;
-                border-radius: 10px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-radius: 16px;
+                box-shadow: 0 20px 60px rgba(107, 70, 193, 0.3);
                 padding: 40px;
                 width: 100%;
                 max-width: 400px;
             }
-            h1 { font-size: 28px; margin-bottom: 10px; text-align: center; color: #333; }
-            .subtitle { text-align: center; color: #999; margin-bottom: 30px; font-size: 14px; }
+            h1 { font-size: 28px; margin-bottom: 10px; text-align: center; color: #2d1b4e; }
+            .subtitle { text-align: center; color: #6b7280; margin-bottom: 30px; font-size: 14px; }
             .form-group {
                 margin-bottom: 20px;
             }
@@ -111,40 +112,43 @@ if (!$isLoggedIn) {
             input {
                 width: 100%;
                 padding: 12px;
-                border: 1px solid #ddd;
-                border-radius: 6px;
+                border: 2px solid rgba(107, 70, 193, 0.2);
+                border-radius: 8px;
                 font-size: 14px;
-                transition: border-color 0.3s;
+                transition: all 0.3s;
+                background: rgba(255, 255, 255, 0.9);
             }
             input:focus {
                 outline: none;
-                border-color: #3498db;
-                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                border-color: #6b46c1;
+                box-shadow: 0 0 0 4px rgba(107, 70, 193, 0.1);
+                background: white;
             }
             button {
                 width: 100%;
                 padding: 12px;
-                background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+                background: linear-gradient(135deg, #6b46c1 0%, #7c3aed 100%);
                 color: white;
                 border: none;
-                border-radius: 6px;
+                border-radius: 8px;
                 font-size: 16px;
                 font-weight: 600;
                 cursor: pointer;
-                transition: transform 0.2s, box-shadow 0.2s;
+                transition: all 0.2s;
             }
             button:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+                box-shadow: 0 8px 24px rgba(107, 70, 193, 0.4);
             }
             .error { color: #dc3545; margin-bottom: 20px; padding: 10px; background: #f8d7da; border-radius: 6px; }
             .note {
                 margin-top: 20px;
                 padding: 12px;
-                background: #f0f4ff;
-                border-left: 4px solid #3498db;
-                color: #555;
+                background: rgba(248, 247, 255, 0.8);
+                border-left: 4px solid #6b46c1;
+                color: #2d1b4e;
                 font-size: 13px;
+                border-radius: 4px;
             }
         </style>
     </head>
