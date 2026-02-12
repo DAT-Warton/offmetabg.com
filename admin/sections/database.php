@@ -8,11 +8,21 @@ $configFile = CMS_ROOT . '/config/database.json';
 $config = file_exists($configFile) ? json_decode(file_get_contents($configFile), true) : [];
 $currentDriver = $config['driver'] ?? 'json';
 
+// Check for DATABASE_URL environment variable
+$databaseUrl = getenv('DATABASE_URL');
+$usingEnvDatabase = !empty($databaseUrl);
+
 // Handle form submission
 if (isset($_POST['test_connection'])) {
+    $driver = $_POST['driver'] ?? 'mysql';
     try {
-        $dsn = "mysql:host={$_POST['db_host']};charset=utf8mb4";
-        $pdo = new PDO($dsn, $_POST['db_user'], $_POST['db_password']);
+        if ($driver === 'pgsql' || $driver === 'postgresql') {
+            $dsn = "pgsql:host={$_POST['db_host']};port=" . ($_POST['db_port'] ?? '5432');
+            $pdo = new PDO($dsn, $_POST['db_user'], $_POST['db_password']);
+        } else {
+            $dsn = "mysql:host={$_POST['db_host']};charset=utf8mb4";
+            $pdo = new PDO($dsn, $_POST['db_user'], $_POST['db_password']);
+        }
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $testMessage = '✅ Connection successful!';
         $testSuccess = true;
@@ -129,9 +139,20 @@ if (isset($_POST['save_database_config'])) {
 
     <div style="background: var(--bg-primary, #f8f9fa); padding: 15px; border-radius: 6px; margin-bottom: 20px;">
         <strong>Current Mode:</strong> 
-        <span style="color: <?php echo $currentDriver === 'mysql' ? '#28a745' : '#3498db'; ?>; font-weight: bold;">
-            <?php echo $currentDriver === 'mysql' ? '🗄️ MySQL Database' : '📄 JSON File Storage'; ?>
-        </span>
+        <?php if ($usingEnvDatabase): ?>
+            <span style="color: #9333ea; font-weight: bold;">🐘 PostgreSQL (DATABASE_URL)</span>
+            <div style="margin-top: 10px; padding: 10px; background: #f3e8ff; border-left: 3px solid #9333ea; font-size: 13px;">
+                ℹ️ Using DATABASE_URL from environment. PostgreSQL is active and will override config below.
+            </div>
+        <?php else: ?>
+            <span style="color: <?php echo $currentDriver === 'mysql' ? '#28a745' : ($currentDriver === 'pgsql' ? '#9333ea' : '#3498db'); ?>; font-weight: bold;">
+                <?php 
+                    if ($currentDriver === 'mysql') echo '🗄️ MySQL Database';
+                    elseif ($currentDriver === 'pgsql') echo '🐘 PostgreSQL Database';
+                    else echo '📄 JSON File Storage';
+                ?>
+            </span>
+        <?php endif; ?>
     </div>
 
     <form method="POST">
@@ -139,14 +160,20 @@ if (isset($_POST['save_database_config'])) {
             <label>Storage Mode</label>
             <select name="driver" id="driver" onchange="toggleMySQLFields()" style="padding: 10px; background: var(--bg-secondary, white); color: var(--text-primary, #333); border: 1px solid var(--border-color, #ddd);">
                 <option value="json" <?php echo $currentDriver === 'json' ? 'selected' : ''; ?>>📄 JSON File Storage (Default)</option>
-                <option value="mysql" <?php echo $currentDriver === 'mysql' ? 'selected' : ''; ?>>🗄️ MySQL Database (For Large Sites)</option>
+                <option value="mysql" <?php echo $currentDriver === 'mysql' ? 'selected' : ''; ?>>🗄️ MySQL Database</option>
+                <option value="pgsql" <?php echo $currentDriver === 'pgsql' ? 'selected' : ''; ?>>🐘 PostgreSQL Database</option>
             </select>
-            <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">JSON is simpler. MySQL is better for high-traffic sites.</small>
+            <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">JSON is simpler. PostgreSQL/MySQL for high-traffic sites.</small>
+            <?php if ($usingEnvDatabase): ?>
+                <small style="display: block; margin-top: 5px; color: #9333ea; font-weight: 600;">⚠️ DATABASE_URL is set - using PostgreSQL automatically</small>
+            <?php endif; ?>
         </div>
 
-        <div id="mysql-fields" style="display: <?php echo $currentDriver === 'mysql' ? 'block' : 'none'; ?>;">
-            <h3 style="margin: 20px 0 15px; color: var(--primary, #3498db);">MySQL Connection Details</h3>
-            <p style="color: var(--text-secondary, #666); margin-bottom: 15px;">📋 Get these credentials from cPanel → MySQL Databases</p>
+        <div id="mysql-fields" style="display: <?php echo ($currentDriver === 'mysql' || $currentDriver === 'pgsql') ? 'block' : 'none'; ?>;">
+            <h3 style="margin: 20px 0 15px; color: var(--primary, #3498db);">
+                <span id="db-type-label"><?php echo $currentDriver === 'pgsql' ? 'PostgreSQL' : 'MySQL'; ?></span> Connection Details
+            </h3>
+            <p style="color: var(--text-secondary, #666); margin-bottom: 15px;">📋 Get credentials from your hosting provider</p>
 
             <div class="form-group">
                 <label>Database Host</label>
@@ -174,8 +201,10 @@ if (isset($_POST['save_database_config'])) {
 
             <div class="form-group">
                 <label>Port (Optional)</label>
-                <input type="text" name="db_port" value="<?php echo htmlspecialchars($config['port'] ?? '3306'); ?>" placeholder="3306">
-                <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">Default: 3306 (usually doesn't need changing)</small>
+                <input type="text" name="db_port" id="db_port" value="<?php echo htmlspecialchars($config['port'] ?? '3306'); ?>" placeholder="3306">
+                <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">
+                    <span id="port-hint">Default: 3306 for MySQL, 5432 for PostgreSQL</span>
+                </small>
             </div>
 
             <div style="margin: 20px 0;">
@@ -209,7 +238,26 @@ if (isset($_POST['save_database_config'])) {
 function toggleMySQLFields() {
     var driver = document.getElementById('driver').value;
     var mysqlFields = document.getElementById('mysql-fields');
-    mysqlFields.style.display = driver === 'mysql' ? 'block' : 'none';
+    var dbTypeLabel = document.getElementById('db-type-label');
+    var portField = document.getElementById('db_port');
+    
+    if (driver === 'mysql') {
+        mysqlFields.style.display = 'block';
+        dbTypeLabel.textContent = 'MySQL';
+        portField.placeholder = '3306';
+        if (!portField.value || portField.value === '5432') {
+            portField.value = '3306';
+        }
+    } else if (driver === 'pgsql') {
+        mysqlFields.style.display = 'block';
+        dbTypeLabel.textContent = 'PostgreSQL';
+        portField.placeholder = '5432';
+        if (!portField.value || portField.value === '3306') {
+            portField.value = '5432';
+        }
+    } else {
+        mysqlFields.style.display = 'none';
+    }
 }
 </script>
 
