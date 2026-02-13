@@ -1,0 +1,37 @@
+# Local Deploy Configuration Example
+# Copy this file to: deploy-config.local.ps1
+# Then edit with your actual values
+
+# VPS Connection Settings
+$VPS_IP = "YOUR_VPS_IP_HERE"          # Example: "159.69.123.45"
+$VPS_USER = "root"                     # SSH user
+$VPS_SSH_KEY = ""                      # Optional: path to SSH key file (leave empty for password auth)
+
+# VPS Paths
+$VPS_WEB_ROOT = "/var/www/offmetabg"
+$VPS_NGINX_SITE = "offmetabg"
+
+# Domain
+$DOMAIN = "offmetabg.com"              # Your actual domain
+
+# Database Settings (for VPS setup)
+$DB_NAME = "offmetabg_db"
+$DB_USER = "offmetabg_user"
+$DB_PASS = "YOUR_SECURE_PASSWORD"      # Generate a strong password!
+
+# GitHub Repository
+$GIT_REPO = "git@github.com:DAT-Warton/offmetabg.com.git"
+$GIT_BRANCH = "master"
+
+# PHP Version on VPS
+$PHP_VERSION = "8.3"                   # Check your VPS PHP version: php -v
+
+# Deployment Options
+$RUN_MIGRATIONS = $true                # Run database migrations after deploy
+$RESTART_SERVICES = $true              # Restart nginx and php-fpm after deploy
+$BACKUP_BEFORE_DEPLOY = $false         # Create backup before deploying
+
+Write-Host "Deploy Configuration Loaded" -ForegroundColor Green
+Write-Host "  VPS: $VPS_IP" -ForegroundColor Gray
+Write-Host "  Domain: $DOMAIN" -ForegroundColor Gray
+Write-Host "  Branch: $GIT_BRANCH" -ForegroundColor Gray
