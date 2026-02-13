@@ -3,18 +3,19 @@
  * Blog Posts Management Section
  */
 $posts = get_posts();
+$action = $_GET['action'] ?? '';
 $editSlug = $_GET['edit'] ?? null;
 $editPost = $editSlug ? get_post($editSlug) : null;
 ?>
 
 <div>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>📝 Блог статии</h2>
-        <a href="?section=posts&action=new" style="padding: 10px 20px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 6px;">+ Нова статия</a>
+    <div class="section-header">
+        <h2 class="section-title">📝 Блог статии</h2>
+        <a href="?section=posts&action=new" class="btn">+ Нова статия</a>
     </div>
 
-    <?php if ($editPost || $_GET['action'] === 'new'): ?>
-        <form method="POST" style="margin-bottom: 30px;">
+    <?php if ($editPost || $action === 'new'): ?>
+        <form method="POST" class="card form-card">
             <input type="hidden" name="action" value="save_post">
             <input type="hidden" name="slug" value="<?php echo htmlspecialchars($editSlug); ?>">
 
@@ -30,7 +31,7 @@ $editPost = $editSlug ? get_post($editSlug) : null;
 
             <div class="form-group">
                 <label>Кратък опис</label>
-                <textarea name="excerpt" style="min-height: 80px;"><?php echo htmlspecialchars($editPost['excerpt'] ?? ''); ?></textarea>
+                <textarea name="excerpt" class="textarea-sm"><?php echo htmlspecialchars($editPost['excerpt'] ?? ''); ?></textarea>
             </div>
 
             <div class="form-group">
@@ -74,8 +75,8 @@ $editPost = $editSlug ? get_post($editSlug) : null;
                     <td><?php echo substr($post['created'], 0, 10); ?></td>
                     <td>
                         <div class="btn-group">
-                            <a href="?section=posts&edit=<?php echo $slug; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('edit'); ?></a>
-                            <form method="POST" style="display: inline;">
+                            <a href="?section=posts&edit=<?php echo $slug; ?>" class="btn-small"><?php echo __('edit'); ?></a>
+                            <form method="POST" class="inline-form">
                                 <input type="hidden" name="action" value="delete_post">
                                 <input type="hidden" name="slug" value="<?php echo $slug; ?>">
                                 <button type="submit" class="btn-small btn-delete" onclick="return confirm('Изтрий тази статия?');"><?php echo __('delete'); ?></button>

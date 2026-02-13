@@ -207,6 +207,16 @@ class DatabaseTable {
         $placeholders = implode(', ', array_fill(0, count($data), '?'));
         $stmt = $this->pdo->prepare("INSERT INTO {$this->name} ({$keys}) VALUES ({$placeholders})");
         $stmt->execute(array_values($data));
+        if ($this->driver === 'pgsql') {
+            if (isset($data['id']) && $data['id'] !== '') {
+                return $data['id'];
+            }
+            try {
+                return $this->pdo->lastInsertId();
+            } catch (PDOException $e) {
+                return null;
+            }
+        }
         return $this->pdo->lastInsertId();
     }
 

@@ -3,6 +3,7 @@
  * Customer Management Section
  */
 $customers = get_customers_data();
+$action = $_GET['action'] ?? '';
 $editId = $_GET['edit'] ?? null;
 $editCustomer = $editId ? ($customers[$editId] ?? null) : null;
 ?>
@@ -12,7 +13,7 @@ $editCustomer = $editId ? ($customers[$editId] ?? null) : null;
     <a href="?section=users&action=new" class="btn"><?php echo icon_user(18); ?> <?php echo __('users.new_customer'); ?></a>
 </div>
 
-    <?php if ($editCustomer || $_GET['action'] === 'new'): ?>
+    <?php if ($editCustomer || $action === 'new'): ?>
         <div class="card">
         <form method="POST">
             <input type="hidden" name="action" value="save_customer">
@@ -31,7 +32,7 @@ $editCustomer = $editId ? ($customers[$editId] ?? null) : null;
             <div class="form-group">
                 <label><?php echo __('auth.password'); ?> <?php echo $editCustomer ? '(оставете празно за да запазите текущата)' : ''; ?></label>
                 <input type="password" name="password" <?php echo !$editCustomer ? 'required' : ''; ?> minlength="6">
-                <small>Минимум 6 символа</small>
+                <small class="hint">Минимум 6 символа</small>
             </div>
 
             <div class="form-group">
@@ -72,7 +73,7 @@ $editCustomer = $editId ? ($customers[$editId] ?? null) : null;
         <tbody>
             <?php if (empty($customers)): ?>
                 <tr>
-                    <td colspan="5" style="text-align: center; padding: 40px;">
+                    <td colspan="5" class="table-empty">
                         <?php echo icon_user(32); ?><br>
                         Все още няма клиенти. Натиснете "<?php echo __('users.new_customer'); ?>", за да добавите!
                     </td>
@@ -85,23 +86,23 @@ $editCustomer = $editId ? ($customers[$editId] ?? null) : null;
                         <td>
                             <?php 
                                 $role = $customer['role'] ?? 'customer';
-                                $roleColors = [
-                                    'admin' => ['bg' => '#dc3545', 'label' => 'Admin'],
-                                    'manager' => ['bg' => '#fbbf24', 'label' => 'Manager'],
-                                    'employee' => ['bg' => '#3b82f6', 'label' => 'Employee'],
-                                    'customer' => ['bg' => '#27ae60', 'label' => 'Customer']
+                                $roleLabels = [
+                                    'admin' => 'Admin',
+                                    'manager' => 'Manager',
+                                    'employee' => 'Employee',
+                                    'customer' => 'Customer'
                                 ];
-                                $roleData = $roleColors[$role] ?? $roleColors['customer'];
+                                $roleLabel = $roleLabels[$role] ?? $roleLabels['customer'];
                             ?>
-                            <span style="display: inline-flex; align-items: center; padding: 4px 12px; background: <?php echo $roleData['bg']; ?>15; color: <?php echo $roleData['bg']; ?>; border: 1px solid <?php echo $roleData['bg']; ?>30; border-radius: 12px; font-size: 12px; font-weight: 600;">
-                                <?php echo $roleData['label']; ?>
+                            <span class="role-badge role-<?php echo htmlspecialchars($role); ?>">
+                                <?php echo $roleLabel; ?>
                             </span>
                         </td>
                         <td><?php echo $customer['created'] ?? 'N/A'; ?></td>
                         <td>
                             <div class="btn-group">
                                 <a href="?section=users&edit=<?php echo $id; ?>" class="btn-small"><?php echo icon_edit(14); ?> <?php echo __('edit'); ?></a>
-                                <form method="POST" style="display: inline; margin: 0;">
+                                <form method="POST" class="inline-form">
                                     <input type="hidden" name="action" value="delete_customer">
                                     <input type="hidden" name="customer_id" value="<?php echo $id; ?>">
                                     <button type="submit" class="btn-delete" onclick="return confirm('Изтрий този клиент? Действието не може да бъде отменено.')"><?php echo icon_trash(14, '#ef4444'); ?> <?php echo __('delete'); ?></button>

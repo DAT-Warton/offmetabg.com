@@ -45,7 +45,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
             <div class="form-group">
                 <label><?php echo __('admin.category_slug'); ?></label>
                 <input type="text" name="slug" value="<?php echo htmlspecialchars($editCategory['slug'] ?? ''); ?>" required>
-                <small style="color: var(--text-secondary, #666);">URL-friendly идентификатор (напр. electronics, clothing)</small>
+                <small class="hint">URL-friendly идентификатор (напр. electronics, clothing)</small>
             </div>
 
             <div class="form-group">
@@ -65,13 +65,13 @@ if ($action === 'edit' && isset($_GET['id'])) {
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </select>
-                <small style="color: var(--text-secondary, #666);">Изберете родителска категория за подкатегории</small>
+                <small class="hint">Изберете родителска категория за подкатегории</small>
             </div>
 
             <div class="form-group">
                 <label><?php echo __('admin.category_icon'); ?></label>
                 <input type="text" name="icon" value="<?php echo htmlspecialchars($editCategory['icon'] ?? ''); ?>" placeholder="📱">
-                <small style="color: var(--text-secondary, #666);">Emoji или HTML код</small>
+                <small class="hint">Emoji или HTML код</small>
             </div>
 
             <div class="form-group">
@@ -109,7 +109,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
             <tbody>
                 <?php if (empty($categories)): ?>
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-secondary, #666);">
+                        <td colspan="6" class="table-empty">
                             <?php echo icon_folder(32); ?><br>
                             <?php echo __('admin.no_categories'); ?>
                         </td>
@@ -119,7 +119,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
                         <tr>
                             <td>
                                 <?php if (!empty($category['icon'])): ?>
-                                    <span style="margin-right: 8px;"><?php echo $category['icon']; ?></span>
+                                    <span class="icon-gap"><?php echo $category['icon']; ?></span>
                                 <?php endif; ?>
                                 <strong><?php echo htmlspecialchars($category['name']); ?></strong>
                             </td>
@@ -134,28 +134,27 @@ if ($action === 'edit' && isset($_GET['id'])) {
                                         }
                                     }
                                 } else {
-                                    echo '<span style="color: var(--text-secondary, #666);">—</span>';
+                                    echo '<span class="text-muted">—</span>';
                                 }
                                 ?>
                             </td>
                             <td>
-                                <span style="background: var(--bg-primary, #f5f7fa); padding: 4px 10px; border-radius: 12px; font-size: 13px; font-weight: 600;">
+                                <span class="badge">
                                     <?php echo $category['product_count'] ?? 0; ?>
                                 </span>
                             </td>
                             <td>
                                 <?php if ($category['active'] ?? true): ?>
-                                    <span style="color: #27ae60; font-weight: 600;"><?php echo icon_check_circle(16); ?> <?php echo __('admin.active'); ?></span>
+                                    <span class="status-pill status-active"><?php echo icon_check_circle(16); ?> <?php echo __('admin.active'); ?></span>
                                 <?php else: ?>
-                                    <span style="color: #6b7280;"><?php echo icon_x_circle(16); ?> <?php echo __('admin.inactive'); ?></span>
+                                    <span class="status-pill status-inactive"><?php echo icon_x_circle(16); ?> <?php echo __('admin.inactive'); ?></span>
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <a href="?section=categories&action=edit&id=<?php echo urlencode($category['id']); ?>" 
-                                   style="padding: 6px 12px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 4px; font-weight: 600; font-size: 13px; display: inline-block; transition: all 0.2s;">
+                                <a href="?section=categories&action=edit&id=<?php echo urlencode($category['id']); ?>" class="btn-small">
                                     <?php echo __('admin.edit'); ?>
                                 </a>
-                                <form method="POST" style="display: inline;" onsubmit="return confirm('<?php echo __('admin.confirm_delete_category'); ?>');">
+                                <form method="POST" class="inline-form" onsubmit="return confirm('<?php echo __('admin.confirm_delete_category'); ?>');">
                                     <input type="hidden" name="action" value="delete_category">
                                     <input type="hidden" name="category_id" value="<?php echo htmlspecialchars($category['id']); ?>">
                                     <button type="submit" class="btn-delete"><?php echo __('admin.delete'); ?></button>

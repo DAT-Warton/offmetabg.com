@@ -125,27 +125,27 @@ if (isset($_POST['save_database_config'])) {
 
 <div>
     <h2>🗄️ Database Configuration</h2>
-    <p style="margin-bottom: 20px; color: #666;">Switch between JSON file storage and MySQL database for cPanel hosting.</p>
+    <p class="header-note">Switch between JSON file storage and MySQL database for cPanel hosting.</p>
 
     <?php if (isset($message)): ?>
         <div class="message"><?php echo $message; ?></div>
     <?php endif; ?>
 
     <?php if (isset($testMessage)): ?>
-        <div class="message" style="background: <?php echo $testSuccess ? 'var(--success-bg, #d4edda)' : '#f8d7da'; ?>; border: 1px solid <?php echo $testSuccess ? 'var(--success-border, #c3e6cb)' : '#f5c6cb'; ?>; color: <?php echo $testSuccess ? 'var(--success-text, #155724)' : '#721c24'; ?>; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+        <div class="message <?php echo $testSuccess ? 'message-success' : 'message-error'; ?>">
             <?php echo $testMessage; ?>
         </div>
     <?php endif; ?>
 
-    <div style="background: var(--bg-primary, #f8f9fa); padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+    <div class="status-panel">
         <strong>Current Mode:</strong> 
         <?php if ($usingEnvDatabase): ?>
-            <span style="color: #9333ea; font-weight: bold;">🐘 PostgreSQL (DATABASE_URL)</span>
-            <div style="margin-top: 10px; padding: 10px; background: #f3e8ff; border-left: 3px solid #9333ea; font-size: 13px;">
+            <span class="db-mode-label db-mode-pgsql">🐘 PostgreSQL (DATABASE_URL)</span>
+            <div class="status-note">
                 ℹ️ Using DATABASE_URL from environment. PostgreSQL is active and will override config below.
             </div>
         <?php else: ?>
-            <span style="color: <?php echo $currentDriver === 'mysql' ? '#28a745' : ($currentDriver === 'pgsql' ? '#9333ea' : '#3498db'); ?>; font-weight: bold;">
+            <span class="db-mode-label db-mode-<?php echo $currentDriver === 'pgsql' ? 'pgsql' : ($currentDriver === 'mysql' ? 'mysql' : 'json'); ?>">
                 <?php 
                     if ($currentDriver === 'mysql') echo '🗄️ MySQL Database';
                     elseif ($currentDriver === 'pgsql') echo '🐘 PostgreSQL Database';
@@ -158,69 +158,69 @@ if (isset($_POST['save_database_config'])) {
     <form method="POST">
         <div class="form-group">
             <label>Storage Mode</label>
-            <select name="driver" id="driver" onchange="toggleMySQLFields()" style="padding: 10px; background: var(--bg-secondary, white); color: var(--text-primary, #333); border: 1px solid var(--border-color, #ddd);">
+            <select name="driver" id="driver" onchange="toggleMySQLFields()" class="select-plain">
                 <option value="json" <?php echo $currentDriver === 'json' ? 'selected' : ''; ?>>📄 JSON File Storage (Default)</option>
                 <option value="mysql" <?php echo $currentDriver === 'mysql' ? 'selected' : ''; ?>>🗄️ MySQL Database</option>
                 <option value="pgsql" <?php echo $currentDriver === 'pgsql' ? 'selected' : ''; ?>>🐘 PostgreSQL Database</option>
             </select>
-            <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">JSON is simpler. PostgreSQL/MySQL for high-traffic sites.</small>
+            <small class="hint">JSON is simpler. PostgreSQL/MySQL for high-traffic sites.</small>
             <?php if ($usingEnvDatabase): ?>
-                <small style="display: block; margin-top: 5px; color: #9333ea; font-weight: 600;">⚠️ DATABASE_URL is set - using PostgreSQL automatically</small>
+                <small class="hint hint-warning">⚠️ DATABASE_URL is set - using PostgreSQL automatically</small>
             <?php endif; ?>
         </div>
 
-        <div id="mysql-fields" style="display: <?php echo ($currentDriver === 'mysql' || $currentDriver === 'pgsql') ? 'block' : 'none'; ?>;">
-            <h3 style="margin: 20px 0 15px; color: var(--primary, #3498db);">
+        <div id="mysql-fields" class="mysql-fields <?php echo ($currentDriver === 'mysql' || $currentDriver === 'pgsql') ? 'is-visible' : ''; ?>">
+            <h3 class="section-subtitle mt-20">
                 <span id="db-type-label"><?php echo $currentDriver === 'pgsql' ? 'PostgreSQL' : 'MySQL'; ?></span> Connection Details
             </h3>
-            <p style="color: var(--text-secondary, #666); margin-bottom: 15px;">📋 Get credentials from your hosting provider</p>
+            <p class="text-muted mb-15">📋 Get credentials from your hosting provider</p>
 
             <div class="form-group">
                 <label>Database Host</label>
                 <input type="text" name="db_host" value="<?php echo htmlspecialchars($config['host'] ?? 'localhost'); ?>" placeholder="localhost">
-                <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">Usually "localhost" on cPanel shared hosting</small>
+                <small class="hint">Usually "localhost" on cPanel shared hosting</small>
             </div>
 
             <div class="form-group">
                 <label>Database Name</label>
                 <input type="text" name="db_name" value="<?php echo htmlspecialchars($config['database'] ?? ''); ?>" placeholder="username_dbname">
-                <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">Format: username_dbname (create in cPanel first)</small>
+                <small class="hint">Format: username_dbname (create in cPanel first)</small>
             </div>
 
             <div class="form-group">
                 <label>Database Username</label>
                 <input type="text" name="db_user" value="<?php echo htmlspecialchars($config['user'] ?? ''); ?>" placeholder="username_dbuser">
-                <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">MySQL username from cPanel</small>
+                <small class="hint">MySQL username from cPanel</small>
             </div>
 
             <div class="form-group">
                 <label>Database Password</label>
                 <input type="password" name="db_password" value="<?php echo htmlspecialchars($config['password'] ?? ''); ?>" placeholder="Enter password">
-                <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">MySQL password (keep it secure!)</small>
+                <small class="hint">MySQL password (keep it secure!)</small>
             </div>
 
             <div class="form-group">
                 <label>Port (Optional)</label>
                 <input type="text" name="db_port" id="db_port" value="<?php echo htmlspecialchars($config['port'] ?? '3306'); ?>" placeholder="3306">
-                <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">
+                <small class="hint">
                     <span id="port-hint">Default: 3306 for MySQL, 5432 for PostgreSQL</span>
                 </small>
             </div>
 
-            <div style="margin: 20px 0;">
-                <button type="submit" name="test_connection" style="background: var(--warning, #ffc107); color: #000; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">🔍 Test Connection</button>
-                <small style="display: block; margin-top: 10px; color: var(--text-secondary, #666);">Test before saving to verify credentials are correct</small>
+            <div class="my-20">
+                <button type="submit" name="test_connection" class="btn btn-warning">🔍 Test Connection</button>
+                <small class="hint form-note">Test before saving to verify credentials are correct</small>
             </div>
         </div>
 
-        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color, #ddd);">
-            <button type="submit" name="save_database_config">💾 Save Configuration</button>
+        <div class="mt-20 pt-20 border-top">
+            <button type="submit" name="save_database_config" class="btn">💾 Save Configuration</button>
         </div>
     </form>
 
-    <div style="margin-top: 30px; padding: 15px; background: #383838; border: 1px solid #4a4a4a; border-radius: 6px;">
-        <h3 style="color: #ffffff; margin-bottom: 10px;">📖 How to Setup MySQL in cPanel</h3>
-        <ol style="color: #ffffff; line-height: 1.8;">
+    <div class="card card-note mt-30">
+        <h3 class="mb-10">📖 How to Setup MySQL in cPanel</h3>
+        <ol>
             <li>Login to cPanel</li>
             <li>Go to <strong>MySQL Databases</strong></li>
             <li>Create a new database (e.g., "username_cms")</li>
@@ -230,7 +230,7 @@ if (isset($_POST['save_database_config'])) {
             <li>Click "Test Connection" to verify</li>
             <li>Click "Save Configuration" to activate MySQL</li>
         </ol>
-        <p style="color: #ffffff; margin-top: 10px;"><strong>Note:</strong> Tables will be created automatically when you save!</p>
+        <p class="mt-10"><strong>Note:</strong> Tables will be created automatically when you save!</p>
     </div>
 </div>
 

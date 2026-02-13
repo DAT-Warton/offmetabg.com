@@ -3,18 +3,19 @@
  * Products Management Section
  */
 $products = get_products_data();
+$action = $_GET['action'] ?? '';
 $editId = $_GET['edit'] ?? null;
 $editProduct = $editId ? ($products[$editId] ?? null) : null;
 ?>
 
 <div>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2 style="color: var(--text-primary, #1f2937);">🛍️ <?php echo __('admin.manage_products'); ?></h2>
-        <a href="?section=products&action=new" style="padding: 10px 20px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 6px;">+ <?php echo __('admin.new_product'); ?></a>
+    <div class="section-header">
+        <h2 class="section-title">🛍️ <?php echo __('admin.manage_products'); ?></h2>
+        <a href="?section=products&action=new" class="btn">+ <?php echo __('admin.new_product'); ?></a>
     </div>
 
-    <?php if ($editProduct || $_GET['action'] === 'new'): ?>
-        <form method="POST" enctype="multipart/form-data" style="margin-bottom: 30px; background: var(--bg-secondary, white); padding: 25px; border-radius: 12px; box-shadow: 0 2px 4px var(--shadow, rgba(0,0,0,0.1));">
+    <?php if ($editProduct || $action === 'new'): ?>
+        <form method="POST" enctype="multipart/form-data" class="card card-lg form-card">
             <input type="hidden" name="action" value="save_product">
             <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($editId ?? ''); ?>">
 
@@ -38,21 +39,21 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
                 
                 <!-- Current Image Preview -->
                 <?php if (!empty($editProduct['image'])): ?>
-                    <div style="margin-bottom: 10px; padding: 10px; background: var(--bg-primary, #f5f7fa); border-radius: 6px; border: 1px solid var(--border-color, #e0e0e0);">
-                        <img src="<?php echo htmlspecialchars($editProduct['image']); ?>" style="max-width: 100%; max-height: 300px; width: auto; height: auto; object-fit: contain; border-radius: 4px; display: block; margin-bottom: 5px;" alt="Current image">
-                        <small style="color: var(--text-secondary, #666);">Current: <?php echo htmlspecialchars($editProduct['image']); ?></small>
+                    <div class="image-preview">
+                        <img src="<?php echo htmlspecialchars($editProduct['image']); ?>" alt="Current image">
+                        <small class="hint">Current: <?php echo htmlspecialchars($editProduct['image']); ?></small>
                     </div>
                 <?php endif; ?>
                 
                 <!-- Upload New Image -->
-                <input type="file" name="product_image" accept="image/*" style="margin-bottom: 10px; padding: 8px; border: 1px solid var(--border-color, #ddd); border-radius: 6px; background: var(--bg-secondary, white); color: var(--text-primary, #333); width: 100%;">
-                <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);"><?php echo __('admin.image_upload_hint'); ?> (JPG, PNG, GIF, max 5MB)</small>
+                <input type="file" name="product_image" accept="image/*" class="file-input">
+                <small class="hint"><?php echo __('admin.image_upload_hint'); ?> (JPG, PNG, GIF, max 5MB)</small>
                 
                 <!-- OR use URL -->
-                <div style="margin-top: 15px;">
-                    <label style="font-size: 14px; color: var(--text-secondary, #666);">Or enter image URL:</label>
+                <div class="mt-15">
+                    <label class="text-sm text-muted">Or enter image URL:</label>
                     <input type="text" name="image" value="<?php echo htmlspecialchars($editProduct['image'] ?? ''); ?>" placeholder="/uploads/product.jpg or https://...">
-                    <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);"><?php echo __('admin.image_url_hint'); ?></small>
+                    <small class="hint"><?php echo __('admin.image_url_hint'); ?></small>
                 </div>
             </div>
 
@@ -64,8 +65,8 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
                 ?>
                 <?php if (empty($categories)): ?>
                     <input type="text" name="category" value="<?php echo htmlspecialchars($currentCategory); ?>" placeholder="general">
-                    <small style="display: block; margin-top: 5px; color: #f59e0b;">
-                        ⚠️ Няма създадени категории. <a href="?section=categories&action=new" style="color: #3498db; font-weight: 600;">Създайте категория</a> или въведете име ръчно.
+                    <small class="text-warning">
+                        ⚠️ Няма създадени категории. <a href="?section=categories&action=new" class="link-primary">Създайте категория</a> или въведете име ръчно.
                     </small>
                 <?php else: ?>
                     <select name="category" required>
@@ -79,8 +80,8 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
                             <?php endif; ?>
                         <?php endforeach; ?>
                     </select>
-                    <small style="display: block; margin-top: 5px; color: var(--text-secondary, #666);">
-                        Изберете категория или <a href="?section=categories&action=new" style="color: #3498db; font-weight: 600;">създайте нова</a>
+                    <small class="hint">
+                        Изберете категория или <a href="?section=categories&action=new" class="link-primary">създайте нова</a>
                     </small>
                 <?php endif; ?>
             </div>
@@ -99,25 +100,25 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
                 </select>
             </div>
 
-            <h3 style="margin-top: 30px; margin-bottom: 15px; color: #3498db; border-bottom: 2px solid #3498db; padding-bottom: 10px;">📹 <?php echo __('admin.product_videos'); ?></h3>
-            <p style="color: #666; margin-bottom: 20px; font-size: 14px;"><?php echo __('admin.product_videos_hint'); ?></p>
+            <h3 class="section-subtitle">📹 <?php echo __('admin.product_videos'); ?></h3>
+            <p class="text-sm text-muted mb-20"><?php echo __('admin.product_videos_hint'); ?></p>
 
             <div class="form-group">
                 <label><?php echo __('admin.youtube_url'); ?></label>
                 <input type="url" name="video_youtube" value="<?php echo htmlspecialchars($editProduct['videos']['youtube'] ?? ''); ?>" placeholder="https://www.youtube.com/watch?v=xxxxx or https://youtu.be/xxxxx">
-                <small style="display: block; margin-top: 5px; color: #666;"><?php echo __('admin.youtube_hint'); ?></small>
+                <small class="hint"><?php echo __('admin.youtube_hint'); ?></small>
             </div>
 
             <div class="form-group">
                 <label><?php echo __('admin.tiktok_url'); ?></label>
                 <input type="url" name="video_tiktok" value="<?php echo htmlspecialchars($editProduct['videos']['tiktok'] ?? ''); ?>" placeholder="https://www.tiktok.com/@username/video/xxxxx">
-                <small style="display: block; margin-top: 5px; color: #666;"><?php echo __('admin.tiktok_hint'); ?></small>
+                <small class="hint"><?php echo __('admin.tiktok_hint'); ?></small>
             </div>
 
             <div class="form-group">
                 <label><?php echo __('admin.instagram_url'); ?></label>
                 <input type="url" name="video_instagram" value="<?php echo htmlspecialchars($editProduct['videos']['instagram'] ?? ''); ?>" placeholder="https://www.instagram.com/p/xxxxx/ or https://www.instagram.com/reel/xxxxx/">
-                <small style="display: block; margin-top: 5px; color: #666;"><?php echo __('admin.instagram_hint'); ?></small>
+                <small class="hint"><?php echo __('admin.instagram_hint'); ?></small>
             </div>
 
             <button type="submit"><?php echo __('admin.save_product'); ?></button>
@@ -137,7 +138,7 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
         <tbody>
             <?php if (empty($products)): ?>
                 <tr>
-                    <td colspan="5" style="text-align: center; padding: 40px;">
+                    <td colspan="5" class="table-empty">
                         <?php echo icon_box(32); ?><br>
                         <?php echo __('admin.no_products_yet'); ?>
                     </td>
@@ -151,8 +152,8 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
                         <td><?php echo ucfirst($product['status'] ?? 'published'); ?></td>
                         <td>
                             <div class="btn-group">
-                                <a href="?section=products&edit=<?php echo $id; ?>" class="btn-small" style="padding: 6px 12px; background: var(--primary, #3498db); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600;"><?php echo __('edit'); ?></a>
-                                <form method="POST" style="display: inline;">
+                                <a href="?section=products&edit=<?php echo $id; ?>" class="btn-small"><?php echo __('edit'); ?></a>
+                                <form method="POST" class="inline-form">
                                     <input type="hidden" name="action" value="delete_product">
                                     <input type="hidden" name="product_id" value="<?php echo $id; ?>">
                                     <button type="submit" class="btn-small btn-delete" onclick="return confirm('Изтрий този продукт?');"><?php echo __('delete'); ?></button>
