@@ -120,7 +120,8 @@ body {
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    flex-wrap: nowrap;
 }
 .action-btn {
     padding: 8px 16px;
@@ -130,11 +131,12 @@ body {
     border: none;
     cursor: pointer;
     transition: all 0.2s;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
     text-decoration: none;
     font-weight: 600;
+    white-space: nowrap;
 }
 .action-btn:hover {
     transform: translateY(-1px);
@@ -143,15 +145,18 @@ body {
 h1 { font-size: 28px; color: #ffffff; transition: color 0.3s ease; }
 h2, h3, h4 { color: #ffffff; transition: color 0.3s ease; }
 .logout-btn {
-    padding: 10px 20px;
+    padding: 8px 16px;
     background: var(--danger);
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     text-decoration: none;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     transition: all 0.2s;
+    font-weight: 600;
+    white-space: nowrap;
 }
 .logout-btn:hover {
     transform: translateY(-2px);
@@ -753,7 +758,7 @@ tr:hover {
     box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
 }
 .inline-form {
-    display: inline;
+    display: inline-flex;
     margin: 0;
 }
 .theme-btn,
@@ -768,5 +773,19 @@ tr:hover {
 @media (max-width: 768px) {
     .container { flex-direction: column; }
     .sidebar { width: 100%; }
-    .header { flex-direction: column; gap: 15px; }
+    .header { 
+        flex-direction: column; 
+        gap: 15px; 
+        align-items: stretch;
+    }
+    .header-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .action-btn,
+    .logout-btn {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
 }
