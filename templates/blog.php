@@ -14,7 +14,8 @@ arsort($publishedPosts);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog - <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></title>
-    <link rel="stylesheet" href="/assets/css/blog.css">
+    <link rel="stylesheet" href="/admin/assets/css/admin.css">
+    <link rel="stylesheet" href="/admin/assets/css/admin-dashboard-section.css">
 </head>
 <body>
     <header>

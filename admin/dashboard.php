@@ -380,17 +380,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $stats = get_dashboard_stats();
 ?>
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo __('admin.cms_dashboard'); ?></title>
-    <link rel="stylesheet" href="../assets/css/dark-theme.css" id="dark-theme-style" disabled>
+    <link rel="stylesheet" href="../assets/css/dark-theme.css" id="dark-theme-style">
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/admin-dashboard-section.css">
 </head>
-<body data-icon-sun="<?php echo htmlspecialchars(icon_sun(18), ENT_QUOTES, 'UTF-8'); ?>"
-    data-icon-moon="<?php echo htmlspecialchars(icon_moon(18), ENT_QUOTES, 'UTF-8'); ?>">
+<body>
     <div class="container">
         <!-- Sidebar -->
         <aside class="sidebar">
@@ -460,9 +459,6 @@ $stats = get_dashboard_stats();
                     <h1><?php echo icon_home(24); ?> <?php echo $sectionTitles[$section] ?? ucfirst($section); ?></h1>
                 </div>
                 <div class="header-actions">
-                    <button type="button" onclick="toggleTheme()" class="theme-btn action-btn" title="<?php echo __('theme.switch_to_dark'); ?>">
-                        <span id="theme-icon"><?php echo icon_moon(18); ?></span>
-                    </button>
                     <a href="?section=<?php echo htmlspecialchars($section); ?>&lang=<?php echo opposite_lang(); ?>" 
                        class="lang-btn action-btn" 
                        title="Switch to <?php echo lang_name(opposite_lang()); ?>">

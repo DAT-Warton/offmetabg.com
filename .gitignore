@@ -10,6 +10,7 @@ config/email-config.php
 .env
 .env.local
 .env.production
+.cloudflare-credentials
 
 # Development & Deployment (contains sensitive data)
 .vscode/

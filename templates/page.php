@@ -11,7 +11,8 @@ $page = $page ?? [];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($page['title'] ?? 'Page'); ?> - <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></title>
     <meta name="description" content="<?php echo htmlspecialchars($page['meta_description'] ?? ''); ?>">
-    <link rel="stylesheet" href="/assets/css/page.css">
+    <link rel="stylesheet" href="/admin/assets/css/admin.css">
+    <link rel="stylesheet" href="/admin/assets/css/admin-dashboard-section.css">
 </head>
 <body>
     <header>

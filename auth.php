@@ -238,8 +238,8 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - OffMeta</title>
-    <link rel="stylesheet" href="assets/css/dark-theme.css" id="dark-theme-style" disabled>
-    <link rel="stylesheet" href="assets/css/auth.css">
+    <link rel="stylesheet" href="admin/assets/css/admin.css">
+    <link rel="stylesheet" href="admin/assets/css/admin-dashboard-section.css">
 </head>
 <body class="auth-page">
     <div class="nav-actions">
