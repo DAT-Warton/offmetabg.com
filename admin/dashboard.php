@@ -347,7 +347,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'delete_inquiry':
             $inquiry_id = $_POST['inquiry_id'] ?? '';
             delete_inquiry_data($inquiry_id);
-            $message = 'Ð—Ð°Ð¿Ð¸Ñ‚Ð²Ð°Ð½ÐµÑ‚Ð¾ Ðµ Ð¸Ð·Ñ‚Ñ€Ð¸Ñ‚Ð¾';
+            $message = 'Запитването е изтрито';
+            break;
+
+        case 'delete_media':
+            $filename = $_POST['filename'] ?? '';
+            if ($filename === '' || strpos($filename, '..') !== false || strpos($filename, '/') !== false) {
+                $message = 'Невалидно име на файл';
+                break;
+            }
+            
+            $uploadDir = CMS_ROOT . '/uploads/';
+            $filePath = $uploadDir . $filename;
+            
+            if (file_exists($filePath) && is_file($filePath)) {
+                if (unlink($filePath)) {
+                    $message = 'Файлът "' . htmlspecialchars($filename) . '" е изтрит успешно';
+                } else {
+                    $message = 'Грешка при изтриване на файла';
+                }
+            } else {
+                $message = 'Файлът не съществува';
+            }
             break;
 
         default:
