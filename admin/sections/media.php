@@ -31,9 +31,19 @@
         echo '<div class="media-grid">';
         foreach ($files as $file) {
             $path = '/uploads/' . $file;
+            $filePath = $uploadDir . '/' . $file;
+            $fileSize = is_file($filePath) ? filesize($filePath) : 0;
+            $fileSizeFormatted = $fileSize > 1048576 ? round($fileSize / 1048576, 2) . ' MB' : round($fileSize / 1024, 2) . ' KB';
+            
             echo '<div class="media-card">';
-            echo '<img src="' . $path . '">';
-            echo '<p class="media-name">' . htmlspecialchars($file) . '</p>';
+            echo '<img src="' . htmlspecialchars($path) . '" alt="' . htmlspecialchars($file) . '">';
+            echo '<p class="media-name" title="' . htmlspecialchars($file) . '">' . htmlspecialchars($file) . '</p>';
+            echo '<small class="text-muted">' . $fileSizeFormatted . '</small>';
+            echo '<form method="POST" style="margin-top: 10px;" onsubmit="return confirm(\'Сигурни ли сте, че искате да изтриете ' . htmlspecialchars($file, ENT_QUOTES) . '?\');">';
+            echo '<input type="hidden" name="action" value="delete_media">';
+            echo '<input type="hidden" name="filename" value="' . htmlspecialchars($file) . '">';
+            echo '<button type="submit" class="btn-delete btn-sm">' . icon_trash(16) . ' Изтрий</button>';
+            echo '</form>';
             echo '</div>';
         }
         echo '</div>';
