@@ -4,9 +4,18 @@ uploads/
 logs/
 cache/
 
-# Development
+# Configuration (sensitive data)
+config/database.json
+config/email-config.php
+.env
+.env.local
+.env.production
+
+# Development & Deployment (contains sensitive data)
 .vscode/
 hetzner-cloud-config.yaml
+deploy-to-vps.ps1
+deploy-vps.sh
 
 # OS files
 .DS_Store
