@@ -17,6 +17,11 @@ config/email-config.php
 hetzner-cloud-config.yaml
 deploy-to-vps.ps1
 deploy-vps.sh
+deploy-config.local.ps1
+*.local.ps1
+*.local.sh
+*.local.json
+*.local.env
 
 # OS files
 .DS_Store
