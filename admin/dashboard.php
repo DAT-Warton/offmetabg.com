@@ -244,14 +244,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'active' => isset($_POST['active']),
             ]);
             
-            $message = 'ÐšÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸ÑÑ‚Ð° Ðµ Ð·Ð°Ð¿Ð°Ð·ÐµÐ½Ð° ÑƒÑÐ¿ÐµÑˆÐ½Ð¾';
+            $message = 'Категорията е запазена успешно';
             break;
 
         case 'delete_category':
             $category_id = $_POST['category_id'] ?? '';
             delete_category_data($category_id);
             
-            $message = 'ÐšÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸ÑÑ‚Ð° Ðµ Ð¸Ð·Ñ‚Ñ€Ð¸Ñ‚Ð°';
+            $message = 'Категорията е изтрита';
             break;
 
         // Promotions Management
@@ -301,13 +301,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             save_promotion_data($promotion);
-            $message = 'ÐŸÑ€Ð¾Ð¼Ð¾Ñ†Ð¸ÑÑ‚Ð° Ðµ Ð·Ð°Ð¿Ð°Ð·ÐµÐ½Ð° ÑƒÑÐ¿ÐµÑˆÐ½Ð¾';
+            $message = 'Промоцията е запазена успешно';
             break;
 
         case 'delete_promotion':
             $promotion_id = $_POST['promotion_id'] ?? '';
             delete_promotion_data($promotion_id);
-            $message = 'ÐŸÑ€Ð¾Ð¼Ð¾Ñ†Ð¸ÑÑ‚Ð° Ðµ Ð¸Ð·Ñ‚Ñ€Ð¸Ñ‚Ð°';
+            $message = 'Промоцията е изтрита';
             break;
 
         // Discounts Management
@@ -329,19 +329,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'active' => isset($_POST['active']),
                 'first_purchase_only' => isset($_POST['first_purchase_only']),
             ]);
-            $message = 'ÐžÑ‚ÑÑ‚ÑŠÐ¿ÐºÐ°Ñ‚Ð° Ðµ Ð·Ð°Ð¿Ð°Ð·ÐµÐ½Ð° ÑƒÑÐ¿ÐµÑˆÐ½Ð¾';
+            $message = 'Отстъпката е запазена успешно';
             break;
 
         case 'delete_discount':
             $discount_id = $_POST['discount_id'] ?? '';
             delete_discount_data($discount_id);
-            $message = 'ÐžÑ‚ÑÑ‚ÑŠÐ¿ÐºÐ°Ñ‚Ð° Ðµ Ð¸Ð·Ñ‚Ñ€Ð¸Ñ‚Ð°';
+            $message = 'Отстъпката е изтрита';
             break;
         
         case 'update_inquiry_status':
             $inquiry_id = $_POST['inquiry_id'] ?? '';
             update_inquiry_status_data($inquiry_id, $_POST['status'] ?? 'pending');
-            $message = 'Ð¡Ñ‚Ð°Ñ‚ÑƒÑÑŠÑ‚ Ð½Ð° Ð·Ð°Ð¿Ð¸Ñ‚Ð²Ð°Ð½ÐµÑ‚Ð¾ Ðµ Ð°ÐºÑ‚ÑƒÐ°Ð»Ð¸Ð·Ð¸Ñ€Ð°Ð½';
+            $message = 'Статусът на запитването е актуализиран';
             break;
         
         case 'delete_inquiry':
@@ -416,7 +416,7 @@ $stats = get_dashboard_stats();
 
             <!-- Marketing Section -->
             <div class="sidebar-section">
-                <p class="sidebar-section-title">ÐœÐ°Ñ€ÐºÐµÑ‚Ð¸Ð½Ð³</p>
+                <p class="sidebar-section-title">Маркетинг</p>
                 <ul>
                     <li><a href="?section=promotions" class="<?php echo $section === 'promotions' ? 'active' : ''; ?>"><?php echo icon_megaphone(18); ?> <?php echo __('admin.promotions'); ?></a></li>
                     <li><a href="?section=discounts" class="<?php echo $section === 'discounts' ? 'active' : ''; ?>"><?php echo icon_percent(18); ?> <?php echo __('admin.discounts'); ?></a></li>
@@ -425,7 +425,7 @@ $stats = get_dashboard_stats();
 
             <!-- Content Section -->
             <div class="sidebar-section">
-                <p class="sidebar-section-title">Ð¡ÑŠÐ´ÑŠÑ€Ð¶Ð°Ð½Ð¸Ðµ</p>
+                <p class="sidebar-section-title">Съдържание</p>
                 <ul>
                     <li><a href="?section=pages" class="<?php echo $section === 'pages' ? 'active' : ''; ?>"><?php echo icon_home(18); ?> <?php echo __('menu.pages'); ?></a></li>
                     <li><a href="?section=posts" class="<?php echo $section === 'posts' ? 'active' : ''; ?>"><?php echo icon_check(18); ?> <?php echo __('menu.blog_posts'); ?></a></li>
@@ -435,7 +435,7 @@ $stats = get_dashboard_stats();
 
             <!-- Communication Section -->
             <div class="sidebar-section">
-                <p class="sidebar-section-title">ÐšÐ¾Ð¼ÑƒÐ½Ð¸ÐºÐ°Ñ†Ð¸Ñ</p>
+                <p class="sidebar-section-title">Комуникация</p>
                 <ul>
                     <li><a href="?section=inquiries" class="<?php echo $section === 'inquiries' ? 'active' : ''; ?>"><?php echo icon_mail(18); ?> <?php echo __('inquiry.title'); ?></a></li>
                     <li><a href="?section=users" class="<?php echo $section === 'users' ? 'active' : ''; ?>"><?php echo icon_user(18); ?> <?php echo __('menu.users'); ?></a></li>
@@ -444,7 +444,7 @@ $stats = get_dashboard_stats();
 
             <!-- System Section -->
             <div class="sidebar-section">
-                <p class="sidebar-section-title">Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð°</p>
+                <p class="sidebar-section-title">Система</p>
                 <ul>
                     <li><a href="?section=database" class="<?php echo $section === 'database' ? 'active' : ''; ?>"><?php echo icon_settings(18); ?> <?php echo __('menu.database'); ?></a></li>
                     <li><a href="?section=settings" class="<?php echo $section === 'settings' ? 'active' : ''; ?>"><?php echo icon_settings(18); ?> <?php echo __('menu.settings'); ?></a></li>
