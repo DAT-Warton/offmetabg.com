@@ -70,14 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
 
         case 'upload_media':
-            if (!isset($_FILES['media'])) {
+            if (!isset($_FILES['media']) || empty($_FILES['media']['name'][0])) {
                 $message = __('admin.no_file_selected');
-                break;
-            }
-
-            $file = $_FILES['media'];
-            if ($file['error'] !== UPLOAD_ERR_OK) {
-                $message = __('admin.upload_error');
                 break;
             }
 
@@ -86,54 +80,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 mkdir($uploadDir, 0755, true);
             }
 
-            $originalName = $file['name'] ?? 'upload';
-            $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-            $heicExtensions = ['heic', 'heif'];
+            $uploadedFiles = [];
+            $errors = [];
+            $fileCount = count($_FILES['media']['name']);
 
-            if (in_array($extension, $heicExtensions, true)) {
-                if (class_exists('\Imagick')) {
-                    $fileName = 'media_' . uniqid() . '.jpg';
-                    $targetPath = $uploadDir . $fileName;
-                    try {
-                        $image = new \Imagick($file['tmp_name']);
-                        $image->setImageFormat('jpeg');
-                        $image->setImageCompressionQuality(90);
-                        $image->stripImage();
-                        $image->writeImage($targetPath);
-                        $image->clear();
-                        $image->destroy();
-                        $message = __('admin.file_uploaded') . ': ' . htmlspecialchars($fileName);
-                    } catch (Exception $e) {
-                        $message = __('admin.upload_error');
-                    }
-                } else {
-                    $message = 'HEIC/HEIF не се поддържат на този сървър. Моля, конвертирайте в JPG або PNG.';
+            for ($i = 0; $i < $fileCount; $i++) {
+                if ($_FILES['media']['error'][$i] !== UPLOAD_ERR_OK) {
+                    $errors[] = $_FILES['media']['name'][$i] . ': ' . __('admin.upload_error');
+                    continue;
                 }
-                break;
+
+                $originalName = $_FILES['media']['name'][$i] ?? 'upload';
+                $tmpName = $_FILES['media']['tmp_name'][$i];
+                $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+                $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                $heicExtensions = ['heic', 'heif'];
+
+                if (in_array($extension, $heicExtensions, true)) {
+                    if (class_exists('\Imagick')) {
+                        $fileName = 'media_' . uniqid() . '.jpg';
+                        $targetPath = $uploadDir . $fileName;
+                        try {
+                            $image = new \Imagick($tmpName);
+                            $image->setImageFormat('jpeg');
+                            $image->setImageCompressionQuality(90);
+                            $image->stripImage();
+                            $image->writeImage($targetPath);
+                            $image->clear();
+                            $image->destroy();
+                            $uploadedFiles[] = $fileName;
+                        } catch (Exception $e) {
+                            $errors[] = $originalName . ': Грешка при конвертиране';
+                        }
+                    } else {
+                        $errors[] = $originalName . ': HEIC/HEIF не се поддържат';
+                    }
+                    continue;
+                }
+
+                if (!in_array($extension, $allowedExtensions, true)) {
+                    $errors[] = $originalName . ': Неподдържан формат';
+                    continue;
+                }
+
+                $baseName = preg_replace('/[^a-zA-Z0-9_-]+/', '-', pathinfo($originalName, PATHINFO_FILENAME));
+                $baseName = trim($baseName, '-');
+                if ($baseName === '') {
+                    $baseName = 'media';
+                }
+
+                $fileName = $baseName . '_' . time() . '_' . uniqid() . '.' . $extension;
+                $targetPath = $uploadDir . $fileName;
+
+                if (move_uploaded_file($tmpName, $targetPath)) {
+                    $uploadedFiles[] = $fileName;
+                } else {
+                    $errors[] = $originalName . ': Грешка при качване';
+                }
             }
 
-            if (!in_array($extension, $allowedExtensions, true)) {
-                $message = 'Неподдържан формат. Позволени: JPG, PNG, GIF, WEBP.';
-                break;
-            }
-
-            $baseName = preg_replace('/[^a-zA-Z0-9_-]+/', '-', pathinfo($originalName, PATHINFO_FILENAME));
-            $baseName = trim($baseName, '-');
-            if ($baseName === '') {
-                $baseName = 'media';
-            }
-
-            $fileName = $baseName . '_' . time() . '_' . uniqid() . '.' . $extension;
-            $targetPath = $uploadDir . $fileName;
-
-            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-                $message = __('admin.file_uploaded') . ': ' . htmlspecialchars($fileName);
+            if (!empty($uploadedFiles)) {
+                $message = 'Качени ' . count($uploadedFiles) . ' файл(а): ' . implode(', ', array_map('htmlspecialchars', $uploadedFiles));
+                if (!empty($errors)) {
+                    $message .= '<br>Грешки: ' . implode(', ', array_map('htmlspecialchars', $errors));
+                }
             } else {
-                $message = __('admin.upload_error');
+                $message = 'Няма качени файлове. ' . (!empty($errors) ? 'Грешки: ' . implode(', ', array_map('htmlspecialchars', $errors)) : '');
             }
             break;
-
         case 'save_product':
             $product_id = $_POST['product_id'] ?: uniqid('prod_');
             
@@ -230,14 +244,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'active' => isset($_POST['active']),
             ]);
             
-            $message = 'Категорията е запазена успешно';
+            $message = 'ÐšÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸ÑÑ‚Ð° Ðµ Ð·Ð°Ð¿Ð°Ð·ÐµÐ½Ð° ÑƒÑÐ¿ÐµÑˆÐ½Ð¾';
             break;
 
         case 'delete_category':
             $category_id = $_POST['category_id'] ?? '';
             delete_category_data($category_id);
             
-            $message = 'Категорията е изтрита';
+            $message = 'ÐšÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸ÑÑ‚Ð° Ðµ Ð¸Ð·Ñ‚Ñ€Ð¸Ñ‚Ð°';
             break;
 
         // Promotions Management
@@ -287,13 +301,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             save_promotion_data($promotion);
-            $message = 'Промоцията е запазена успешно';
+            $message = 'ÐŸÑ€Ð¾Ð¼Ð¾Ñ†Ð¸ÑÑ‚Ð° Ðµ Ð·Ð°Ð¿Ð°Ð·ÐµÐ½Ð° ÑƒÑÐ¿ÐµÑˆÐ½Ð¾';
             break;
 
         case 'delete_promotion':
             $promotion_id = $_POST['promotion_id'] ?? '';
             delete_promotion_data($promotion_id);
-            $message = 'Промоцията е изтрита';
+            $message = 'ÐŸÑ€Ð¾Ð¼Ð¾Ñ†Ð¸ÑÑ‚Ð° Ðµ Ð¸Ð·Ñ‚Ñ€Ð¸Ñ‚Ð°';
             break;
 
         // Discounts Management
@@ -315,25 +329,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'active' => isset($_POST['active']),
                 'first_purchase_only' => isset($_POST['first_purchase_only']),
             ]);
-            $message = 'Отстъпката е запазена успешно';
+            $message = 'ÐžÑ‚ÑÑ‚ÑŠÐ¿ÐºÐ°Ñ‚Ð° Ðµ Ð·Ð°Ð¿Ð°Ð·ÐµÐ½Ð° ÑƒÑÐ¿ÐµÑˆÐ½Ð¾';
             break;
 
         case 'delete_discount':
             $discount_id = $_POST['discount_id'] ?? '';
             delete_discount_data($discount_id);
-            $message = 'Отстъпката е изтрита';
+            $message = 'ÐžÑ‚ÑÑ‚ÑŠÐ¿ÐºÐ°Ñ‚Ð° Ðµ Ð¸Ð·Ñ‚Ñ€Ð¸Ñ‚Ð°';
             break;
         
         case 'update_inquiry_status':
             $inquiry_id = $_POST['inquiry_id'] ?? '';
             update_inquiry_status_data($inquiry_id, $_POST['status'] ?? 'pending');
-            $message = 'Статусът на запитването е актуализиран';
+            $message = 'Ð¡Ñ‚Ð°Ñ‚ÑƒÑÑŠÑ‚ Ð½Ð° Ð·Ð°Ð¿Ð¸Ñ‚Ð²Ð°Ð½ÐµÑ‚Ð¾ Ðµ Ð°ÐºÑ‚ÑƒÐ°Ð»Ð¸Ð·Ð¸Ñ€Ð°Ð½';
             break;
         
         case 'delete_inquiry':
             $inquiry_id = $_POST['inquiry_id'] ?? '';
             delete_inquiry_data($inquiry_id);
-            $message = 'Запитването е изтрито';
+            $message = 'Ð—Ð°Ð¿Ð¸Ñ‚Ð²Ð°Ð½ÐµÑ‚Ð¾ Ðµ Ð¸Ð·Ñ‚Ñ€Ð¸Ñ‚Ð¾';
             break;
 
         default:
@@ -381,7 +395,7 @@ $stats = get_dashboard_stats();
 
             <!-- Marketing Section -->
             <div class="sidebar-section">
-                <p class="sidebar-section-title">Маркетинг</p>
+                <p class="sidebar-section-title">ÐœÐ°Ñ€ÐºÐµÑ‚Ð¸Ð½Ð³</p>
                 <ul>
                     <li><a href="?section=promotions" class="<?php echo $section === 'promotions' ? 'active' : ''; ?>"><?php echo icon_megaphone(18); ?> <?php echo __('admin.promotions'); ?></a></li>
                     <li><a href="?section=discounts" class="<?php echo $section === 'discounts' ? 'active' : ''; ?>"><?php echo icon_percent(18); ?> <?php echo __('admin.discounts'); ?></a></li>
@@ -390,7 +404,7 @@ $stats = get_dashboard_stats();
 
             <!-- Content Section -->
             <div class="sidebar-section">
-                <p class="sidebar-section-title">Съдържание</p>
+                <p class="sidebar-section-title">Ð¡ÑŠÐ´ÑŠÑ€Ð¶Ð°Ð½Ð¸Ðµ</p>
                 <ul>
                     <li><a href="?section=pages" class="<?php echo $section === 'pages' ? 'active' : ''; ?>"><?php echo icon_home(18); ?> <?php echo __('menu.pages'); ?></a></li>
                     <li><a href="?section=posts" class="<?php echo $section === 'posts' ? 'active' : ''; ?>"><?php echo icon_check(18); ?> <?php echo __('menu.blog_posts'); ?></a></li>
@@ -400,7 +414,7 @@ $stats = get_dashboard_stats();
 
             <!-- Communication Section -->
             <div class="sidebar-section">
-                <p class="sidebar-section-title">Комуникация</p>
+                <p class="sidebar-section-title">ÐšÐ¾Ð¼ÑƒÐ½Ð¸ÐºÐ°Ñ†Ð¸Ñ</p>
                 <ul>
                     <li><a href="?section=inquiries" class="<?php echo $section === 'inquiries' ? 'active' : ''; ?>"><?php echo icon_mail(18); ?> <?php echo __('inquiry.title'); ?></a></li>
                     <li><a href="?section=users" class="<?php echo $section === 'users' ? 'active' : ''; ?>"><?php echo icon_user(18); ?> <?php echo __('menu.users'); ?></a></li>
@@ -409,7 +423,7 @@ $stats = get_dashboard_stats();
 
             <!-- System Section -->
             <div class="sidebar-section">
-                <p class="sidebar-section-title">Система</p>
+                <p class="sidebar-section-title">Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð°</p>
                 <ul>
                     <li><a href="?section=database" class="<?php echo $section === 'database' ? 'active' : ''; ?>"><?php echo icon_settings(18); ?> <?php echo __('menu.database'); ?></a></li>
                     <li><a href="?section=settings" class="<?php echo $section === 'settings' ? 'active' : ''; ?>"><?php echo icon_settings(18); ?> <?php echo __('menu.settings'); ?></a></li>

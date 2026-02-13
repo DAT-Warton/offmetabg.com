@@ -12,9 +12,9 @@
         <form method="POST" enctype="multipart/form-data">
             <input type="hidden" name="action" value="upload_media">
             <div class="form-group">
-                <label>Избери файл</label>
-                <input type="file" name="media" accept="image/*" required>
-                <small class="hint">Поддържани формати: JPG, PNG, GIF, WEBP. HEIC/HEIF се конвертира, ако сървърът го поддържа.</small>
+                <label>Избери файлове</label>
+                <input type="file" name="media[]" accept="image/*" multiple required>
+                <small class="hint">Можете да изберете множество файлове наведнъж. Поддържани формати: JPG, PNG, GIF, WEBP. HEIC/HEIF се конвертира, ако сървърът го поддържа.</small>
             </div>
             <button type="submit"><?php echo __('upload'); ?></button>
         </form>
