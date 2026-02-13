@@ -31,9 +31,9 @@ foreach ($directories as $dir) {
 // Initialize JSON storage files
 $jsonFiles = [
     'storage/options.json' => [
-        'site_title' => 'OffMeta',
+        'site_title' => 'My E-commerce',
         'site_description' => 'E-commerce platform',
-        'admin_email' => 'admin@offmeta.com',
+        'admin_email' => 'admin@example.com',
         'currency' => 'EUR',
         'language' => 'bg',
         'timezone' => 'Europe/Sofia'
@@ -46,8 +46,8 @@ $jsonFiles = [
         'about' => [
             'slug' => 'about',
             'title' => 'За Нас',
-            'content' => '<h2>Добре дошли в OffMeta</h2><p>Вашият онлайн магазин за уникални продукти.</p>',
-            'meta_description' => 'Научете повече за OffMeta',
+            'content' => '<h2>Добре дошли</h2><p>Вашият онлайн магазин за уникални продукти.</p>',
+            'meta_description' => 'Научете повече за нашия магазин',
             'status' => 'published',
             'created' => date('Y-m-d H:i:s'),
             'updated' => date('Y-m-d H:i:s')
