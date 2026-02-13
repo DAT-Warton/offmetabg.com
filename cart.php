@@ -312,8 +312,8 @@ $total = max(0, $subtotal - $discount_amount);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo __('cart_page.title'); ?> - <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></title>
-    <link rel="stylesheet" href="admin/assets/css/admin.css">
-    <link rel="stylesheet" href="admin/assets/css/admin-dashboard-section.css">
+    <link rel="stylesheet" href="assets/css/dark-theme.css" id="dark-theme-style" disabled>
+    <link rel="stylesheet" href="assets/css/cart.css">
 </head>
 <body>
 <?php if ($show_success && $order): ?>

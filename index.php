@@ -136,8 +136,7 @@ header('HTTP/1.1 404 Not Found');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Not Found - <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></title>
-    <link rel="stylesheet" href="admin/assets/css/admin.css">
-    <link rel="stylesheet" href="admin/assets/css/admin-dashboard-section.css">
+    <link rel="stylesheet" href="assets/css/404.css">
 </head>
 <body>
     <div class="container">
