@@ -35,6 +35,7 @@ $isLoggedIn = isset($_SESSION['admin_user']) && isset($_SESSION['user_role']) &&
 if (!$isLoggedIn && isset($_POST['login'])) {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
+    $loginSuccess = false;
 
     // Check admins.json first
     $admins = load_json('storage/admins.json');
@@ -44,16 +45,37 @@ if (!$isLoggedIn && isset($_POST['login'])) {
             $_SESSION['user_role'] = 'admin';
             $_SESSION['admin'] = true;
             $_SESSION['user_id'] = $admin['id'];
-            redirect('dashboard');
+            $loginSuccess = true;
             break;
         }
     }
 
+    // Check customers with admin role (from dashboard-created admins)
+    if (!$loginSuccess) {
+        $customers = get_customers_data();
+        foreach ($customers as $customer) {
+            if ($customer['username'] === $username && 
+                password_verify($password, $customer['password']) && 
+                ($customer['role'] ?? 'customer') === 'admin') {
+                $_SESSION['admin_user'] = $customer['username'];
+                $_SESSION['user_role'] = 'admin';
+                $_SESSION['admin'] = true;
+                $_SESSION['user_id'] = $customer['id'];
+                $loginSuccess = true;
+                break;
+            }
+        }
+    }
+
     // Fallback: hardcoded admin credentials
-    if ($username === 'Warton' && $password === 'Warton2026') {
+    if (!$loginSuccess && $username === 'Warton' && $password === 'Warton2026') {
         $_SESSION['admin_user'] = $username;
         $_SESSION['user_role'] = 'admin';
         $_SESSION['admin'] = true;
+        $loginSuccess = true;
+    }
+
+    if ($loginSuccess) {
         redirect('dashboard');
     } else {
         $error = 'Invalid admin credentials. Only administrators can access this area.';
