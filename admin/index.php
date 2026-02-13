@@ -44,7 +44,7 @@ if (!$isLoggedIn && isset($_POST['login'])) {
             $_SESSION['user_role'] = 'admin';
             $_SESSION['admin'] = true;
             $_SESSION['user_id'] = $admin['id'];
-            redirect('admin/dashboard');
+            redirect('dashboard');
             break;
         }
     }
@@ -54,7 +54,7 @@ if (!$isLoggedIn && isset($_POST['login'])) {
         $_SESSION['admin_user'] = $username;
         $_SESSION['user_role'] = 'admin';
         $_SESSION['admin'] = true;
-        redirect('admin/dashboard');
+        redirect('dashboard');
     } else {
         $error = 'Invalid admin credentials. Only administrators can access this area.';
     }
