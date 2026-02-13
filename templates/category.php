@@ -36,8 +36,8 @@ $pageTitle = htmlspecialchars($category['name']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></title>
     <meta name="description" content="<?php echo htmlspecialchars($category['description'] ?? ''); ?>">
-    <link rel="stylesheet" href="/assets/css/dark-theme.css">
-    <link rel="stylesheet" href="/assets/css/category.css">
+    <link rel="stylesheet" href="/admin/assets/css/admin.css">
+    <link rel="stylesheet" href="/admin/assets/css/admin-dashboard-section.css">
 </head>
 <body>
     <!-- Header -->

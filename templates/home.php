@@ -58,7 +58,8 @@ foreach ($categories as $category) {
     <meta name="description" content="<?php echo $site_description; ?>">
     <meta property="og:title" content="<?php echo $site_title; ?>">
     <meta property="og:description" content="<?php echo $site_description; ?>">
-    <link rel="stylesheet" href="assets/css/home.css">
+    <link rel="stylesheet" href="admin/assets/css/admin.css">
+    <link rel="stylesheet" href="admin/assets/css/admin-dashboard-section.css">
 </head>
 <body data-theme="dark">
     <header>
