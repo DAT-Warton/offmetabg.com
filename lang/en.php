@@ -149,6 +149,7 @@ $translations = [
         'update' => 'Update',
         'delete_inquiry' => 'Delete Inquiry',
         'total' => 'Total Inquiries',
+        'total_inquiries' => 'Total Inquiries',
         'from' => 'From',
         'date' => 'Date',
         'actions' => 'Actions',

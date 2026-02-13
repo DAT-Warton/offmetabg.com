@@ -70,28 +70,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
 
         case 'upload_media':
-            if (isset($_FILES['media']) && $_FILES['media']['error'] === 0) {
-                $uploadDir = CMS_ROOT . '/uploads/';
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-
-                $fileName = basename($_FILES['media']['name']);
-                $targetPath = $uploadDir . $fileName;
-
-                // Check if file already exists
-                if (file_exists($targetPath)) {
-                    $fileName = time() . '_' . $fileName;
-                    $targetPath = $uploadDir . $fileName;
-                }
-
-                if (move_uploaded_file($_FILES['media']['tmp_name'], $targetPath)) {
-                    $message = __('admin.file_uploaded') . ': ' . htmlspecialchars($fileName);
-                } else {
-                    $message = __('admin.upload_error');
-                }
-            } else {
+            if (!isset($_FILES['media'])) {
                 $message = __('admin.no_file_selected');
+                break;
+            }
+
+            $file = $_FILES['media'];
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                $message = __('admin.upload_error');
+                break;
+            }
+
+            $uploadDir = CMS_ROOT . '/uploads/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            $originalName = $file['name'] ?? 'upload';
+            $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            $heicExtensions = ['heic', 'heif'];
+
+            if (in_array($extension, $heicExtensions, true)) {
+                if (class_exists('\Imagick')) {
+                    $fileName = 'media_' . uniqid() . '.jpg';
+                    $targetPath = $uploadDir . $fileName;
+                    try {
+                        $image = new \Imagick($file['tmp_name']);
+                        $image->setImageFormat('jpeg');
+                        $image->setImageCompressionQuality(90);
+                        $image->stripImage();
+                        $image->writeImage($targetPath);
+                        $image->clear();
+                        $image->destroy();
+                        $message = __('admin.file_uploaded') . ': ' . htmlspecialchars($fileName);
+                    } catch (Exception $e) {
+                        $message = __('admin.upload_error');
+                    }
+                } else {
+                    $message = 'HEIC/HEIF не се поддържат на този сървър. Моля, конвертирайте в JPG або PNG.';
+                }
+                break;
+            }
+
+            if (!in_array($extension, $allowedExtensions, true)) {
+                $message = 'Неподдържан формат. Позволени: JPG, PNG, GIF, WEBP.';
+                break;
+            }
+
+            $baseName = preg_replace('/[^a-zA-Z0-9_-]+/', '-', pathinfo($originalName, PATHINFO_FILENAME));
+            $baseName = trim($baseName, '-');
+            if ($baseName === '') {
+                $baseName = 'media';
+            }
+
+            $fileName = $baseName . '_' . time() . '_' . uniqid() . '.' . $extension;
+            $targetPath = $uploadDir . $fileName;
+
+            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                $message = __('admin.file_uploaded') . ': ' . htmlspecialchars($fileName);
+            } else {
+                $message = __('admin.upload_error');
             }
             break;
 
@@ -325,7 +364,7 @@ $stats = get_dashboard_stats();
             <!-- Overview Section -->
             <div class="sidebar-section">
                 <ul>
-                    <li><a href="../" style="background: rgba(102, 126, 234, 0.2); border-left-color: var(--primary, #3498db);"><?php echo icon_home(18); ?> <?php echo __('menu.back_to_site'); ?></a></li>
+                    <li><a href="../" class="back-to-site"><?php echo icon_home(18); ?> <?php echo __('menu.back_to_site'); ?></a></li>
                     <li><a href="?section=dashboard" class="<?php echo $section === 'dashboard' ? 'active' : ''; ?>"><?php echo icon_package(18); ?> <?php echo __('menu.dashboard'); ?></a></li>
                 </ul>
             </div>
@@ -385,17 +424,16 @@ $stats = get_dashboard_stats();
                 <div>
                     <h1><?php echo icon_home(24); ?> <?php echo $sectionTitles[$section] ?? ucfirst($section); ?></h1>
                 </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <button type="button" onclick="toggleTheme()" class="theme-btn" title="<?php echo __('theme.switch_to_dark'); ?>" style="padding: 8px 16px; border-radius: 6px; background: var(--primary); color: white; border: none; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;">
+                <div class="header-actions">
+                    <button type="button" onclick="toggleTheme()" class="theme-btn action-btn" title="<?php echo __('theme.switch_to_dark'); ?>">
                         <span id="theme-icon"><?php echo icon_moon(18); ?></span>
                     </button>
                     <a href="?section=<?php echo htmlspecialchars($section); ?>&lang=<?php echo opposite_lang(); ?>" 
-                       class="lang-btn" 
-                       title="Switch to <?php echo lang_name(opposite_lang()); ?>"
-                       style="padding: 8px 16px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 6px;">
+                       class="lang-btn action-btn" 
+                       title="Switch to <?php echo lang_name(opposite_lang()); ?>">
                         <?php echo lang_flag(opposite_lang()); ?> <?php echo strtoupper(opposite_lang()); ?>
                     </a>
-                    <form method="POST" style="display: inline;">
+                    <form method="POST" class="inline-form">
                         <button type="submit" name="logout" value="1" class="logout-btn"><?php echo __('admin.logout'); ?></button>
                     </form>
                 </div>

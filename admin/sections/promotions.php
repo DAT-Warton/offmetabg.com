@@ -40,7 +40,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
             <input type="hidden" name="action" value="save_promotion">
             <input type="hidden" name="promotion_id" value="<?php echo htmlspecialchars($editPromotion['id'] ?? ''); ?>">
             
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+            <div class="grid grid-2-1">
                 <div class="form-group">
                     <label><?php echo __('admin.promotion_title'); ?></label>
                     <input type="text" name="title" value="<?php echo htmlspecialchars($editPromotion['title'] ?? ''); ?>" required placeholder="Лятна разпродажба 2026">
@@ -72,25 +72,25 @@ if ($action === 'edit' && isset($_GET['id'])) {
             </div>
 
             <!-- Visual Promotion Fields (for banner/popup/notification/homepage) -->
-            <div id="visualFields" style="display: none;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div id="visualFields" class="is-hidden">
+                <div class="grid grid-2">
                     <div class="form-group">
                         <label><?php echo __('admin.promotion_image'); ?></label>
                         <input type="text" name="image" value="<?php echo htmlspecialchars($editPromotion['image'] ?? ''); ?>" placeholder="/uploads/promo-banner.jpg">
-                        <small style="color: var(--text-secondary, #666);">URL на изображение (банер/снимка)</small>
+                        <small class="hint">URL на изображение (банер/снимка)</small>
                     </div>
 
                     <div class="form-group">
                         <label><?php echo __('admin.promotion_link'); ?></label>
                         <input type="text" name="link" value="<?php echo htmlspecialchars($editPromotion['link'] ?? ''); ?>" placeholder="/products?category=sale">
-                        <small style="color: var(--text-secondary, #666);">Линк към страница (оставете празно за без линк)</small>
+                        <small class="hint">Линк към страница (оставете празно за без линк)</small>
                     </div>
                 </div>
             </div>
 
             <!-- Sales Promotion Fields (for bundle/discount/buy_x_get_y) -->
-            <div id="salesFields" style="display: none;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+            <div id="salesFields" class="is-hidden">
+                <div class="grid grid-3">
                     <div class="form-group">
                         <label>💶 Тип отстъпка</label>
                         <select name="discount_type">
@@ -107,15 +107,15 @@ if ($action === 'edit' && isset($_GET['id'])) {
                     <div class="form-group">
                         <label>🛒 Минимална покупка (€)</label>
                         <input type="number" name="min_purchase" step="0.01" min="0" value="<?php echo htmlspecialchars($editPromotion['min_purchase'] ?? '0'); ?>" placeholder="0">
-                        <small style="color: var(--text-secondary, #666);">0 = без минимум</small>
+                        <small class="hint">0 = без минимум</small>
                     </div>
                 </div>
 
                 <!-- Product Selection (for bundle/product_discount/buy_x_get_y) -->
-                <div id="productFields" style="display: none;">
+                <div id="productFields" class="is-hidden">
                     <div class="form-group">
                         <label>🏷️ Изберете продукти</label>
-                        <select name="product_ids[]" multiple size="8" style="width: 100%; padding: 8px; border: 1px solid var(--border-color, #e0e0e0); border-radius: 6px;">
+                        <select name="product_ids[]" multiple size="8" class="select-multi">
                             <?php if (empty($products)): ?>
                                 <option disabled>Няма налични продукти</option>
                             <?php else: ?>
@@ -130,15 +130,15 @@ if ($action === 'edit' && isset($_GET['id'])) {
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </select>
-                        <small style="color: var(--text-secondary, #666);">Ctrl+Click за избор на много продукти</small>
+                        <small class="hint">Ctrl+Click за избор на много продукти</small>
                     </div>
                 </div>
 
                 <!-- Category Selection (for category_discount) -->
-                <div id="categoryFields" style="display: none;">
+                <div id="categoryFields" class="is-hidden">
                     <div class="form-group">
                         <label>📂 Изберете категория</label>
-                        <select name="category_id" style="width: 100%; padding: 10px; border: 1px solid var(--border-color, #e0e0e0); border-radius: 6px;">
+                        <select name="category_id" class="select-plain select-block">
                             <option value="">Всички категории</option>
                             <?php if (!empty($categories)): ?>
                                 <?php foreach ($categories as $category): ?>
@@ -152,8 +152,8 @@ if ($action === 'edit' && isset($_GET['id'])) {
                 </div>
 
                 <!-- Buy X Get Y Fields -->
-                <div id="buyXGetYFields" style="display: none;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div id="buyXGetYFields" class="is-hidden">
+                    <div class="grid grid-2">
                         <div class="form-group">
                             <label>🛍️ Купи X броя</label>
                             <input type="number" name="buy_quantity" min="1" value="<?php echo htmlspecialchars($editPromotion['buy_quantity'] ?? '2'); ?>" placeholder="2">
@@ -162,34 +162,34 @@ if ($action === 'edit' && isset($_GET['id'])) {
                         <div class="form-group">
                             <label>🎁 Вземи Y броя</label>
                             <input type="number" name="get_quantity" min="1" value="<?php echo htmlspecialchars($editPromotion['get_quantity'] ?? '1'); ?>" placeholder="1">
-                            <small style="color: var(--text-secondary, #666);">Купи 2, вземи 1 безплатно</small>
+                            <small class="hint">Купи 2, вземи 1 безплатно</small>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr 100px; gap: 20px; align-items: start;">
+            <div class="grid grid-1-1-100 align-start">
                 <div class="form-group">
                     <label><?php echo __('admin.start_date'); ?></label>
                     <input type="datetime-local" name="start_date" value="<?php echo htmlspecialchars($editPromotion['start_date'] ?? ''); ?>">
-                    <small style="color: var(--text-secondary, #666);">Начало на промоцията</small>
+                    <small class="hint">Начало на промоцията</small>
                 </div>
 
                 <div class="form-group">
                     <label><?php echo __('admin.end_date'); ?></label>
                     <input type="datetime-local" name="end_date" value="<?php echo htmlspecialchars($editPromotion['end_date'] ?? ''); ?>">
-                    <small style="color: var(--text-secondary, #666);">Край на промоцията</small>
+                    <small class="hint">Край на промоцията</small>
                 </div>
 
                 <div class="form-group">
                     <label><?php echo __('admin.display_order'); ?></label>
-                    <input type="number" name="order" value="<?php echo htmlspecialchars($editPromotion['order'] ?? '0'); ?>" min="0" style="text-align: center;">
-                    <small style="color: var(--text-secondary, #666);">Ред</small>
+                    <input type="number" name="order" value="<?php echo htmlspecialchars($editPromotion['order'] ?? '0'); ?>" min="0" class="input-center">
+                    <small class="hint">Ред</small>
                 </div>
             </div>
 
             <div class="form-group">
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <label class="checkbox-label">
                     <input type="checkbox" name="active" value="1" <?php echo ($editPromotion['active'] ?? true) ? 'checked' : ''; ?>>
                     <span><?php echo __('admin.promotion_active'); ?></span>
                 </label>
@@ -217,7 +217,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
             <tbody>
                 <?php if (empty($promotions)): ?>
                     <tr>
-                        <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-secondary, #666);">
+                        <td colspan="5" class="table-empty">
                             <?php echo icon_megaphone(32); ?><br>
                             <?php echo __('admin.no_promotions'); ?>
                         </td>
@@ -228,7 +228,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
                             <td>
                                 <strong><?php echo htmlspecialchars($promotion['title']); ?></strong>
                                 <?php if (!empty($promotion['description'])): ?>
-                                    <br><small style="color: var(--text-secondary, #666);"><?php echo htmlspecialchars(substr($promotion['description'], 0, 60)); ?><?php echo strlen($promotion['description']) > 60 ? '...' : ''; ?></small>
+                                    <br><small class="text-muted text-sm"><?php echo htmlspecialchars(substr($promotion['description'], 0, 60)); ?><?php echo strlen($promotion['description']) > 60 ? '...' : ''; ?></small>
                                 <?php endif; ?>
                             </td>
                             <td>
@@ -247,36 +247,37 @@ if ($action === 'edit' && isset($_GET['id'])) {
                                     'cart_discount' => ['icon' => '🛒', 'label' => 'Кошница', 'color' => '#06b6d4']
                                 ];
                                 $type = $typeIcons[$promotion['type']] ?? ['icon' => '📌', 'label' => $promotion['type'], 'color' => '#8b5cf6'];
+                                $typeClass = 'promo-type-' . str_replace('_', '-', $promotion['type'] ?? 'default');
                                 ?>
-                                <span style="display: inline-flex; align-items: center; gap: 6px; background: <?php echo $type['color']; ?>15; color: <?php echo $type['color']; ?>; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; border: 1px solid <?php echo $type['color']; ?>30;">
-                                    <span style="font-size: 16px;"><?php echo $type['icon']; ?></span>
+                                <span class="pill <?php echo htmlspecialchars($typeClass); ?>">
+                                    <span class="text-lg"><?php echo $type['icon']; ?></span>
                                     <?php echo $type['label']; ?>
                                 </span>
                             </td>
-                            <td style="font-size: 13px; color: var(--text-secondary, #666);">
+                            <td class="text-sm text-muted">
                                 <?php if (!empty($promotion['start_date']) && !empty($promotion['end_date'])): ?>
                                     <?php echo date('d.m.Y', strtotime($promotion['start_date'])); ?> - <?php echo date('d.m.Y', strtotime($promotion['end_date'])); ?>
                                 <?php else: ?>
-                                    <span style="color: var(--text-secondary, #666);">—</span>
+                                    <span class="text-muted">—</span>
                                 <?php endif; ?>
                             </td>
                             <td>
                                 <?php if ($promotion['active'] ?? true): ?>
-                                    <span style="display: inline-flex; align-items: center; gap: 6px; background: #27ae6015; color: #27ae60; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; border: 1px solid #27ae6030;">
+                                    <span class="status-pill status-active">
                                         <?php echo icon_check_circle(14); ?> Активна
                                     </span>
                                 <?php else: ?>
-                                    <span style="display: inline-flex; align-items: center; gap: 6px; background: #6b728015; color: #6b7280; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; border: 1px solid #6b728030;">
+                                    <span class="status-pill status-inactive">
                                         <?php echo icon_x_circle(14); ?> Неактивна
                                     </span>
                                 <?php endif; ?>
                             </td>
-                            <td style="white-space: nowrap;">
-                                <div style="display: flex; gap: 8px;">
+                            <td class="table-actions">
+                                <div class="flex-gap-8">
                                     <a href="?section=promotions&action=edit&id=<?php echo urlencode($promotion['id']); ?>" class="btn-small" title="Редактирай">
                                         ✏️ Редактирай
                                     </a>
-                                    <form method="POST" style="display: inline; margin: 0;" onsubmit="return confirm('<?php echo __('admin.confirm_delete_promotion'); ?>');">
+                                    <form method="POST" class="inline-form" onsubmit="return confirm('<?php echo __('admin.confirm_delete_promotion'); ?>');">
                                         <input type="hidden" name="action" value="delete_promotion">
                                         <input type="hidden" name="promotion_id" value="<?php echo htmlspecialchars($promotion['id']); ?>">
                                         <button type="submit" class="btn-delete" title="Изтрий">

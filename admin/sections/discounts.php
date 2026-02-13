@@ -39,8 +39,8 @@ if ($action === 'edit' && isset($_GET['id'])) {
             
             <div class="form-group">
                 <label><?php echo __('admin.discount_code'); ?></label>
-                <input type="text" name="code" value="<?php echo htmlspecialchars($editDiscount['code'] ?? ''); ?>" required style="text-transform: uppercase; font-weight: 600;">
-                <small style="color: var(--text-secondary, #666);">Промо код (напр. SUMMER2026, WELCOME10)</small>
+                <input type="text" name="code" value="<?php echo htmlspecialchars($editDiscount['code'] ?? ''); ?>" required class="input-uppercase">
+                <small class="hint">Промо код (напр. SUMMER2026, WELCOME10)</small>
             </div>
 
             <div class="form-group">
@@ -60,24 +60,24 @@ if ($action === 'edit' && isset($_GET['id'])) {
             <div class="form-group" id="value_field">
                 <label id="value_label"><?php echo __('admin.discount_value'); ?></label>
                 <input type="number" name="value" id="value_input" value="<?php echo htmlspecialchars($editDiscount['value'] ?? ''); ?>" step="0.01" min="0">
-                <small id="value_hint" style="color: var(--text-secondary, #666);"></small>
+                <small id="value_hint" class="hint"></small>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="grid grid-2">
                 <div class="form-group">
                     <label><?php echo __('admin.min_purchase'); ?></label>
                     <input type="number" name="min_purchase" value="<?php echo htmlspecialchars($editDiscount['min_purchase'] ?? '0'); ?>" step="0.01" min="0">
-                    <small style="color: var(--text-secondary, #666);">Минимална поръчка (€)</small>
+                    <small class="hint">Минимална поръчка (€)</small>
                 </div>
 
                 <div class="form-group">
                     <label><?php echo __('admin.max_uses'); ?></label>
                     <input type="number" name="max_uses" value="<?php echo htmlspecialchars($editDiscount['max_uses'] ?? ''); ?>" min="0">
-                    <small style="color: var(--text-secondary, #666);">0 за неограничено</small>
+                    <small class="hint">0 за неограничено</small>
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="grid grid-2">
                 <div class="form-group">
                     <label><?php echo __('admin.start_date'); ?></label>
                     <input type="datetime-local" name="start_date" value="<?php echo htmlspecialchars($editDiscount['start_date'] ?? ''); ?>">
@@ -90,14 +90,14 @@ if ($action === 'edit' && isset($_GET['id'])) {
             </div>
 
             <div class="form-group">
-                <label>
+                <label class="checkbox-label">
                     <input type="checkbox" name="active" value="1" <?php echo ($editDiscount['active'] ?? true) ? 'checked' : ''; ?>>
                     <?php echo __('admin.discount_active'); ?>
                 </label>
             </div>
 
             <div class="form-group">
-                <label>
+                <label class="checkbox-label">
                     <input type="checkbox" name="first_purchase_only" value="1" <?php echo ($editDiscount['first_purchase_only'] ?? false) ? 'checked' : ''; ?>>
                     <?php echo __('admin.first_purchase_only'); ?>
                 </label>
@@ -129,7 +129,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
             <tbody>
                 <?php if (empty($discounts)): ?>
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-secondary, #666);">
+                        <td colspan="7" class="table-empty">
                             <?php echo icon_percent(32); ?><br>
                             <?php echo __('admin.no_discounts'); ?>
                         </td>
@@ -138,11 +138,11 @@ if ($action === 'edit' && isset($_GET['id'])) {
                     <?php foreach ($discounts as $discount): ?>
                         <tr>
                             <td>
-                                <code style="background: var(--bg-primary, #f5f7fa); padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 14px;">
+                                <code class="code-pill">
                                     <?php echo htmlspecialchars($discount['code']); ?>
                                 </code>
                                 <?php if (!empty($discount['description'])): ?>
-                                    <br><small style="color: var(--text-secondary, #666);"><?php echo htmlspecialchars($discount['description']); ?></small>
+                                    <br><small class="text-muted text-sm"><?php echo htmlspecialchars($discount['description']); ?></small>
                                 <?php endif; ?>
                             </td>
                             <td>
@@ -153,13 +153,14 @@ if ($action === 'edit' && isset($_GET['id'])) {
                                     'free_shipping' => ['icon' => '🚚', 'label' => 'Безплатна доставка', 'color' => '#27ae60']
                                 ];
                                 $type = $typeData[$discount['type']] ?? ['icon' => '🏷️', 'label' => $discount['type'], 'color' => '#6b7280'];
+                                $typeClass = 'discount-type-' . str_replace('_', '-', $discount['type'] ?? 'default');
                                 ?>
-                                <span style="display: inline-flex; align-items: center; gap: 6px; background: <?php echo $type['color']; ?>15; color: <?php echo $type['color']; ?>; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; border: 1px solid <?php echo $type['color']; ?>30;">
+                                <span class="pill <?php echo htmlspecialchars($typeClass); ?>">
                                     <?php echo $type['icon']; ?> <?php echo $type['label']; ?>
                                 </span>
                             </td>
                             <td>
-                                <strong style="color: var(--primary, #3498db); font-size: 16px;">
+                                <strong class="text-primary text-lg">
                                     <?php 
                                     if ($discount['type'] === 'percentage') {
                                         echo $discount['value'] . '%';
@@ -176,34 +177,34 @@ if ($action === 'edit' && isset($_GET['id'])) {
                                 $used = $discount['used_count'] ?? 0;
                                 $max = $discount['max_uses'] ?? 0;
                                 ?>
-                                <span style="font-size: 13px;">
+                                <span class="text-sm">
                                     <?php echo $used; ?> / <?php echo $max > 0 ? $max : '∞'; ?>
                                 </span>
                             </td>
-                            <td style="font-size: 13px; color: var(--text-secondary, #666);">
+                            <td class="text-sm text-muted">
                                 <?php if (!empty($discount['start_date']) && !empty($discount['end_date'])): ?>
                                     <?php echo date('d.m.Y', strtotime($discount['start_date'])); ?><br><?php echo date('d.m.Y', strtotime($discount['end_date'])); ?>
                                 <?php else: ?>
-                                    <span style="color: var(--text-secondary, #666);">—</span>
+                                    <span class="text-muted">—</span>
                                 <?php endif; ?>
                             </td>
                             <td>
                                 <?php if ($discount['active'] ?? true): ?>
-                                    <span style="display: inline-flex; align-items: center; gap: 6px; background: #27ae6015; color: #27ae60; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; border: 1px solid #27ae6030;">
+                                    <span class="status-pill status-active">
                                         <?php echo icon_check_circle(14); ?> Активна
                                     </span>
                                 <?php else: ?>
-                                    <span style="display: inline-flex; align-items: center; gap: 6px; background: #6b728015; color: #6b7280; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; border: 1px solid #6b728030;">
+                                    <span class="status-pill status-inactive">
                                         <?php echo icon_x_circle(14); ?> Неактивна
                                     </span>
                                 <?php endif; ?>
                             </td>
-                            <td style="white-space: nowrap;">
-                                <div style="display: flex; gap: 8px;">
+                            <td class="table-actions">
+                                <div class="flex-gap-8">
                                     <a href="?section=discounts&action=edit&id=<?php echo urlencode($discount['id']); ?>" class="btn-small" title="Редактирай">
                                         ✏️ Редактирай
                                     </a>
-                                    <form method="POST" style="display: inline; margin: 0;" onsubmit="return confirm('<?php echo __('admin.confirm_delete_discount'); ?>');">
+                                    <form method="POST" class="inline-form" onsubmit="return confirm('<?php echo __('admin.confirm_delete_discount'); ?>');">
                                         <input type="hidden" name="action" value="delete_discount">
                                         <input type="hidden" name="discount_id" value="<?php echo htmlspecialchars($discount['id']); ?>">
                                         <button type="submit" class="btn-delete" title="Изтрий">

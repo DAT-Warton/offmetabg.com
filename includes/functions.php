@@ -184,8 +184,26 @@ function get_page($slug) {
 
 // Save page
 function save_page($slug, $data) {
+    $originalSlug = trim((string)$slug);
+    $slug = $originalSlug;
+    if ($slug === '') {
+        $slug = generate_slug($data['title'] ?? '');
+    }
+    if ($slug === '') {
+        $slug = 'page-' . substr(uniqid('', true), -6);
+    }
+
     if (db_enabled()) {
         $table = db_table('pages');
+        if ($originalSlug === '') {
+            $baseSlug = $slug;
+            $counter = 2;
+            while ($table->find('slug', $slug)) {
+                $slug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+        }
+
         $existing = $table->find('slug', $slug);
         $payload = [
             'slug' => $slug,
@@ -208,6 +226,14 @@ function save_page($slug, $data) {
     }
 
     $pages = get_pages();
+    if ($originalSlug === '') {
+        $baseSlug = $slug;
+        $counter = 2;
+        while (isset($pages[$slug])) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+    }
     $pages[$slug] = array_merge($pages[$slug] ?? [], [
         'slug' => $slug,
         'title' => $data['title'] ?? '',
@@ -371,8 +397,13 @@ function validate_email($email) {
 
 // Generate slug from title
 function generate_slug($title) {
-    $slug = strtolower(trim($title));
-    $slug = preg_replace('/[^a-z0-9]+/', '-', $slug);
+    $slug = trim($title);
+    if (function_exists('mb_strtolower')) {
+        $slug = mb_strtolower($slug, 'UTF-8');
+    } else {
+        $slug = strtolower($slug);
+    }
+    $slug = preg_replace('/[^\p{L}\p{N}]+/u', '-', $slug);
     $slug = trim($slug, '-');
     return $slug;
 }

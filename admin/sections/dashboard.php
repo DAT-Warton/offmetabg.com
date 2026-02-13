@@ -109,7 +109,7 @@ $top_products = array_slice($product_sales, 0, 5);
 ?>
 
 <div>
-    <h2 style="color: var(--text-primary, #1f2937); font-size: 28px; margin-bottom: 30px;"><?php echo icon_package(28); ?> <?php echo __('admin.dashboard_overview'); ?></h2>
+    <h2 class="section-title page-title"><?php echo icon_package(28); ?> <?php echo __('admin.dashboard_overview'); ?></h2>
 
     <!-- Key Metrics -->
     <div class="dashboard-grid">
