@@ -127,7 +127,7 @@ const ThemeAdmin = {
             window.themeManager.applyTheme(slug);
 
             // Save to database
-            const response = await fetch('/api/handler.php?action=set-theme', {
+            const response = await fetch('/api?action=set-theme', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -213,7 +213,7 @@ const ThemeAdmin = {
             const themeData = await window.themeManager.importTheme(file);
 
             // Save to database
-            const response = await fetch('/api/handler.php?action=save-custom-theme', {
+            const response = await fetch('/api?action=save-custom-theme', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -298,7 +298,7 @@ const ThemeAdmin = {
                 version: '1.0'
             };
 
-            const response = await fetch('/api/handler.php?action=save-custom-theme', {
+            const response = await fetch('/api?action=save-custom-theme', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -355,7 +355,7 @@ const ThemeAdmin = {
         if (!confirm('Are you sure you want to delete this theme?')) return;
 
         try {
-            const response = await fetch('/api/handler.php?action=delete-custom-theme', {
+            const response = await fetch('/api?action=delete-custom-theme', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -382,7 +382,7 @@ const ThemeAdmin = {
      */
     async applyCustomTheme(themeId) {
         try {
-            const response = await fetch(`/api/handler.php?action=get-custom-theme&id=${themeId}`);
+            const response = await fetch(`/api?action=get-custom-theme&id=${themeId}`);
             const data = await response.json();
 
             if (data.success && data.theme) {
