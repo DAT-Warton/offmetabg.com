@@ -205,15 +205,20 @@ foreach ($categories as $category) {
                                     <span class="product-category"><?php echo htmlspecialchars($productCategoryLabel); ?></span>
                                 <?php endif; ?>
                                 <h3 class="product-title"><?php echo htmlspecialchars($product['name']); ?></h3>
-                                <p class="product-description">
-                                    <?php 
-                                    $desc = $product['description'] ?? 'Красив продукт';
-                                    echo htmlspecialchars(substr($desc, 0, 120));
-                                    if (strlen($desc) > 120) {
-                                        echo '...';
-                                    }
-                                    ?>
-                                </p>
+                                <div class="product-description-wrapper">
+                                    <p class="product-description">
+                                        <?php 
+                                        $desc = $product['description'] ?? 'Красив продукт';
+                                        echo htmlspecialchars($desc);
+                                        ?>
+                                    </p>
+                                    <?php if (strlen($desc) > 120): ?>
+                                        <button class="btn-read-more" onclick="toggleDescription(this)">
+                                            <span class="read-more-text">Прочети още</span>
+                                            <span class="read-less-text" style="display: none;">Прочети по-малко</span>
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
                                 
                                 <div class="product-footer">
                                     <div>
@@ -248,6 +253,7 @@ foreach ($categories as $category) {
         <p>&copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>. Всички права запазени.</p>
     </footer>
     
+    <script src="assets/js/products.js"></script>
     <script src="assets/js/theme-manager.js"></script>
 </body>
 </html>

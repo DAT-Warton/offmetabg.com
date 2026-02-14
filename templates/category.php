@@ -123,7 +123,18 @@ $pageTitle = htmlspecialchars($category['name']);
                         
                         <div class="product-info">
                             <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
-                            <p class="product-description"><?php echo htmlspecialchars($product['description'] ?? ''); ?></p>
+                            <div class="product-description-wrapper">
+                                <p class="product-description"><?php 
+                                    $desc = $product['description'] ?? '';
+                                    echo htmlspecialchars($desc); 
+                                ?></p>
+                                <?php if (strlen($desc) > 100): ?>
+                                    <button class="btn-read-more" onclick="toggleDescription(this)">
+                                        <span class="read-more-text">Прочети още</span>
+                                        <span class="read-less-text" style="display: none;">Прочети по-малко</span>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
                             
                             <div class="product-footer">
                                 <span class="product-price">€<?php echo number_format($product['price'], 2); ?></span>
@@ -149,6 +160,7 @@ $pageTitle = htmlspecialchars($category['name']);
         <?php endif; ?>
     </div>
 
+    <script src="/assets/js/products.js"></script>
     <script src="/assets/js/theme-manager.js"></script>
 </body>
 </html>

@@ -382,7 +382,6 @@ header {
     overflow-wrap: break-word;
     display: flex;
     flex-direction: column;
-    flex: 1;
 }
 
 .product-category {
@@ -406,8 +405,39 @@ header {
 .product-description {
     color: var(--text-secondary);
     font-size: 15px;
-    margin-bottom: 20px;
     line-height: 1.6;
+    max-height: 4.8em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    transition: max-height 0.3s ease;
+}
+
+.product-description-wrapper {
+    margin-bottom: 20px;
+}
+
+.product-description-wrapper.expanded .product-description {
+    max-height: none;
+    -webkit-line-clamp: unset;
+}
+
+.btn-read-more {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-top: 4px;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.btn-read-more:hover {
+    color: var(--primary-hover);
 }
 
 .product-footer {
@@ -881,7 +911,6 @@ footer p {
     padding: 24px;
     display: flex;
     flex-direction: column;
-    flex: 1;
 }
 
 .product-title {
@@ -895,12 +924,39 @@ footer p {
 .product-description {
     color: var(--color-gray-500);
     font-size: 14px;
-    margin-bottom: 20px;
     line-height: 1.6;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    max-height: 4.2em;
     overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    transition: max-height 0.3s ease;
+}
+
+.product-description-wrapper {
+    margin-bottom: 20px;
+}
+
+.product-description-wrapper.expanded .product-description {
+    max-height: none;
+    -webkit-line-clamp: unset;
+}
+
+.btn-read-more {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-top: 4px;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.btn-read-more:hover {
+    color: var(--primary-hover);
 }
 
 .product-footer {
