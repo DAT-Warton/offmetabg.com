@@ -176,8 +176,8 @@ class CourierAPI {
     public function getEcontShippingCost($order_data) {
         $weight = $this->calculateWeight($order_data['items']);
         $cod_fee = $order_data['payment']['cod'] ? ($order_data['total'] * 0.01) : 0; // 1% COD fee
-        $base_cost = 5.50; // Base shipping cost in BGN
-        $weight_cost = $weight * 0.50; // 0.50 BGN per kg
+        $base_cost = 5.50; // Base shipping cost in EUR
+        $weight_cost = $weight * 0.50; // 0.50 EUR per kg
         
         return [
             'success' => true,
@@ -185,7 +185,7 @@ class CourierAPI {
             'weight_cost' => $weight_cost,
             'cod_fee' => $cod_fee,
             'total' => $base_cost + $weight_cost + $cod_fee,
-            'currency' => 'BGN',
+            'currency' => 'EUR',
             'estimated_days' => '1-2'
         ];
     }
@@ -198,8 +198,8 @@ class CourierAPI {
     public function getSpeedyShippingCost($order_data) {
         $weight = $this->calculateWeight($order_data['items']);
         $cod_fee = $order_data['payment']['cod'] ? ($order_data['total'] * 0.01) : 0; // 1% COD fee
-        $base_cost = 6.00; // Base shipping cost in BGN
-        $weight_cost = $weight * 0.45; // 0.45 BGN per kg
+        $base_cost = 6.00; // Base shipping cost in EUR
+        $weight_cost = $weight * 0.45; // 0.45 EUR per kg
         
         return [
             'success' => true,
@@ -207,7 +207,7 @@ class CourierAPI {
             'weight_cost' => $weight_cost,
             'cod_fee' => $cod_fee,
             'total' => $base_cost + $weight_cost + $cod_fee,
-            'currency' => 'BGN',
+            'currency' => 'EUR',
             'estimated_days' => '1-2'
         ];
     }

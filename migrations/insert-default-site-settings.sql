@@ -59,8 +59,8 @@ INSERT INTO site_settings (category, setting_key, setting_value, setting_type, i
 
 -- Commerce Settings
 INSERT INTO site_settings (category, setting_key, setting_value, setting_type, is_public, label, description, display_order) VALUES
-('commerce', 'currency', 'BGN', 'text', true, 'Currency', 'Default currency code', 1),
-('commerce', 'currency_symbol', 'лв', 'text', true, 'Currency Symbol', 'Currency display symbol', 2),
+('commerce', 'currency', 'EUR', 'text', true, 'Currency', 'Default currency code', 1),
+('commerce', 'currency_symbol', '€', 'text', true, 'Currency Symbol', 'Currency display symbol', 2),
 ('commerce', 'tax_rate', '0.20', 'number', true, 'Tax Rate', 'VAT/Tax percentage (0.20 = 20%)', 3),
 ('commerce', 'enable_tax', 'true', 'boolean', true, 'Enable Tax', 'Apply tax to orders', 4),
 ('commerce', 'free_shipping_threshold', '100.00', 'number', true, 'Free Shipping Threshold', 'Minimum order for free shipping', 5),

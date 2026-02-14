@@ -219,8 +219,8 @@ function get_contact_email() {
  */
 function get_currency_settings() {
     return [
-        'code' => get_site_setting('currency', 'BGN', 'commerce'),
-        'symbol' => get_site_setting('currency_symbol', 'лв', 'commerce')
+        'code' => get_site_setting('currency', 'EUR', 'commerce'),
+        'symbol' => get_site_setting('currency_symbol', '€', 'commerce')
     ];
 }
 

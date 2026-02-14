@@ -88,8 +88,8 @@ $totalRevenue = array_sum(array_column($orders, 'total'));
                         <tr>
                             <td><?php echo htmlspecialchars($item['name']); ?></td>
                             <td class="text-center"><?php echo $item['quantity']; ?></td>
-                            <td class="text-right">$<?php echo number_format($item['price'], 2); ?></td>
-                            <td class="text-right font-semibold">$<?php echo number_format($item['price'] * $item['quantity'], 2); ?></td>
+                            <td class="text-right">€<?php echo number_format($item['price'], 2); ?></td>
+                            <td class="text-right font-semibold">€<?php echo number_format($item['price'] * $item['quantity'], 2); ?></td>
                         </tr>
                     <?php endforeach; ?>
                     <tr>

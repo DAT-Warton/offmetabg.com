@@ -126,7 +126,7 @@ $pageTitle = htmlspecialchars($category['name']);
                             <p class="product-description"><?php echo htmlspecialchars($product['description'] ?? ''); ?></p>
                             
                             <div class="product-footer">
-                                <span class="product-price">$<?php echo number_format($product['price'], 2); ?></span>
+                                <span class="product-price">€<?php echo number_format($product['price'], 2); ?></span>
                                 
                                 <?php if ($is_logged_in): ?>
                                     <form method="POST" action="/cart.php" class="inline-form">

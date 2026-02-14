@@ -449,7 +449,7 @@ function save_imported_products($newProducts) {
                             ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars($prod['name']); ?></td>
-                                    <td>$<?php echo number_format($prod['price'], 2); ?></td>
+                                    <td>€<?php echo number_format($prod['price'], 2); ?></td>
                                     <td><?php echo htmlspecialchars($prod['category']); ?></td>
                                     <td><?php echo $prod['stock']; ?></td>
                                     <td>
