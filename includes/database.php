@@ -1,7 +1,11 @@
 <?php
 /**
- * Database Layer - JSON Storage by default, MySQL optional
+ * Database Layer - JSON Storage by default, MySQL/PostgreSQL optional
+ * Now with environment variable support
  */
+
+// Load environment variables
+require_once __DIR__ . '/env-loader.php';
 
 class Database {
     private static $instance = null;
@@ -9,15 +13,38 @@ class Database {
     private $pdo = null;
 
     private function __construct() {
-        // Check for DATABASE_URL environment variable first (Render PostgreSQL)
-        $databaseUrl = getenv('DATABASE_URL');
+        // Priority 1: Environment variable DATABASE_URL (Render/Cloud platforms)
+        $databaseUrl = env('DATABASE_URL', getenv('DATABASE_URL'));
         if ($databaseUrl) {
             $this->driver = 'pgsql';
             $this->connectFromUrl($databaseUrl);
             return;
         }
 
-        // Check if database is configured via config file
+        // Priority 2: Individual environment variables
+        $dbType = env('DB_TYPE');
+        if ($dbType) {
+            $config = [
+                'driver' => $dbType,
+                'host' => env('DB_HOST', 'localhost'),
+                'port' => env('DB_PORT', $dbType === 'pgsql' ? 5432 : 3306),
+                'database' => env('DB_NAME'),
+                'user' => env('DB_USER'),
+                'password' => env('DB_PASSWORD')
+            ];
+
+            if ($dbType === 'mysql') {
+                $this->driver = 'mysql';
+                $this->connectMySQL($config);
+                return;
+            } elseif ($dbType === 'pgsql' || $dbType === 'postgresql') {
+                $this->driver = 'pgsql';
+                $this->connectPostgreSQL($config);
+                return;
+            }
+        }
+
+        // Priority 3: Config file (legacy/fallback)
         $config = load_json('config/database.json');
 
         if (!empty($config['driver'])) {

@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS customers (
     id VARCHAR(50) PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255),
     first_name VARCHAR(100),
     last_name VARCHAR(100),
     phone VARCHAR(50),
@@ -61,6 +61,9 @@ CREATE TABLE IF NOT EXISTS customers (
     activation_token VARCHAR(255),
     reset_token VARCHAR(255),
     reset_expires TIMESTAMP,
+    oauth_provider VARCHAR(50) DEFAULT NULL,
+    oauth_provider_id VARCHAR(255) DEFAULT NULL,
+    avatar VARCHAR(500) DEFAULT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -70,6 +73,7 @@ CREATE INDEX idx_customers_email ON customers(email);
 CREATE INDEX idx_customers_status ON customers(status);
 CREATE INDEX idx_customers_activation_token ON customers(activation_token);
 CREATE INDEX idx_customers_reset_token ON customers(reset_token);
+CREATE INDEX idx_customers_oauth ON customers(oauth_provider, oauth_provider_id);
 
 -- Admins table
 CREATE TABLE IF NOT EXISTS admins (
@@ -204,12 +208,36 @@ CREATE INDEX idx_posts_slug ON posts(slug);
 CREATE INDEX idx_posts_status ON posts(status);
 CREATE INDEX idx_posts_category ON posts(category);
 
--- Options/Settings table
+-- Options/Settings table (legacy simple key-value)
 CREATE TABLE IF NOT EXISTS options (
     option_key VARCHAR(100) PRIMARY KEY,
     option_value TEXT,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Site Settings table (structured settings)
+CREATE TABLE IF NOT EXISTS site_settings (
+    id SERIAL PRIMARY KEY,
+    category VARCHAR(50) NOT NULL, -- 'general', 'email', 'social', 'api', 'appearance', 'commerce'
+    setting_key VARCHAR(100) NOT NULL,
+    setting_value TEXT,
+    setting_type VARCHAR(20) DEFAULT 'text', -- 'text', 'number', 'boolean', 'json', 'url', 'email', 'password'
+    is_encrypted BOOLEAN DEFAULT false,
+    is_public BOOLEAN DEFAULT true, -- if false, not exposed to frontend
+    label VARCHAR(255),
+    description TEXT,
+    default_value TEXT,
+    validation_rules TEXT, -- JSON with validation rules
+    display_order INTEGER DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(category, setting_key)
+);
+
+CREATE INDEX idx_site_settings_category ON site_settings(category);
+CREATE INDEX idx_site_settings_key ON site_settings(setting_key);
+CREATE INDEX idx_site_settings_public ON site_settings(is_public);
+CREATE INDEX idx_site_settings_order ON site_settings(category, display_order);
 
 -- Themes table
 CREATE TABLE IF NOT EXISTS themes (

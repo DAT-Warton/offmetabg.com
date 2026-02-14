@@ -3,6 +3,12 @@
  * Core CMS Functions
  */
 
+// Load environment variables early
+require_once __DIR__ . '/env-loader.php';
+
+// Load site settings helper
+require_once __DIR__ . '/site-settings.php';
+
 // Get current user
 function current_user() {
     return $_SESSION['user'] ?? null;
