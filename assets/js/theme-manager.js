@@ -5,7 +5,13 @@
 
 class ThemeManager {
     constructor() {
-        this.currentTheme = this.getStoredTheme() || 'default';
+        // Get theme from backend (body data-theme), localStorage, or default
+        const bodyTheme = document.body.getAttribute('data-theme') || document.documentElement.getAttribute('data-theme');
+        const storedTheme = this.getStoredTheme();
+        
+        // Priority: localStorage > body attribute > 'default'
+        this.currentTheme = storedTheme || bodyTheme || 'default';
+        
         this.themeChangeCallbacks = [];
         this.init();
     }

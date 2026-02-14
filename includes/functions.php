@@ -464,6 +464,27 @@ function sanitize($input) {
     return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
 }
 
+// Render safe HTML for product descriptions
+function render_description($description) {
+    if (empty($description)) {
+        return '';
+    }
+    
+    // Replace escaped newlines with actual newlines
+    $description = str_replace('\n', "\n", $description);
+    
+    // Allow only safe HTML tags
+    $allowed_tags = '<p><br><b><strong><i><em><u><ul><ol><li><h1><h2><h3><h4><h5><h6><span><div><a>';
+    $description = strip_tags($description, $allowed_tags);
+    
+    // Convert newlines to <br> if not already in HTML format
+    if (strpos($description, '<') === false) {
+        $description = nl2br($description);
+    }
+    
+    return $description;
+}
+
 // Validate email
 function validate_email($email) {
     return filter_var($email, FILTER_VALIDATE_EMAIL);

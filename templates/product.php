@@ -151,18 +151,31 @@ $currency_symbol = $product['currency'] === 'BGN' ? 'лв.' : ($product['currenc
                 <!-- Short Description -->
                 <?php if (!empty($product['short_description'])): ?>
                     <div class="product-short-desc">
-                        <?php echo nl2br(htmlspecialchars($product['short_description'])); ?>
+                        <?php echo render_description($product['short_description']); ?>
                     </div>
                 <?php endif; ?>
                 
-                <!-- Add to Cart -->
-                <form method="POST" action="/cart.php" class="add-to-cart-form">
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
-                    <button type="submit" class="btn btn-primary btn-large" <?php echo $stock <= 0 ? 'disabled' : ''; ?>>
-                        🛒 <?php echo __('product.add_to_cart'); ?>
+                <!-- Action Buttons -->
+                <div class="product-actions">
+                    <!-- Add to Cart -->
+                    <form method="POST" action="/cart.php" class="add-to-cart-form">
+                        <input type="hidden" name="action" value="add">
+                        <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
+                        <button type="submit" class="btn btn-primary btn-large" <?php echo $stock <= 0 ? 'disabled' : ''; ?>>
+                            🛒 <?php echo __('product.add_to_cart'); ?>
+                        </button>
+                    </form>
+                    
+                    <!-- Add to Wishlist -->
+                    <button type="button" 
+                            class="btn btn-wishlist btn-large" 
+                            onclick="toggleWishlist('<?php echo htmlspecialchars($product['id']); ?>')"
+                            id="wishlist-btn"
+                            data-product-id="<?php echo htmlspecialchars($product['id']); ?>">
+                        <span id="wishlist-icon">🤍</span>
+                        <span id="wishlist-text"><?php echo __('product.add_to_wishlist'); ?></span>
                     </button>
-                </form>
+                </div>
             </div>
         </div>
         
@@ -171,7 +184,7 @@ $currency_symbol = $product['currency'] === 'BGN' ? 'лв.' : ($product['currenc
             <div class="product-description-full">
                 <h2><?php echo __('product.description'); ?></h2>
                 <div class="description-content">
-                    <?php echo nl2br(htmlspecialchars($product['description'])); ?>
+                    <?php echo render_description($product['description']); ?>
                 </div>
             </div>
         <?php endif; ?>
@@ -183,5 +196,12 @@ $currency_symbol = $product['currency'] === 'BGN' ? 'лв.' : ($product['currenc
     </footer>
     
     <script src="/assets/js/theme-manager.js"></script>
+    <script src="/assets/js/wishlist.js"></script>
+    <script>
+        // Check if product is in wishlist on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkWishlistStatus('<?php echo htmlspecialchars($product['id']); ?>');
+        });
+    </script>
 </body>
 </html>
