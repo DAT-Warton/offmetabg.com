@@ -246,6 +246,50 @@ class ThemeManager {
     }
 
     /**
+     * Clean up invalid theme from storage and database
+     * @param {string} themeName - Invalid theme name to clean up
+     */
+    async cleanupInvalidTheme(themeName) {
+        console.log(`Cleaning up invalid theme: ${themeName}`);
+        
+        // Remove from localStorage
+        try {
+            const storedTheme = localStorage.getItem('offmeta_theme');
+            if (storedTheme === themeName) {
+                localStorage.removeItem('offmeta_theme');
+                localStorage.removeItem('offmeta_custom_theme');
+                console.log('Removed invalid theme from localStorage');
+            }
+        } catch (e) {
+            console.error('Failed to clean localStorage:', e);
+        }
+        
+        // Try to reset active theme in database to default
+        try {
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=set-theme`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({ theme: 'default' })
+            });
+            
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+                if (data.success) {
+                    console.log('Reset active theme to default in database');
+                }
+            }
+        } catch (e) {
+            console.warn('Could not reset theme in database (using localStorage fallback):', e.message);
+        }
+    }
+
+    /**
      * Register callback for theme changes
      */
     onThemeChange(callback) {
