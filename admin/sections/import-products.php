@@ -52,7 +52,7 @@ function import_products_from_csv($filePath) {
     $handle = fopen($filePath, 'r');
     $headers = fgetcsv($handle);
     
-    // Enhanced column mapping - supports multiple formats
+    // Enhanced column mapping - supports multiple formats including Bulgarian
     $columnMap = [
         // ID variants
         'ID' => 'id',
@@ -60,47 +60,61 @@ function import_products_from_csv($filePath) {
         'product_id' => 'id',
         'Post ID' => 'id',
         
-        // Name variants
+        // Type variants (for filtering)
+        'Вид' => 'type',
+        'Type' => 'type',
+        'type' => 'type',
+        
+        // Name variants (English + Bulgarian)
         'Name' => 'name',
         'name' => 'name',
+        'Име' => 'name',
         'post_title' => 'name',
         'Title' => 'name',
         'title' => 'name',
         'Product name' => 'name',
         'product_name' => 'name',
         
-        // Description variants
+        // Description variants (English + Bulgarian)
         'Description' => 'description',
         'description' => 'description',
+        'Описание' => 'description',
         'post_content' => 'description',
         'Content' => 'description',
         'Short description' => 'description',
         'short_description' => 'description',
+        'Кратко описание' => 'description',
         
-        // Price variants
+        // Price variants (English + Bulgarian)
         'Regular price' => 'price',
         'regular_price' => 'price',
         'Price' => 'price',
         'price' => 'price',
         'Sale price' => 'price',
         'sale_price' => 'price',
+        'Редовна цена:' => 'price',
+        'Промоционална цена:' => 'price',
+        'Цена' => 'price',
         
-        // Category variants
+        // Category variants (English + Bulgarian)
         'Categories' => 'category',
         'categories' => 'category',
+        'Категории' => 'category',
         'product_cat' => 'category',
         'Category' => 'category',
         'category' => 'category',
         
-        // Stock variants
+        // Stock variants (English + Bulgarian)
         'Stock' => 'stock',
         'stock' => 'stock',
         'stock_quantity' => 'stock',
         'Stock quantity' => 'stock',
         'Quantity' => 'stock',
         'quantity' => 'stock',
+        'Наличност' => 'stock',
+        'В наличност?' => 'status_stock',
         
-        // Image variants
+        // Image variants (English + Bulgarian)
         'Images' => 'image',
         'images' => 'image',
         'image' => 'image',
@@ -108,12 +122,14 @@ function import_products_from_csv($filePath) {
         'Featured image' => 'image',
         'featured_image' => 'image',
         'thumbnail' => 'image',
+        'Изображения' => 'image',
         
-        // Status variants
+        // Status variants (English + Bulgarian)
         'Status' => 'status',
         'status' => 'status',
         'post_status' => 'status',
-        'Published' => 'status'
+        'Published' => 'status',
+        'Публикувано' => 'status'
     ];
     
     while (($row = fgetcsv($handle)) !== false) {
@@ -130,6 +146,14 @@ function import_products_from_csv($filePath) {
             continue;
         }
         
+        // Skip product variations (only import parent products)
+        if (isset($product['type'])) {
+            $productType = strtolower($product['type']);
+            if ($productType === 'variation') {
+                continue; // Skip variations, we only want main products
+            }
+        }
+        
         // Generate ID if not present
         if (empty($product['id'])) {
             $product['id'] = 'prod_' . uniqid();
@@ -140,27 +164,79 @@ function import_products_from_csv($filePath) {
         // Clean and format data with better validation
         $productName = trim($product['name'] ?? '');
         if (empty($productName)) {
-            $productName = 'Untitled Product';
+            // Skip products without names
+            continue;
         }
         
+        // Description - clean HTML and get first part
         $productDescription = trim($product['description'] ?? '');
-        $productPrice = $product['price'] ?? 0;
-        // Remove currency symbols and convert to float
-        $productPrice = preg_replace('/[^\d.,]/', '', $productPrice);
-        $productPrice = str_replace(',', '.', $productPrice);
-        $productPrice = floatval($productPrice);
+        if (!empty($productDescription)) {
+            $productDescription = strip_tags($productDescription);
+            // Limit to 500 characters
+            if (strlen($productDescription) > 500) {
+                $productDescription = substr($productDescription, 0, 500) . '...';
+            }
+        }
         
+        // Price - handle both promotional and regular price
+        $productPrice = 0;
+        if (!empty($product['price'])) {
+            $priceStr = $product['price'];
+            // Remove currency symbols and convert to float
+            $priceStr = preg_replace('/[^\d.,]/', '', $priceStr);
+            $priceStr = str_replace(',', '.', $priceStr);
+            $productPrice = floatval($priceStr);
+        }
+        
+        // Category - take first category if multiple
         $productCategory = trim($product['category'] ?? 'general');
+        if (!empty($productCategory)) {
+            // If multiple categories separated by comma, take first one
+            if (strpos($productCategory, ',') !== false) {
+                $categories = explode(',', $productCategory);
+                $productCategory = trim($categories[0]);
+            }
+            // Convert to slug
+            $productCategory = strtolower($productCategory);
+            $productCategory = preg_replace('/[^\p{L}\p{N}]+/u', '-', $productCategory);
+            $productCategory = trim($productCategory, '-');
+        }
         if (empty($productCategory)) {
             $productCategory = 'general';
         }
         
-        $productStock = intval($product['stock'] ?? 0);
+        // Stock - parse integer
+        $productStock = 0;
+        if (isset($product['stock']) && $product['stock'] !== '') {
+            $productStock = intval($product['stock']);
+        }
         
-        $productStatus = strtolower(trim($product['status'] ?? 'publish'));
-        $productStatus = in_array($productStatus, ['publish', 'published', '1', 'true']) ? 'published' : 'draft';
+        // Status - handle Bulgarian "Публикувано" status
+        $productStatus = 'published';
+        if (isset($product['status'])) {
+            $statusValue = strtolower(trim($product['status']));
+            // Check for published indicators: 1, true, publish, published, публикувано
+            if (in_array($statusValue, ['0', 'false', 'draft', 'чернова', ''])) {
+                $productStatus = 'draft';
+            }
+        }
+        // Also check status_stock field (В наличност?)
+        if (isset($product['status_stock'])) {
+            $stockStatus = strtolower(trim($product['status_stock']));
+            if ($stockStatus === '0' || $stockStatus === 'no' || $stockStatus === 'не') {
+                $productStock = 0;
+            }
+        }
         
+        // Images - take first image if multiple
         $productImage = trim($product['image'] ?? '');
+        if (!empty($productImage)) {
+            // If multiple images separated by comma, take first one
+            if (strpos($productImage, ',') !== false) {
+                $images = explode(',', $productImage);
+                $productImage = trim($images[0]);
+            }
+        }
         
         // Build final product
         $finalProduct = [
