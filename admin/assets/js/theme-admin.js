@@ -281,78 +281,54 @@ const ThemeAdmin = {
             'text-secondary': document.getElementById('color-text-secondary').value
         };
 
-        // Apply to root immediately for preview
+        // Apply to root immediately for preview (LOCAL ONLY)
         const root = document.documentElement;
         Object.entries(colors).forEach(([key, value]) => {
             root.style.setProperty(`--${key}`, value);
         });
 
-        // Create a preview theme name
-        const previewThemeName = 'custom-preview-' + Date.now();
-        
-        // Create theme data
-        const themeData = {
-            name: 'Custom Preview',
-            slug: previewThemeName,
-            description: 'Preview of custom colors',
-            category: 'custom',
-            variables: colors,
-            version: '1.0'
-        };
-
-        try {
-            // Save as temporary preview theme
-            const response = await fetch(`${window.location.origin}/api/handler.php?action=save-custom-theme`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(themeData)
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                // Now activate this theme
-                const activateResponse = await fetch(`${window.location.origin}/api/handler.php?action=set-theme`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ theme: previewThemeName })
-                });
-
-                const activateData = await activateResponse.json();
-
-                if (activateData.success) {
-                    this.showNotification('Custom colors applied and saved! Reloading...', 'success');
-                    
-                    // Reload page to apply everywhere
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1500);
-                } else {
-                    throw new Error(activateData.message || 'Failed to activate theme');
-                }
-            } else {
-                throw new Error(data.message || 'Failed to save theme');
-            }
-        } catch (error) {
-            console.error('Apply custom colors error:', error);
-            this.showNotification('Preview applied locally. Click "Save as New Theme" to keep permanently.', 'warning');
-        }
+        this.showNotification('Preview applied! Click "Save as New Theme" to keep this permanently.', 'success');
     },
 
     /**
      * Save custom theme
      */
     async saveCustomTheme() {
-        const name = prompt('Enter theme name:');
-        if (!name) return;
-
-        const description = prompt('Enter theme description (optional):');
-
         try {
+            let name, slug, description;
+
+            // Check if we're editing an existing theme
+            if (this.editingThemeId) {
+                // Update existing theme
+                name = this.editingThemeName;
+                slug = this.editingThemeSlug;
+                const updateDesc = confirm(`Update theme "${name}"?\n\nClick OK to update, or Cancel to save as new theme.`);
+                
+                if (!updateDesc) {
+                    // User wants to save as new theme instead
+                    this.editingThemeId = null;
+                    this.editingThemeName = null;
+                    this.editingThemeSlug = null;
+                    // Reset button text
+                    const saveBtn = document.querySelector('button[onclick*="saveCustomTheme"]');
+                    if (saveBtn) {
+                        saveBtn.textContent = 'Save as New Theme';
+                        saveBtn.removeAttribute('data-editing');
+                    }
+                    // Call function again to prompt for new name
+                    return this.saveCustomTheme();
+                }
+                
+                description = ''; // Keep existing description
+            } else {
+                // Create new theme
+                name = prompt('Enter theme name:');
+                if (!name) return;
+
+                description = prompt('Enter theme description (optional):');
+                slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            }
+
             const colors = {
                 primary: document.getElementById('color-primary').value,
                 'primary-hover': document.getElementById('color-primary-hover').value,
@@ -366,7 +342,7 @@ const ThemeAdmin = {
 
             const themeData = {
                 name: name,
-                slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                slug: slug,
                 description: description || '',
                 category: 'custom',
                 variables: colors,
@@ -391,16 +367,24 @@ const ThemeAdmin = {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ theme: themeData.slug })
+                    body: JSON.stringify({ theme: slug })
                 });
 
                 const activateData = await activateResponse.json();
 
                 if (activateData.success) {
-                    this.showNotification('Theme saved and activated successfully! Reloading...', 'success');
+                    const action = this.editingThemeId ? 'updated' : 'saved';
+                    this.showNotification(`Theme ${action} and activated successfully! Reloading...`, 'success');
+                    
+                    // Clear editing state
+                    this.editingThemeId = null;
+                    this.editingThemeName = null;
+                    this.editingThemeSlug = null;
+                    
                     setTimeout(() => location.reload(), 1500);
                 } else {
-                    this.showNotification('Theme saved but not activated. You can activate it from the themes list.', 'warning');
+                    const action = this.editingThemeId ? 'updated' : 'saved';
+                    this.showNotification(`Theme ${action} but not activated. You can activate it from the themes list.`, 'warning');
                     setTimeout(() => location.reload(), 2000);
                 }
             } else {
@@ -436,6 +420,18 @@ const ThemeAdmin = {
                 textInput.value = value;
             }
         });
+
+        // Clear editing state
+        this.editingThemeId = null;
+        this.editingThemeName = null;
+        this.editingThemeSlug = null;
+
+        // Reset save button text
+        const saveBtn = document.querySelector('button[onclick*="saveCustomTheme"]');
+        if (saveBtn) {
+            saveBtn.textContent = 'Save as New Theme';
+            saveBtn.removeAttribute('data-editing');
+        }
 
         this.showNotification('Customizer reset to current theme', 'success');
     },
@@ -513,7 +509,63 @@ const ThemeAdmin = {
      * Edit custom theme
      */
     async editCustomTheme(themeId) {
-        this.showNotification('Edit functionality coming soon!', 'info');
+        try {
+            // Fetch theme data
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=get-custom-theme&id=${themeId}`);
+            const data = await response.json();
+
+            if (!data.success || !data.theme) {
+                throw new Error('Failed to load theme');
+            }
+
+            const theme = data.theme;
+            const variables = theme.variables;
+
+            // Populate customizer inputs
+            document.getElementById('color-primary').value = variables.primary || '#6366f1';
+            document.getElementById('color-primary-hover').value = variables['primary-hover'] || '#4f46e5';
+            document.getElementById('color-secondary').value = variables.secondary || '#8b5cf6';
+            document.getElementById('color-accent').value = variables.accent || '#ec4899';
+            document.getElementById('color-bg-primary').value = variables['bg-primary'] || '#ffffff';
+            document.getElementById('color-bg-secondary').value = variables['bg-secondary'] || '#f9fafb';
+            document.getElementById('color-text-primary').value = variables['text-primary'] || '#111827';
+            document.getElementById('color-text-secondary').value = variables['text-secondary'] || '#6b7280';
+
+            // Sync with color pickers
+            document.querySelectorAll('.color-input-item').forEach(item => {
+                const colorInput = item.querySelector('input[type="color"]');
+                const textInput = item.querySelector('input[type="text"]');
+                if (colorInput && textInput) {
+                    colorInput.value = textInput.value;
+                }
+            });
+
+            // Apply preview
+            await this.applyCustomColors();
+
+            // Store theme ID for update
+            this.editingThemeId = themeId;
+            this.editingThemeName = theme.name;
+            this.editingThemeSlug = theme.slug;
+
+            // Update save button text
+            const saveBtn = document.querySelector('button[onclick*="saveCustomTheme"]');
+            if (saveBtn) {
+                saveBtn.textContent = 'Update Theme';
+                saveBtn.setAttribute('data-editing', themeId);
+            }
+
+            // Scroll to customizer
+            const customizer = document.getElementById('theme-customizer');
+            if (customizer) {
+                customizer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            this.showNotification(`Editing "${theme.name}" - modify colors and click "Update Theme"`, 'info');
+        } catch (error) {
+            console.error('Edit theme error:', error);
+            this.showNotification('Failed to load theme for editing: ' + error.message, 'error');
+        }
     },
 
     /**
