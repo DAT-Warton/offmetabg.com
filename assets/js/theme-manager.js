@@ -13,7 +13,10 @@ class ThemeManager {
     /**
      * Initialize theme system
      */
-    init() {
+    async init() {
+        // Load theme from backend first
+        await this.loadThemeFromBackend();
+        
         // Apply stored theme
         this.applyTheme(this.currentTheme);
         
@@ -26,6 +29,24 @@ class ThemeManager {
         
         // Expose to global scope
         window.ThemeManager = this;
+    }
+
+    /**
+     * Load active theme from backend
+     */
+    async loadThemeFromBackend() {
+        try {
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=get-active-theme`);
+            const data = await response.json();
+            
+            if (data.success && data.theme) {
+                this.currentTheme = data.theme;
+                this.storeTheme(data.theme);
+            }
+        } catch (error) {
+            console.error('Failed to load theme from backend:', error);
+            // Fallback to localStorage or default
+        }
     }
 
     /**
@@ -76,8 +97,20 @@ class ThemeManager {
      * Apply theme
      * @param {string} themeName - Name of the theme to apply
      */
-    applyTheme(themeName) {
+    async applyTheme(themeName) {
         const themes = this.getAvailableThemes();
+        
+        // Check if it's a custom theme (not in built-in themes)
+        if (!themes[themeName] && themeName.includes('custom')) {
+            // Try to load custom theme from backend
+            try {
+                await this.loadCustomThemeBySlug(themeName);
+                return; // Custom theme will be applied in loadCustomThemeBySlug
+            } catch (error) {
+                console.error('Failed to load custom theme:', error);
+                themeName = 'default';
+            }
+        }
         
         if (!themes[themeName]) {
             console.warn(`Theme "${themeName}" not found. Using default theme.`);
@@ -103,6 +136,30 @@ class ThemeManager {
         window.dispatchEvent(new CustomEvent('themeChanged', {
             detail: { theme: themeName, themeData: themes[themeName] }
         }));
+    }
+
+    /**
+     * Load custom theme by slug from backend
+     */
+    async loadCustomThemeBySlug(slug) {
+        try {
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=list-custom-themes`);
+            const data = await response.json();
+            
+            if (data.success && data.themes) {
+                const customTheme = data.themes.find(t => t.slug === slug);
+                
+                if (customTheme) {
+                    this.applyCustomTheme(customTheme);
+                    return;
+                }
+            }
+            
+            throw new Error('Custom theme not found');
+        } catch (error) {
+            console.error('Failed to load custom theme:', error);
+            throw error;
+        }
     }
 
     /**
@@ -259,23 +316,34 @@ class ThemeManager {
         const root = document.documentElement;
         
         // Set all CSS variables
-        Object.entries(themeData.variables).forEach(([varName, value]) => {
-            root.style.setProperty(`--${varName}`, value);
-        });
+        if (themeData.variables && typeof themeData.variables === 'object') {
+            Object.entries(themeData.variables).forEach(([varName, value]) => {
+                root.style.setProperty(`--${varName}`, value);
+            });
+        }
         
-        // Set theme attribute
-        root.setAttribute('data-theme', 'custom');
-        document.body.setAttribute('data-theme', 'custom');
+        // Set theme attribute to the theme's slug
+        const themeSlug = themeData.slug || 'custom';
+        root.setAttribute('data-theme', themeSlug);
+        document.body.setAttribute('data-theme', themeSlug);
         
         // Store custom theme
         try {
             localStorage.setItem('offmeta_custom_theme', JSON.stringify(themeData));
-            localStorage.setItem('offmeta_theme', 'custom');
+            localStorage.setItem('offmeta_theme', themeSlug);
         } catch (e) {
             console.error('Failed to store custom theme:', e);
         }
         
-        this.currentTheme = 'custom';
+        this.currentTheme = themeSlug;
+        
+        // Trigger callbacks
+        this.triggerCallbacks(themeSlug);
+        
+        // Dispatch custom event
+        window.dispatchEvent(new CustomEvent('themeChanged', {
+            detail: { theme: themeSlug, themeData: themeData }
+        }));
     }
 
     /**

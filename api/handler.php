@@ -44,7 +44,12 @@ try {
                 throw new Exception('Theme name is required');
             }
             
-            $db->setOption('active_theme', $input['theme']);
+            // Save to database/options
+            $result = $db->setOption('active_theme', $input['theme']);
+            
+            if (!$result) {
+                throw new Exception('Failed to save theme to database');
+            }
             
             $response = [
                 'success' => true,
@@ -94,14 +99,25 @@ try {
                 throw new Exception('Theme ID is required');
             }
             
-            $theme = $db->query("SELECT * FROM themes WHERE id = ?", [$themeId])->fetch();
+            // Get theme from database
+            $pdo = $db->getPDO();
+            if ($pdo) {
+                $stmt = $pdo->prepare("SELECT * FROM themes WHERE id = ?");
+                $stmt->execute([$themeId]);
+                $theme = $stmt->fetch(PDO::FETCH_ASSOC);
+            } else {
+                // JSON fallback
+                $theme = $db->table('themes')->find('id', $themeId);
+            }
             
             if (!$theme) {
                 throw new Exception('Theme not found');
             }
             
             // Parse variables JSON
-            $theme['variables'] = json_decode($theme['variables'], true);
+            if (isset($theme['variables']) && is_string($theme['variables'])) {
+                $theme['variables'] = json_decode($theme['variables'], true);
+            }
             
             $response = [
                 'success' => true,
@@ -125,11 +141,20 @@ try {
             
         case 'list-custom-themes':
             // List all custom themes
-            $themes = $db->query("SELECT * FROM themes ORDER BY created_at DESC")->fetchAll();
+            $pdo = $db->getPDO();
+            if ($pdo) {
+                $stmt = $pdo->query("SELECT * FROM themes ORDER BY created_at DESC");
+                $themes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                // JSON fallback
+                $themes = $db->table('themes')->all();
+            }
             
             // Parse variables JSON for each theme
             foreach ($themes as &$theme) {
-                $theme['variables'] = json_decode($theme['variables'], true);
+                if (isset($theme['variables']) && is_string($theme['variables'])) {
+                    $theme['variables'] = json_decode($theme['variables'], true);
+                }
             }
             
             $response = [

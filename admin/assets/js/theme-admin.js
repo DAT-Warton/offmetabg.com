@@ -123,11 +123,8 @@ const ThemeAdmin = {
      */
     async activateTheme(slug) {
         try {
-            // Apply theme on frontend
-            window.themeManager.applyTheme(slug);
-
-            // Save to database  
-            const response = await fetch(`${window.location.origin}/api?action=set-theme`, {
+            // Save to database first 
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=set-theme`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -138,8 +135,16 @@ const ThemeAdmin = {
             const data = await response.json();
 
             if (data.success) {
-                this.showNotification('Theme activated successfully!', 'success');
+                // Apply theme on frontend
+                window.themeManager.applyTheme(slug);
+                
+                this.showNotification('Theme activated successfully! Reloading...', 'success');
                 this.highlightActiveTheme();
+                
+                // Reload page to apply theme everywhere
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             } else {
                 throw new Error(data.message || 'Failed to save theme');
             }
@@ -213,7 +218,7 @@ const ThemeAdmin = {
             const themeData = await window.themeManager.importTheme(file);
 
             // Save to database
-            const response = await fetch(`${window.location.origin}/api?action=save-custom-theme`, {
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=save-custom-theme`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -259,13 +264,66 @@ const ThemeAdmin = {
             'text-secondary': document.getElementById('color-text-secondary').value
         };
 
-        // Apply to root
+        // Apply to root immediately for preview
         const root = document.documentElement;
         Object.entries(colors).forEach(([key, value]) => {
             root.style.setProperty(`--${key}`, value);
         });
 
-        this.showNotification('Custom colors applied! Save as new theme to keep them.', 'success');
+        // Create a preview theme name
+        const previewThemeName = 'custom-preview-' + Date.now();
+        
+        // Create theme data
+        const themeData = {
+            name: 'Custom Preview',
+            slug: previewThemeName,
+            description: 'Preview of custom colors',
+            category: 'custom',
+            variables: colors,
+            version: '1.0'
+        };
+
+        try {
+            // Save as temporary preview theme
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=save-custom-theme`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(themeData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Now activate this theme
+                const activateResponse = await fetch(`${window.location.origin}/api/handler.php?action=set-theme`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ theme: previewThemeName })
+                });
+
+                const activateData = await activateResponse.json();
+
+                if (activateData.success) {
+                    this.showNotification('Custom colors applied and saved! Reloading...', 'success');
+                    
+                    // Reload page to apply everywhere
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    throw new Error(activateData.message || 'Failed to activate theme');
+                }
+            } else {
+                throw new Error(data.message || 'Failed to save theme');
+            }
+        } catch (error) {
+            console.error('Apply custom colors error:', error);
+            this.showNotification('Preview applied locally. Click "Save as New Theme" to keep permanently.', 'warning');
+        }
     },
 
     /**
@@ -298,7 +356,8 @@ const ThemeAdmin = {
                 version: '1.0'
             };
 
-            const response = await fetch(`${window.location.origin}/api?action=save-custom-theme`, {
+            // Save theme to database
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=save-custom-theme`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -309,8 +368,24 @@ const ThemeAdmin = {
             const data = await response.json();
 
             if (data.success) {
-                this.showNotification('Theme saved successfully!', 'success');
-                setTimeout(() => location.reload(), 1500);
+                // Now activate this theme
+                const activateResponse = await fetch(`${window.location.origin}/api/handler.php?action=set-theme`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ theme: themeData.slug })
+                });
+
+                const activateData = await activateResponse.json();
+
+                if (activateData.success) {
+                    this.showNotification('Theme saved and activated successfully! Reloading...', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    this.showNotification('Theme saved but not activated. You can activate it from the themes list.', 'warning');
+                    setTimeout(() => location.reload(), 2000);
+                }
             } else {
                 throw new Error(data.message || 'Failed to save theme');
             }
@@ -355,7 +430,7 @@ const ThemeAdmin = {
         if (!confirm('Are you sure you want to delete this theme?')) return;
 
         try {
-            const response = await fetch(`${window.location.origin}/api?action=delete-custom-theme`, {
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=delete-custom-theme`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -382,12 +457,32 @@ const ThemeAdmin = {
      */
     async applyCustomTheme(themeId) {
         try {
-            const response = await fetch(`${window.location.origin}/api?action=get-custom-theme&id=${themeId}`);
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=get-custom-theme&id=${themeId}`);
             const data = await response.json();
 
             if (data.success && data.theme) {
-                window.themeManager.applyCustomTheme(data.theme);
-                this.showNotification('Custom theme applied!', 'success');
+                const theme = data.theme;
+                
+                // Apply theme variables
+                window.themeManager.applyCustomTheme(theme);
+                
+                // Now save this theme as active to backend
+                const activateResponse = await fetch(`${window.location.origin}/api/handler.php?action=set-theme`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ theme: theme.slug })
+                });
+
+                const activateData = await activateResponse.json();
+
+                if (activateData.success) {
+                    this.showNotification('Custom theme applied successfully! Reloading...', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    throw new Error(activateData.message || 'Failed to activate theme');
+                }
             } else {
                 throw new Error(data.message || 'Failed to load theme');
             }
