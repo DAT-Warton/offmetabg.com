@@ -32,10 +32,10 @@ foreach ($dirs as $dir) {
     if (!is_dir($dir)) @mkdir($dir, 0755, true);
 }
 
-// Load core functions
+// Load core functions (database must be loaded before functions)
+require_once CMS_ROOT . '/includes/database.php';
 require_once CMS_ROOT . '/includes/functions.php';
 require_once CMS_ROOT . '/includes/router.php';
-require_once CMS_ROOT . '/includes/database.php';
 
 // Get current page/route
 $uri = $_SERVER['REQUEST_URI'] ?? '/';
