@@ -13,11 +13,11 @@ header('Content-Type: application/json');
 
 // Get action from query parameter
 $action = $_GET['action'] ?? '';
-$method = $_SERVER['REQUEST_METHOD'];
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 // Initialize database
 require_once CMS_ROOT . '/includes/database.php';
-$db = new Database();
+$db = Database::getInstance();
 
 // Parse JSON input for POST requests
 $input = [];
