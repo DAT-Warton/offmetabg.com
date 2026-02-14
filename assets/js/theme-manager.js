@@ -124,20 +124,17 @@ class ThemeManager {
         const themes = this.getAvailableThemes();
         
         // Check if it's a custom theme (not in built-in themes)
-        if (!themes[themeName] && themeName.includes('custom')) {
+        if (!themes[themeName]) {
+            console.log(`Theme "${themeName}" not in built-in list, trying to load as custom theme...`);
             // Try to load custom theme from backend
             try {
                 await this.loadCustomThemeBySlug(themeName);
                 return; // Custom theme will be applied in loadCustomThemeBySlug
             } catch (error) {
                 console.error('Failed to load custom theme:', error);
+                console.warn(`Theme "${themeName}" not found. Using default theme.`);
                 themeName = 'default';
             }
-        }
-        
-        if (!themes[themeName]) {
-            console.warn(`Theme "${themeName}" not found. Using default theme.`);
-            themeName = 'default';
         }
 
         // Set data-theme attribute on root element

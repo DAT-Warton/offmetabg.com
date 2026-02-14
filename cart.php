@@ -410,7 +410,7 @@ $total = max(0, $subtotal - $discount_amount);
                 <a href="index.php" class="btn btn-secondary">← <?php echo __('home'); ?></a>
                 
                 <?php if ($is_logged_in): ?>
-                    <a href="auth.php?logout=1" class="btn btn-secondary"><?php echo __('logout'); ?></a>
+                    <a href="/auth.php?logout=1" class="btn btn-secondary"><?php echo __('logout'); ?></a>
                 <?php else: ?>
                     <a href="auth.php?action=login" class="btn btn-secondary"><?php echo __('login'); ?></a>
                 <?php endif; ?>
