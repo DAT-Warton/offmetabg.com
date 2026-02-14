@@ -44,7 +44,7 @@
                             <small>Количество: <?= htmlspecialchars($item['quantity']) ?></small>
                         </div>
                         <div>
-                            <?= number_format($item['price'] * $item['quantity'], 2) ?> лв.
+                            €<?= number_format($item['price'] * $item['quantity'], 2) ?>
                         </div>
                     </div>
                     <?php endforeach; ?>

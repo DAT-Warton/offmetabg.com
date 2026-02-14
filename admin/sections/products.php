@@ -147,7 +147,7 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
                 <?php foreach ($products as $id => $product): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($product['name']); ?></td>
-                        <td>$<?php echo number_format($product['price'], 2); ?></td>
+                        <td>€<?php echo number_format($product['price'], 2); ?></td>
                         <td><?php echo $product['stock'] ?? 0; ?></td>
                         <td><?php echo ucfirst($product['status'] ?? 'published'); ?></td>
                         <td>
