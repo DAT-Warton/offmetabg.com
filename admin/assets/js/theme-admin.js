@@ -270,24 +270,80 @@ const ThemeAdmin = {
      * Apply custom colors from customizer
      */
     async applyCustomColors() {
-        const colors = {
-            primary: document.getElementById('color-primary').value,
-            'primary-hover': document.getElementById('color-primary-hover').value,
-            secondary: document.getElementById('color-secondary').value,
-            accent: document.getElementById('color-accent').value,
-            'bg-primary': document.getElementById('color-bg-primary').value,
-            'bg-secondary': document.getElementById('color-bg-secondary').value,
-            'text-primary': document.getElementById('color-text-primary').value,
-            'text-secondary': document.getElementById('color-text-secondary').value
-        };
+        try {
+            const colors = {
+                primary: document.getElementById('color-primary').value,
+                'primary-hover': document.getElementById('color-primary-hover').value,
+                secondary: document.getElementById('color-secondary').value,
+                accent: document.getElementById('color-accent').value,
+                'bg-primary': document.getElementById('color-bg-primary').value,
+                'bg-secondary': document.getElementById('color-bg-secondary').value,
+                'text-primary': document.getElementById('color-text-primary').value,
+                'text-secondary': document.getElementById('color-text-secondary').value
+            };
 
-        // Apply to root immediately for preview (LOCAL ONLY)
-        const root = document.documentElement;
-        Object.entries(colors).forEach(([key, value]) => {
-            root.style.setProperty(`--${key}`, value);
-        });
+            // Apply to root immediately for instant preview
+            const root = document.documentElement;
+            Object.entries(colors).forEach(([key, value]) => {
+                root.style.setProperty(`--${key}`, value);
+            });
 
-        this.showNotification('Preview applied! Click "Save as New Theme" to keep this permanently.', 'success');
+            // Generate readable theme name based on primary color
+            const primaryColor = colors['primary'];
+            const themeName = `Custom Theme ${primaryColor}`;
+            const themeSlug = `custom-${primaryColor.replace('#', '')}`;
+
+            // Create theme data
+            const themeData = {
+                name: themeName,
+                slug: themeSlug,
+                description: 'Custom theme from Advanced Theme Customizer',
+                category: 'custom',
+                variables: colors,
+                version: '1.0'
+            };
+
+            // Save theme to database
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=save-custom-theme`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(themeData)
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.message || 'Failed to save theme');
+            }
+
+            // Now activate this theme
+            const activateResponse = await fetch(`${window.location.origin}/api/handler.php?action=set-theme`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ theme: themeSlug })
+            });
+
+            const activateData = await activateResponse.json();
+
+            if (!activateData.success) {
+                throw new Error(activateData.message || 'Failed to activate theme');
+            }
+
+            this.showNotification('Theme applied and saved! Reloading to apply everywhere...', 'success');
+            
+            // Reload page to apply server-side CSS injection
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+
+        } catch (error) {
+            console.error('Apply custom colors error:', error);
+            this.showNotification('Failed to apply theme: ' + error.message, 'error');
+        }
     },
 
     /**
