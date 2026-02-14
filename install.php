@@ -170,10 +170,10 @@ if ($allMet) {
     echo "1. Delete this install.php file for security\n";
     echo "2. Configure email settings in config/email-config.php\n";
     echo "3. (Optional) Configure courier API in config/courier-config.php\n";
-    echo "4. Access admin panel at: /admin/ with credentials:\n";
-    echo "   Username: Warton\n";
-    echo "   Password: Warton2026\n";
-    echo "   (Change these in admin/index.php)\n\n";
+    echo "4. Create your admin account via database or admin panel\n";
+    echo "   Default credentials (if created by migration):\n";
+    echo "   Username: admin\n";
+    echo "   Password: (set during first setup)\n\n";
     echo "5. Start adding products, categories, and pages!\n";
 } else {
     echo "✗ Installation completed with errors!\n";
@@ -201,7 +201,7 @@ if (PHP_SAPI !== 'cli') {
             </div>
             
             <?php if (!extension_loaded('curl')): ?>
-            <div class="info" style="background: #fef3c7; border-color: #fde047; color: #854d0e;">
+            <div class="info warning">
                 <strong>⚠️ Забележка:</strong> cURL extension не е налично. Email системата ще използва <code>file_get_contents</code> fallback метод. За по-добра производителност, помолете хостинг провайдъра да активира cURL.
             </div>
             <?php endif; ?>
@@ -212,18 +212,13 @@ if (PHP_SAPI !== 'cli') {
                     <li>Изтрийте файла <code>install.php</code> за сигурност</li>
                     <li>Конфигурирайте email в <code>config/email-config.php</code></li>
                     <li>(Опционално) Конфигурирайте куриерски API в <code>config/courier-config.php</code></li>
-                    <li>Влезте в админ панела с:
-                        <ul style="margin-left: 20px; margin-top: 10px;">
-                            <li>Потребител: <code>Warton</code></li>
-                            <li>Парола: <code>Warton2026</code></li>
-                        </ul>
-                    </li>
+                    <li>Създайте админ акаунт чрез базата данни или използвайте съществуващ</li>
                     <li>Започнете да добавяте продукти и категории!</li>
                 </ol>
             </div>
             
             <a href="admin/" class="btn">Влез в Админ Панела</a>
-            <a href="index.php" class="btn" style="background: linear-gradient(135deg, #27ae60 0%, #059669 100%); margin-top: 10px;">Виж Сайта</a>
+            <a href="index.php" class="btn btn-success">Виж Сайта</a>
         </div>
     </body>
     </html>

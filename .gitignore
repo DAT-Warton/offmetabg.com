@@ -7,10 +7,24 @@ cache/
 # Configuration (sensitive data)
 config/database.json
 config/email-config.php
+config/courier-config.php
 .env
 .env.local
 .env.production
 .cloudflare-credentials
+
+# Secrets and credentials documentation
+SECRETS.local.md
+SECRETS.md
+credentials.md
+*.secret.md
+CHANGES-SUMMARY.md
+FINAL-STATE.md
+MIGRATION-COMPLETE.txt
+QUICK-START.md
+.github-deploy-checklist.md
+DEPLOYMENT-SUMMARY.local.md
+remove-sensitive-files.local.ps1
 
 # Development & Deployment (contains sensitive data)
 .vscode/
@@ -22,6 +36,28 @@ deploy-config.local.ps1
 *.local.sh
 *.local.json
 *.local.env
+
+# Test files with hardcoded credentials (DO NOT COMMIT)
+test-stefie-login.php
+test-system.php
+reset-admin-passwords.php
+update-stefie-password.php
+create-admin.php
+
+# Deployment and setup scripts with sensitive data
+setup-vps.sh
+git-deploy.ps1
+
+# Local development scripts
+start-server.bat
+restart-server.bat
+
+# SSH keys and credentials
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+authorized_keys
 
 # OS files
 .DS_Store

@@ -39,7 +39,7 @@ if (isset($_POST['register'])) {
     } elseif (strlen($password) < 6) {
         $error = __('auth.password_min_6');
     } else {
-        // Check if user exists
+        // Check if user exists (database only)
         $userExists = false;
         
         if (db_enabled()) {
@@ -47,19 +47,14 @@ if (isset($_POST['register'])) {
             $table = db_table('customers');
             $userExists = !empty($table->find('username', $username)) || !empty($table->find('email', $email));
         } else {
-            $customers = load_json('storage/customers.json');
-            foreach ($customers as $customer) {
-                if ($customer['username'] === $username || $customer['email'] === $email) {
-                    $userExists = true;
-                    break;
-                }
-            }
+            $error = __('auth.database_required');
+            $userExists = true; // Prevent registration if DB not available
         }
         
         if ($userExists) {
             $error = __('auth.user_exists');
         } else {
-            // Create new customer
+            // Create new customer (in database)
             $customerId = uniqid('cust_');
             // Generate shorter, user-friendly activation token (16 characters)
             $activationToken = bin2hex(random_bytes(8));
@@ -81,21 +76,6 @@ if (isset($_POST['register'])) {
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s')
                 ]);
-            } else {
-                $customers = load_json('storage/customers.json');
-                $customers[$customerId] = [
-                    'id' => $customerId,
-                    'username' => $username,
-                    'email' => $email,
-                    'password' => password_hash($password, PASSWORD_DEFAULT),
-                    'role' => 'customer',
-                    'activated' => false,
-                    'activation_token' => $activationToken,
-                    'activation_token_expires' => $activationExpires,
-                    'created' => date('Y-m-d H:i:s')
-                ];
-                
-                save_json('storage/customers.json', $customers);
             }
             
             // Try to send activation email
@@ -134,36 +114,21 @@ if (isset($_POST['login'])) {
     } else {
         $found = false;
         
-        // Check administrators first
-        $adminRecord = null;
+        // Check administrators first (from database only)
         if (db_enabled()) {
             $adminRecord = db_table('admins')->find('username', $username);
-        }
-
-        if ($adminRecord && password_verify($password, $adminRecord['password'])) {
-            $_SESSION['admin_user'] = $adminRecord['username'];
-            $_SESSION['user_role'] = 'admin';
-            $_SESSION['admin'] = true;
-            $_SESSION['user_id'] = $adminRecord['id'];
-            header('Location: admin/index.php');
-            exit;
-        }
-
-        $admins = load_json('storage/admins.json');
-        foreach ($admins as $admin) {
-            if ($admin['username'] === $username && password_verify($password, $admin['password'])) {
-                $_SESSION['admin_user'] = $admin['username'];
+            if ($adminRecord && password_verify($password, $adminRecord['password'])) {
+                $_SESSION['admin_user'] = $adminRecord['username'];
                 $_SESSION['user_role'] = 'admin';
                 $_SESSION['admin'] = true;
-                $_SESSION['user_id'] = $admin['id'];
+                $_SESSION['user_id'] = $adminRecord['id'];
                 header('Location: admin/index.php');
                 exit;
             }
         }
         
-        // Then check customers
-        $customer = null;
-        if (db_enabled()) {
+        // Then check customers (from database only)
+        if (!$found && db_enabled()) {
             $customer = db_table('customers')->find('username', $username);
             if ($customer && password_verify($password, $customer['password'])) {
                 $isActivated = true;
@@ -186,35 +151,6 @@ if (isset($_POST['login'])) {
                     exit;
                 }
             }
-        }
-
-        if (!$found) {
-            $customers = load_json('storage/customers.json');
-            foreach ($customers as $customer) {
-                if ($customer['username'] === $username && password_verify($password, $customer['password'])) {
-                    // Check if account is activated
-                    if (isset($customer['activated']) && $customer['activated'] === false) {
-                        $error = __('auth.activation_required') . '. ' . __('auth.check_email_activation') . '.';
-                        break;
-                    }
-                    
-                    $_SESSION['customer_id'] = $customer['id'];
-                    $_SESSION['customer_user'] = $customer['username'];
-                    $_SESSION['user_role'] = 'customer';
-                    $found = true;
-                    header('Location: index.php');
-                    exit;
-                }
-            }
-        }
-        
-        // Fallback: hardcoded admin
-        if (!$found && $username === 'Warton' && $password === 'Warton2026') {
-            $_SESSION['admin_user'] = $username;
-            $_SESSION['user_role'] = 'admin';
-            $_SESSION['admin'] = true;
-            header('Location: admin/index.php');
-            exit;
         }
         
         if (!$found) {
@@ -286,16 +222,15 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
                     Не виждате имейла? Проверете папката за спам.
                 </p>
             <?php else: ?>
-                <p class="info-text" style="color: #f59e0b;">
+                <p class="info-text warning">
                     <?php echo icon_alert(18, '#f59e0b'); ?> Имейлът не може да бъде изпратен автоматично.
                 </p>
                 <?php if ($activationToken): ?>
                     <p class="info-text">
                         Моля, използвайте този линк за активация:
                     </p>
-                    <div style="background: #f3f4f6; padding: 15px; border-radius: 6px; word-break: break-all; margin: 15px 0;">
-                        <a href="<?php echo $site_url ?? 'http://localhost:8000'; ?>/activate/<?php echo htmlspecialchars($activationToken); ?>" 
-                           style="color: #667eea; text-decoration: none;">
+                    <div class="activation-link-box">
+                        <a href="<?php echo $site_url ?? 'http://localhost:8000'; ?>/activate/<?php echo htmlspecialchars($activationToken); ?>">
                             <?php echo $site_url ?? 'http://localhost:8000'; ?>/activate/<?php echo htmlspecialchars($activationToken); ?>
                         </a>
                     </div>

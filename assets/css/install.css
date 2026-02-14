@@ -37,13 +37,27 @@ h1 {
     border-radius: 6px;
     margin: 20px 0;
 }
+
+.info.warning {
+    background: #fef3c7;
+    border-color: #fde047;
+    color: #854d0e;
+}
+
 .steps {
     margin: 20px 0;
 }
+
 .steps li {
     margin: 10px 0;
     margin-left: 20px;
 }
+
+.steps ul {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
 .btn {
     display: block;
     width: 100%;
@@ -59,9 +73,19 @@ h1 {
     text-decoration: none;
     margin-top: 20px;
 }
+
 .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #27ae60 0%, #059669 100%);
+    margin-top: 10px;
+}
+
+.btn-success:hover {
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
 }
 code {
     background: #f3f4f6;

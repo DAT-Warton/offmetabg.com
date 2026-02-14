@@ -398,3 +398,31 @@ h3 {
 .form-terms a {
     color: var(--primary, #3498db);
 }
+
+/* Success Icon Container */
+.success-icon-container {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+/* Order Actions Container */
+.order-actions-container {
+    margin-top: 30px;
+}
+
+/* Quantity Update Form */
+.quantity-update-form {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Remove Item Form */
+.remove-item-form {
+    display: inline;
+}
+
+/* Remove Promo Form */
+.remove-promo-form {
+    margin: 0;
+}

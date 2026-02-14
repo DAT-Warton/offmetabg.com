@@ -1,67 +1,106 @@
-Creative Commons Zero v1.0 Universal
+PROPRIETARY SOFTWARE LICENSE
 
-CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE LEGAL SERVICES. 
-DISTRIBUTION OF THIS DOCUMENT DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP. 
-CREATIVE COMMONS PROVIDES THIS INFORMATION ON AN "AS-IS" BASIS. CREATIVE COMMONS 
-GIVES NO WARRANTIES REGARDING THE USE OF THIS DOCUMENT OR THE INFORMATION OR WORKS 
-PROVIDED HEREUNDER, AND DISCLAIMS LIABILITY FOR DAMAGES RESULTING FROM THE USE OF 
-THIS DOCUMENT OR THE INFORMATION OR WORKS PROVIDED HEREUNDER.
+Copyright © 2024-2026 Warton. All Rights Reserved.
 
-Statement of Purpose
+NOTICE: This software and associated documentation files (the "Software") are the 
+exclusive property of the copyright holder. All rights are reserved.
 
-The laws of most jurisdictions throughout the world automatically confer exclusive 
-Copyright and Related Rights (defined below) upon the creator and, in some cases, 
-the creator's heirs or assigns ("Copyright Holder") of an original work of authorship 
-and/or a database (each, a "Work").
+NO LICENSE IS GRANTED. This repository is made available for viewing purposes ONLY.
 
-Certain Copyright Holders ("Original Author") of Works wish to permanently relinquish 
-those rights to a Work for the purpose of contributing to a commons of creative, 
-cultural and scientific works that the public can reliably and without fear of later 
-claims of infringement build upon, modify, incorporate in other works, reuse and 
-redistribute as freely as possible in any form whatsoever and for any purposes, 
-including without limitation commercial purposes. These Copyright Holders desire to 
-make those rights available to the general public in such a manner that those individuals 
-can relieve themselves of the consequences of the prior copyright restrictions on these Works.
+═══════════════════════════════════════════════════════════════════════════════
 
-Therefore, the Copyright Holders undertake to exercise any Copyright and Related Rights 
-they hold in the Work under the following terms and conditions:
+TERMS AND CONDITIONS:
 
-1. Waiver
+1. COPYRIGHT AND OWNERSHIP
 
-Copyright Holder waives the copyright and related rights in the Work to the extent 
-possible under law in all territories of the world, including without limitation all 
-present and future rights therein, whether now known or hereafter discovered. The copyright 
-holder does not waive the rights that may not be waived under applicable law.
+   The Software and all associated files, code, documentation, designs, graphics, 
+   text, and other materials in this repository are protected by copyright laws 
+   and international copyright treaties, as well as other intellectual property 
+   laws and treaties.
 
-2. Public License Fallback
+   All intellectual property rights in the Software belong exclusively to Warton.
 
-Should any portion of the Waiver for any reason be judged legally invalid or ineffective 
-under applicable law, then the Waiver shall be preserved to the maximum extent permitted 
-taking into account the intent and purpose of Creative Commons. Additionally, to the extent 
-the Waiver is so judged Creative Commons hereby grants to each affected person a royalty-free, 
-non transferable, non sublicensable, non exclusive, irrevocable and unconditional license to 
-exercise Copyright and Related Rights in the Work.
+2. RESTRICTIONS - NO USAGE PERMITTED
 
-3. Limitations and Disclaimers
+   You are NOT permitted to:
 
-a. No trademark or patent rights held by Creative Commons are waived, abandoned, surrendered, 
-   licensed or otherwise affected by this document.
+   a) Use the Software or any portion thereof for any purpose, commercial or 
+      non-commercial
+   b) Copy, reproduce, or duplicate the Software or any portion thereof
+   c) Modify, adapt, translate, or create derivative works based on the Software
+   d) Distribute, sublicense, sell, rent, lease, or transfer the Software
+   e) Reverse engineer, decompile, or disassemble the Software
+   f) Remove or alter any copyright notices, trademarks, or other proprietary 
+      rights notices
+   g) Use the Software as a basis for developing competitive products or services
+   h) Incorporate any portion of the Software into your own projects
+   i) Use the Software for training artificial intelligence or machine learning 
+      models
+   j) Extract, scrape, or otherwise obtain code, algorithms, or logic from the 
+      Software
 
-b. Creative Commons offers the Work as-is and makes no representations or warranties of any 
-   kind concerning the Work, express, implied, statutory or otherwise, including without 
-   limitation warranties of title, merchantability, fitness for a particular purpose, 
-   non infringement, or the absence of latent or other defects, accuracy, or the present 
-   or absence of errors, whether or not discoverable, all to the greatest extent permissible 
-   under applicable law.
+3. NO ATTRIBUTION EXCEPTION
 
-c. Creative Commons disclaims responsibility for clearing rights of other persons that may 
-   apply to the Work or any use thereof including without limitation any person's Copyright 
-   and Related Rights in the Work. Further, Creative Commons disclaims responsibility for 
-   obtaining any consents, permissions or other rights required for any use of the Work.
+   Providing attribution, credits, or acknowledgment does NOT grant any rights 
+   to use, copy, modify, or distribute the Software. All usage is PROHIBITED 
+   regardless of attribution.
 
-d. If any restriction can not be waived, the Work is provided royalty-free under the terms 
-   of this License to each person entitled to benefit from the restrictions contained herein.
+4. VIEWING ONLY
 
-e. Nothing in this license shall be deemed to waive, abandon, surrender, license or otherwise 
-   affect any claim which Creative Commons otherwise might have, whether now known or unknown, 
-   in the Work.
+   This repository is made available for:
+   - Portfolio demonstration purposes
+   - Code review by potential employers or clients
+   - Academic review or assessment
+   
+   Viewing does NOT constitute a license to use, copy, or modify the Software.
+
+5. COMMERCIAL LICENSING
+
+   If you wish to use this Software or any portion thereof, you MUST obtain a 
+   written commercial license agreement from the copyright holder.
+   
+   For licensing inquiries, contact: datwarton@gmail.com
+
+6. ENFORCEMENT
+
+   Any unauthorized use, copying, modification, or distribution of the Software 
+   constitutes copyright infringement and may result in:
+   
+   a) Civil liability for damages
+   b) Injunctive relief to stop the infringement
+   c) Criminal prosecution where applicable
+   d) Recovery of legal fees and costs
+
+7. TERMINATION
+
+   Any attempted use of the Software in violation of this license automatically 
+   terminates your right to view this repository.
+
+8. NO WARRANTY
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+   FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+9. LIMITATION OF LIABILITY
+
+   IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR 
+   OTHER LIABILITY ARISING FROM THE SOFTWARE OR ITS VIEWING.
+
+10. GOVERNING LAW
+
+    This license shall be governed by and construed in accordance with the laws 
+    of Bulgaria, without regard to its conflict of law provisions.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+BY ACCESSING THIS REPOSITORY, YOU ACKNOWLEDGE THAT YOU HAVE READ THIS LICENSE, 
+UNDERSTAND IT, AND AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS.
+
+IF YOU DO NOT AGREE TO THESE TERMS, YOU MUST IMMEDIATELY CEASE VIEWING THIS 
+REPOSITORY AND DELETE ANY COPIES YOU MAY HAVE MADE.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+For questions about this license, contact: Warton
+Last Updated: February 14, 2026

@@ -67,6 +67,8 @@ foreach ($categories as $category) {
                 <h1><?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></h1>
             </div>
             <div class="nav-buttons">
+                <a href="/blog" class="btn btn-secondary"><?php echo __('menu.blog_posts'); ?></a>
+                <a href="/about" class="btn btn-secondary"><?php echo __('about_link'); ?></a>
                 <a href="?lang=<?php echo opposite_lang(); ?>" class="lang-toggle" title="Switch Language" aria-label="Switch Language">
                     <?php echo strtoupper(opposite_lang()); ?>
                 </a>
@@ -81,6 +83,7 @@ foreach ($categories as $category) {
                             <span class="cart-badge"><?php echo $cart_count; ?></span>
                         <?php endif; ?>
                     </a>
+                    <a href="auth.php?logout=1" class="btn btn-secondary"><?php echo __('logout'); ?></a>
                 <?php else: ?>
                     <a href="auth.php?action=login" class="btn btn-primary"><?php echo __('login'); ?></a>
                     <a href="cart.php" class="btn btn-cart">
@@ -135,7 +138,7 @@ foreach ($categories as $category) {
                         <?php if ($sampleProduct && !empty($sampleProduct['image'])): ?>
                             <div class="category-preview-image" style="background-image: url('<?php echo htmlspecialchars($sampleProduct['image']); ?>');"></div>
                         <?php else: ?>
-                            <div class="category-preview-image" style="background: linear-gradient(135deg, rgba(107, 70, 193, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);"></div>
+                            <div class="category-preview-image no-image"></div>
                         <?php endif; ?>
                         <div class="category-info">
                             <div class="category-name"><?php echo htmlspecialchars($category['name']); ?></div>
@@ -175,8 +178,6 @@ foreach ($categories as $category) {
                                          alt="<?php echo htmlspecialchars($product['name']); ?>"
                                          loading="lazy"
                                          decoding="async">
-                                <?php else: ?>
-                                    <div style="font-size: 80px; color: #c4b5d5;"></div>
                                 <?php endif; ?>
                                 <?php if (!empty($productCategoryLabel)): ?>
                                     <span class="product-badge"><?php echo htmlspecialchars($productCategoryLabel); ?></span>

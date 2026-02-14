@@ -383,6 +383,12 @@ header {
     cursor: not-allowed;
 }
 
+.cart-icon-svg {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
 .stock-indicator {
     font-size: 13px;
     font-weight: 600;
@@ -1051,6 +1057,10 @@ footer {
     background-attachment: scroll;
     transition: transform 0.3s;
     flex-shrink: 0;
+}
+
+.category-preview-image.no-image {
+    background: linear-gradient(135deg, rgba(107, 70, 193, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
 }
 
 .category-card:hover .category-preview-image {

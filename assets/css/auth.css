@@ -113,6 +113,24 @@ button:hover {
     color: var(--text-secondary, #6b7280);
     margin: 20px 0;
 }
+
+.info-text.warning {
+    color: #f59e0b;
+}
+
+.activation-link-box {
+    background: #f3f4f6;
+    padding: 15px;
+    border-radius: 6px;
+    word-break: break-all;
+    margin: 15px 0;
+}
+
+.activation-link-box a {
+    color: #667eea;
+    text-decoration: none;
+}
+
 .forgot-password-link {
     text-align: right;
     margin-top: 5px;

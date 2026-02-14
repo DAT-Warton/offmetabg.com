@@ -39,7 +39,7 @@
             echo '<img src="' . htmlspecialchars($path) . '" alt="' . htmlspecialchars($file) . '">';
             echo '<p class="media-name" title="' . htmlspecialchars($file) . '">' . htmlspecialchars($file) . '</p>';
             echo '<small class="text-muted">' . $fileSizeFormatted . '</small>';
-            echo '<form method="POST" style="margin-top: 10px;" onsubmit="return confirm(\'Сигурни ли сте, че искате да изтриете ' . htmlspecialchars($file, ENT_QUOTES) . '?\');">';
+            echo '<form method="POST" onsubmit="return confirm(\'Сигурни ли сте, че искате да изтриете ' . htmlspecialchars($file, ENT_QUOTES) . '?\');">';
             echo '<input type="hidden" name="action" value="delete_media">';
             echo '<input type="hidden" name="filename" value="' . htmlspecialchars($file) . '">';
             echo '<button type="submit" class="btn-delete btn-sm">' . icon_trash(16) . ' Изтрий</button>';

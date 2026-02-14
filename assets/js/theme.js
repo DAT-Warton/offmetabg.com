@@ -117,7 +117,7 @@ function initSmoothScroll() {
 // Add to cart animation
 function addToCartAnimation(button) {
     const originalText = button.innerHTML;
-    button.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 4px;"><polyline points="20 6 9 17 4 12"></polyline></svg>Added!';
+    button.innerHTML = '<svg class="cart-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>Added!';
     button.style.background = '#4caf50';
     button.disabled = true;
     

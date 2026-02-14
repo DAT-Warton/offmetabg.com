@@ -334,7 +334,7 @@ $total = max(0, $subtotal - $discount_amount);
 
         <div class="container">
             <div class="cart-items order-success">
-                <div style="font-size: 64px; margin-bottom: 20px;"><?php echo icon_check_circle(64, '#10b981'); ?></div>
+                <div class="success-icon-container"><?php echo icon_check_circle(64, '#10b981'); ?></div>
                 <h2><?php echo __('order.order_placed'); ?></h2>
                 <p>
                     <?php echo __('order.thank_you'); ?>. <?php echo __('order.order_number'); ?>: <strong><?php echo htmlspecialchars($order['id']); ?></strong>
@@ -380,7 +380,7 @@ $total = max(0, $subtotal - $discount_amount);
                     </p>
                 </div>
                 
-                <div style="margin-top: 30px;">
+                <div class="order-actions-container">
                     <a href="/" class="btn-continue-shopping">
                         ← <?php echo __('cart_page.continue_shopping'); ?>
                     </a>
@@ -440,13 +440,13 @@ $total = max(0, $subtotal - $discount_amount);
                             <div class="item-price">€<?php echo number_format($item['price'], 2); ?> <?php echo __('cart_page.each'); ?></div>
                         </div>
                         <div class="item-actions">
-                            <form method="POST" style="display: inline-flex; gap: 10px; align-items: center;">
+                            <form method="POST" class="quantity-update-form">
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($item['id']); ?>">
                                 <input type="number" name="quantity" value="<?php echo $item['quantity']; ?>" min="0" class="quantity-input">
                                 <button type="submit" class="btn btn-update"><?php echo __('cart_page.update'); ?></button>
                             </form>
-                            <form method="POST" style="display: inline;">
+                            <form method="POST" class="remove-item-form">
                                 <input type="hidden" name="action" value="remove">
                                 <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($item['id']); ?>">
                                 <button type="submit" class="btn btn-remove"><?php echo __('cart_page.remove'); ?></button>
@@ -468,7 +468,7 @@ $total = max(0, $subtotal - $discount_amount);
                                 <strong><?php echo icon_check(16, '#10b981'); ?> <?php echo htmlspecialchars($_SESSION['applied_discount']['code']); ?></strong>
                                 <p><?php echo htmlspecialchars($_SESSION['applied_discount']['description']); ?></p>
                             </div>
-                            <form method="POST" style="margin: 0;">
+                            <form method="POST" class="remove-promo-form">
                                 <input type="hidden" name="action" value="remove_discount">
                                 <button type="submit" class="btn-remove-promo" title="Премахни промокод"><?php echo icon_trash(18, '#ef4444'); ?></button>
                             </form>
