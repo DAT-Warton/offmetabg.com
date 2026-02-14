@@ -288,16 +288,16 @@ const ThemeAdmin = {
                 root.style.setProperty(`--${key}`, value);
             });
 
-            // Generate readable theme name based on primary color
-            const primaryColor = colors['primary'];
-            const themeName = `Custom Theme ${primaryColor}`;
-            const themeSlug = `custom-${primaryColor.replace('#', '')}`;
+            // Generate unique theme slug based on timestamp (more reliable than color-based)
+            const timestamp = Date.now();
+            const themeName = `Custom Preview ${timestamp}`;
+            const themeSlug = `custom-preview-${timestamp}`;
 
             // Create theme data
             const themeData = {
                 name: themeName,
                 slug: themeSlug,
-                description: 'Custom theme from Advanced Theme Customizer',
+                description: 'Custom theme preview from Advanced Theme Customizer',
                 category: 'custom',
                 variables: colors,
                 version: '1.0'
@@ -318,6 +318,14 @@ const ThemeAdmin = {
                 throw new Error(data.message || 'Failed to save theme');
             }
 
+            // Store the theme data in localStorage for immediate loading
+            try {
+                localStorage.setItem('offmeta_custom_theme', JSON.stringify(themeData));
+                localStorage.setItem('offmeta_theme', themeSlug);
+            } catch (e) {
+                console.warn('Could not store theme in localStorage:', e);
+            }
+
             // Now activate this theme
             const activateResponse = await fetch(`${window.location.origin}/api/handler.php?action=set-theme`, {
                 method: 'POST',
@@ -333,12 +341,7 @@ const ThemeAdmin = {
                 throw new Error(activateData.message || 'Failed to activate theme');
             }
 
-            this.showNotification('Theme applied and saved! Reloading to apply everywhere...', 'success');
-            
-            // Reload page to apply server-side CSS injection
-            setTimeout(() => {
-                location.reload();
-            }, 1500);
+            this.showNotification('Theme preview applied! Save as theme to keep it permanently.', 'success');
 
         } catch (error) {
             console.error('Apply custom colors error:', error);
