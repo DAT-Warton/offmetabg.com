@@ -7,8 +7,8 @@
 /* ============================================
    DEFAULT THEME (Light Purple Gradient)
    ============================================ */
-:root,
-:root[data-theme="default"] {
+:root[data-theme="default"],
+:root:not([data-theme]) {
     /* Primary Colors */
     --primary: #6b46c1;
     --primary-hover: #7c3aed;

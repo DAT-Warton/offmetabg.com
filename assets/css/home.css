@@ -2,16 +2,7 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-:root {
-    --ink: #1b1430;
-    --ink-soft: #52456d;
-    --accent: #6b46c1;
-    --accent-2: #10b981;
-    --surface: #ffffff;
-    --surface-muted: rgba(255, 255, 255, 0.72);
-    --shadow-soft: rgba(107, 70, 193, 0.16);
-    --hero-glow: rgba(124, 58, 237, 0.35);
-}
+/* CSS variables are now defined in themes.css and custom theme injection */
 
 body {
     font-family: "Space Grotesk", "Segoe UI", system-ui, -apple-system, sans-serif;

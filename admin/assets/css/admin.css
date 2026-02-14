@@ -1,21 +1,6 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-:root {
-    --bg-primary: #383838;
-    --bg-secondary: #383838;
-    --bg-sidebar: #002B4D;
-    --text-primary: #ffffff;
-    --text-secondary: #ffffff;
-    --border-color: rgba(107, 70, 193, 0.15);
-    --shadow: rgba(107, 70, 193, 0.08);
-    --primary: #6b46c1;
-    --primary-hover: #7c3aed;
-    --danger: #dc3545;
-    --success-bg: #f0fdf4;
-    --success-border: #86efac;
-    --success-text: #166534;
-    --calendar-icon-filter: invert(1);
-}
+/* CSS variables inherited from themes.css and custom theme injection */
 
 [data-theme="dark"] {
     --bg-primary: #0f0a1a;
