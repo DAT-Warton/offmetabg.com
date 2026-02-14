@@ -23,7 +23,13 @@ $db = Database::getInstance();
 // Parse JSON input for POST requests
 $input = [];
 if ($method === 'POST') {
-    $input = json_decode(file_get_contents('php://input'), true) ?? [];
+    $rawInput = file_get_contents('php://input');
+    $input = json_decode($rawInput, true) ?? [];
+    
+    // Fallback to $_POST if JSON parsing fails
+    if (empty($input) && !empty($_POST)) {
+        $input = $_POST;
+    }
 }
 
 // Basic API response
