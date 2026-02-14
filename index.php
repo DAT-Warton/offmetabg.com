@@ -95,6 +95,28 @@ if (strpos($path, 'blog/') === 0) {
     }
 }
 
+// Single product page
+if (strpos($path, 'product/') === 0) {
+    $productSlug = substr($path, 8);
+    $products = get_products_data();
+    
+    // Find product by slug
+    $product = null;
+    foreach ($products as $prod) {
+        if (($prod['slug'] ?? '') === $productSlug && ($prod['status'] ?? 'published') === 'published') {
+            $product = $prod;
+            break;
+        }
+    }
+    
+    if ($product) {
+        ob_start();
+        include CMS_ROOT . '/templates/product.php';
+        echo ob_get_clean();
+        exit;
+    }
+}
+
 // Category page - products by category
 if (strpos($path, 'category/') === 0) {
     $categorySlug = strtolower(substr($path, 9));

@@ -172,7 +172,11 @@ $translations = [
     
     // Products
     'product' => [
-        'title' => 'Products',        'product' => 'product',        'add_to_cart' => 'Add to Cart',
+        'title' => 'Products',
+        'product' => 'product',
+        'add_to_cart' => 'Add to Cart',
+        'learn_more' => 'Learn More',
+        'sku' => 'SKU',
         'out_of_stock' => 'Out of Stock',
         'in_stock' => 'In Stock',
         'price' => 'Price',
