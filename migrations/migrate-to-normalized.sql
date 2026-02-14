@@ -15,7 +15,7 @@ ALTER TABLE IF EXISTS products RENAME TO products_old_backup;
 DO $$
 DECLARE
     old_product RECORD;
-    category_id VARCHAR(50);
+    found_category_id VARCHAR(50);
 BEGIN
     RAISE NOTICE 'Starting migration...';
     
@@ -123,15 +123,15 @@ BEGIN
             -- Link to category
             IF old_product.category IS NOT NULL AND old_product.category != '' THEN
                 -- Find category by slug or name (case-insensitive)
-                SELECT c.id INTO category_id
+                SELECT c.id INTO found_category_id
                 FROM categories c
                 WHERE LOWER(c.slug) = LOWER(old_product.category) 
                    OR LOWER(c.name) = LOWER(old_product.category)
                 LIMIT 1;
                 
-                IF category_id IS NOT NULL THEN
+                IF found_category_id IS NOT NULL THEN
                     INSERT INTO product_category_links (product_id, category_id, is_primary, sort_order)
-                    VALUES (old_product.id, category_id, true, 0)
+                    VALUES (old_product.id, found_category_id, true, 0)
                     ON CONFLICT (product_id, category_id) DO NOTHING;
                 END IF;
             END IF;
