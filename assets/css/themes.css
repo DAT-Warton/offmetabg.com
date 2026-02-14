@@ -76,6 +76,11 @@
     
     /* Calendar & Icons */
     --calendar-icon-filter: invert(0);
+    
+    /* Utility Colors */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-transparent: transparent;
 }
 
 /* ============================================
@@ -149,6 +154,11 @@
     
     /* Calendar & Icons */
     --calendar-icon-filter: invert(1);
+    
+    /* Utility Colors */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-transparent: transparent;
 }
 
 /* ============================================
@@ -221,8 +231,11 @@
     --hero-glow: rgba(6, 182, 212, 0.35);
     
     /* Calendar & Icons */
-    --calendar-icon-filter: invert(0);
-}
+    --calendar-icon-filter: invert(0);    
+    /* Utility Colors */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-transparent: transparent;}
 
 /* ============================================
    FOREST GREEN THEME (Nature & Fresh)
@@ -367,7 +380,15 @@
     --hero-glow: rgba(251, 146, 60, 0.35);
     
     /* Calendar & Icons */
-    --calendar-icon-filter: invert(0);
+    --calendar-icon-filter: invert(0);    
+    /* Utility Colors */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-transparent: transparent;    
+    /* Utility Colors */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-transparent: transparent;
 }
 
 /* ============================================
@@ -440,8 +461,11 @@
     --hero-glow: rgba(251, 113, 133, 0.35);
     
     /* Calendar & Icons */
-    --calendar-icon-filter: invert(0);
-}
+    --calendar-icon-filter: invert(0);    
+    /* Utility Colors */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-transparent: transparent;}
 
 /* ============================================
    APPLY THEME TO BODY
