@@ -174,7 +174,7 @@ try {
                 throw new Exception('Theme ID is required');
             }
             
-            $db->delete('themes', ['id' => $input['id']]);
+            $db->delete('themes', $input['id']);
             
             $response = [
                 'success' => true,
