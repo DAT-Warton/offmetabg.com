@@ -132,7 +132,12 @@ class ThemeManager {
                 return; // Custom theme will be applied in loadCustomThemeBySlug
             } catch (error) {
                 console.error('Failed to load custom theme:', error);
-                console.warn(`Theme "${themeName}" not found. Using default theme.`);
+                console.warn(`Theme "${themeName}" not found. Falling back to default theme.`);
+                
+                // Clean up invalid theme from storage
+                this.cleanupInvalidTheme(themeName);
+                
+                // Fallback to default theme
                 themeName = 'default';
             }
         }
@@ -246,6 +251,47 @@ class ThemeManager {
     onThemeChange(callback) {
         if (typeof callback === 'function') {
             this.themeChangeCallbacks.push(callback);
+        }
+    }
+
+    /**
+     * Clean up invalid theme from storage and database
+     */
+    cleanupInvalidTheme(themeName) {
+        console.log(`Cleaning up invalid theme: ${themeName}`);
+        
+        // Remove from localStorage
+        try {
+            const storedTheme = localStorage.getItem('offmeta_theme');
+            if (storedTheme === themeName) {
+                localStorage.removeItem('offmeta_theme');
+                localStorage.removeItem('offmeta_custom_theme');
+                console.log('Removed invalid theme from localStorage');
+            }
+        } catch (e) {
+            console.error('Failed to clean localStorage:', e);
+        }
+        
+        // Try to reset active theme in database to default
+        try {
+            fetch(`${window.location.origin}/api/handler.php?action=set-theme`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({ theme: 'default' })
+            }).then(response => {
+                if (response.ok) {
+                    console.log('Reset active theme to default in database');
+                }
+            }).catch(err => {
+                console.error('Failed to reset theme in database:', err);
+            });
+        } catch (e) {
+            console.error('Failed to reset theme in database:', e);
         }
     }
 
