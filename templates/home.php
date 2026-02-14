@@ -58,9 +58,10 @@ foreach ($categories as $category) {
     <meta name="description" content="<?php echo $site_description; ?>">
     <meta property="og:title" content="<?php echo $site_title; ?>">
     <meta property="og:description" content="<?php echo $site_description; ?>">
+    <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/home.css">
 </head>
-<body data-theme="dark">
+<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <header>
         <div class="header-container">
             <div class="logo">
@@ -231,6 +232,7 @@ foreach ($categories as $category) {
         <p>&copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>. Всички права запазени.</p>
     </footer>
     
+    <script src="assets/js/theme-manager.js"></script>
 </body>
 </html>
 

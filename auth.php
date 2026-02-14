@@ -174,10 +174,10 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - OffMeta</title>
-    <link rel="stylesheet" href="assets/css/dark-theme.css" id="dark-theme-style" disabled>
+    <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/auth.css">
 </head>
-<body class="auth-page">
+<body class="auth-page" data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <div class="nav-actions">
         <button type="button" id="themeToggle" class="theme-toggle" title="<?php echo __('theme.switch_to_dark'); ?>"><?php echo icon_moon(18); ?></button>
         <a href="?action=<?php echo $action; ?>&lang=<?php echo opposite_lang(); ?>" class="lang-toggle" title="Switch Language">
@@ -294,7 +294,7 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
         </div>
     </div>
 
-    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/theme-manager.js"></script>
 </body>
 </html>
 

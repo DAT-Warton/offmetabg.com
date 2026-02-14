@@ -100,6 +100,45 @@ class Database {
             return new JSONTable($name);
         }
     }
+
+    // Options operations
+    public function getOption($key, $default = null) {
+        if ($this->pdo) {
+            $stmt = $this->pdo->prepare("SELECT option_value FROM options WHERE option_key = ?");
+            $stmt->execute([$key]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ? $result['option_value'] : $default;
+        } else {
+            $options = load_json('storage/options.json');
+            return $options[$key] ?? $default;
+        }
+    }
+
+    public function setOption($key, $value) {
+        if ($this->pdo) {
+            $stmt = $this->pdo->prepare("
+                INSERT INTO options (option_key, option_value, updated_at) 
+                VALUES (?, ?, CURRENT_TIMESTAMP)
+                ON CONFLICT (option_key) 
+                DO UPDATE SET option_value = EXCLUDED.option_value, updated_at = CURRENT_TIMESTAMP
+            ");
+            return $stmt->execute([$key, $value]);
+        } else {
+            $options = load_json('storage/options.json');
+            $options[$key] = $value;
+            save_json('storage/options.json', $options);
+            return true;
+        }
+    }
+
+    // Convenience methods for direct operations
+    public function insert($table, $data) {
+        return $this->table($table)->insert($data);
+    }
+
+    public function delete($table, $id) {
+        return $this->table($table)->delete($id);
+    }
 }
 
 class JSONTable {

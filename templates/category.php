@@ -36,10 +36,10 @@ $pageTitle = htmlspecialchars($category['name']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></title>
     <meta name="description" content="<?php echo htmlspecialchars($category['description'] ?? ''); ?>">
-    <link rel="stylesheet" href="/assets/css/dark-theme.css">
+    <link rel="stylesheet" href="/assets/css/themes.css">
     <link rel="stylesheet" href="/assets/css/category.css">
 </head>
-<body>
+<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <!-- Header -->
     <header class="header">
         <div class="header-content">
@@ -148,7 +148,7 @@ $pageTitle = htmlspecialchars($category['name']);
         <?php endif; ?>
     </div>
 
-    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/theme-manager.js"></script>
 </body>
 </html>
 

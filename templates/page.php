@@ -11,9 +11,10 @@ $page = $page ?? [];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($page['title'] ?? 'Page'); ?> - <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></title>
     <meta name="description" content="<?php echo htmlspecialchars($page['meta_description'] ?? ''); ?>">
+    <link rel="stylesheet" href="/assets/css/themes.css">
     <link rel="stylesheet" href="/assets/css/page.css">
 </head>
-<body>
+<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <header>
         <div class="container">
             <h1><?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></h1>
@@ -42,5 +43,7 @@ $page = $page ?? [];
             <p>&copy; 2024 <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?>. All rights reserved.</p>
         </div>
     </footer>
+
+    <script src="/assets/js/theme-manager.js"></script>
 </body>
 </html>

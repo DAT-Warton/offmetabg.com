@@ -87,6 +87,20 @@ function db_table($name) {
     return Database::getInstance()->table($name);
 }
 
+function db_get_option($key, $default = null) {
+    if (!class_exists('Database')) {
+        return $default;
+    }
+    return Database::getInstance()->getOption($key, $default);
+}
+
+function db_set_option($key, $value) {
+    if (!class_exists('Database')) {
+        return false;
+    }
+    return Database::getInstance()->setOption($key, $value);
+}
+
 function ensure_db_schema() {
     static $done = false;
 

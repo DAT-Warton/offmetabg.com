@@ -205,10 +205,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo __('password_reset.title'); ?> - OffMeta</title>
+    <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/password-reset.css">
-    <link rel="stylesheet" href="assets/css/dark-theme.css" id="dark-theme-style" disabled>
 </head>
-<body>
+<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <div class="auth-container">
         <div class="auth-box">
             <div class="theme-toggle">
@@ -284,7 +284,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
         </div>
     </div>
 
-    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/theme-manager.js"></script>
 </body>
 </html>
 
