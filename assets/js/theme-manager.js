@@ -36,16 +36,39 @@ class ThemeManager {
      */
     async loadThemeFromBackend() {
         try {
-            const response = await fetch(`${window.location.origin}/api/handler.php?action=get-active-theme`);
+            // Add timestamp to prevent caching
+            const timestamp = Date.now();
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=get-active-theme&_t=${timestamp}`, {
+                credentials: 'same-origin',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            });
+            
+            // Check if response is HTML (Cloudflare challenge) or JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('API blocked by security - using localStorage fallback');
+            }
+            
             const data = await response.json();
             
             if (data.success && data.theme) {
                 this.currentTheme = data.theme;
                 this.storeTheme(data.theme);
+                console.log('Theme loaded from backend:', data.theme);
             }
         } catch (error) {
-            console.error('Failed to load theme from backend:', error);
-            // Fallback to localStorage or default
+            console.warn('Backend theme loading failed, using localStorage:', error.message);
+            // Fallback to localStorage - this is OK until Cloudflare is configured
+            const storedTheme = this.getStoredTheme();
+            if (storedTheme) {
+                this.currentTheme = storedTheme;
+            }
         }
     }
 
@@ -143,7 +166,20 @@ class ThemeManager {
      */
     async loadCustomThemeBySlug(slug) {
         try {
-            const response = await fetch(`${window.location.origin}/api/handler.php?action=list-custom-themes`);
+            const response = await fetch(`${window.location.origin}/api/handler.php?action=list-custom-themes`, {
+                credentials: 'same-origin',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            // Check if response is valid JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('API blocked - falling back to stored theme');
+            }
+            
             const data = await response.json();
             
             if (data.success && data.themes) {
@@ -157,7 +193,22 @@ class ThemeManager {
             
             throw new Error('Custom theme not found');
         } catch (error) {
-            console.error('Failed to load custom theme:', error);
+            console.warn('Failed to load custom theme from backend:', error.message);
+            
+            // Try to load from localStorage
+            const storedCustomTheme = localStorage.getItem('offmeta_custom_theme');
+            if (storedCustomTheme) {
+                try {
+                    const themeData = JSON.parse(storedCustomTheme);
+                    if (themeData.slug === slug) {
+                        this.applyCustomTheme(themeData);
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Failed to parse stored custom theme:', e);
+                }
+            }
+            
             throw error;
         }
     }
