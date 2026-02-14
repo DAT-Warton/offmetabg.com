@@ -1,7 +1,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #667eea;
+    background: var(--primary);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -9,20 +9,22 @@ body {
     padding: 20px;
 }
 .container {
-    background: white;
+    background: var(--bg-primary);
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     width: 100%;
     max-width: 400px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 h1 {
-    color: #667eea;
+    color: var(--primary);
     margin-bottom: 10px;
     text-align: center;
 }
 .subtitle {
-    color: #6b7280;
+    color: var(--text-secondary);
     text-align: center;
     margin-bottom: 30px;
 }
@@ -32,59 +34,67 @@ h1 {
 label {
     display: block;
     margin-bottom: 8px;
-    color: #374151;
+    color: var(--text-primary);
     font-weight: 600;
 }
 input {
     width: 100%;
     padding: 12px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     font-size: 14px;
     transition: border 0.2s;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--primary);
 }
 button {
     width: 100%;
     padding: 12px;
-    background: #667eea;
-    color: white;
+    background: var(--primary);
+    color: var(--color-white);
     border: none;
     border-radius: 6px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.2s;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 button:hover {
     transform: translateY(-2px);
 }
 .error {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #991b1b;
+    background: var(--danger-bg);
+    border: 1px solid var(--danger-border);
+    color: var(--danger-text);
     padding: 12px;
     border-radius: 6px;
     margin-bottom: 20px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 .message {
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    color: #166534;
+    background: var(--success-bg);
+    border: 1px solid var(--success-border);
+    color: var(--success-text);
     padding: 12px;
     border-radius: 6px;
     margin-bottom: 20px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 .switch {
     text-align: center;
     margin-top: 20px;
-    color: #6b7280;
+    color: var(--text-secondary);
 }
 .switch a {
-    color: #667eea;
+    color: var(--primary);
     text-decoration: none;
     font-weight: 600;
 }
@@ -95,31 +105,33 @@ button:hover {
 .btn-link {
     display: inline-block;
     padding: 10px 20px;
-    background: white;
-    color: #667eea;
+    background: var(--bg-primary);
+    color: var(--primary);
     text-decoration: none;
-    border: 2px solid #667eea;
+    border: 2px solid var(--primary);
     border-radius: 6px;
     font-weight: 600;
     transition: all 0.2s;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 .btn-link:hover {
-    background: #667eea;
-    color: white;
+    background: var(--primary);
+    color: var(--color-white);
     transform: translateY(-2px);
 }
 .info-text {
     text-align: center;
-    color: var(--text-secondary, #6b7280);
+    color: var(--text-secondary);
     margin: 20px 0;
 }
 
 .info-text.warning {
-    color: #f59e0b;
+    color: var(--warning-text);
 }
 
 .activation-link-box {
-    background: #f3f4f6;
+    background: var(--bg-secondary);
     padding: 15px;
     border-radius: 6px;
     word-break: break-all;
@@ -127,7 +139,7 @@ button:hover {
 }
 
 .activation-link-box a {
-    color: #667eea;
+    color: var(--primary);
     text-decoration: none;
 }
 
@@ -137,7 +149,7 @@ button:hover {
 }
 .forgot-password-link a {
     font-size: 14px;
-    color: var(--primary, #667eea);
+    color: var(--primary);
     text-decoration: none;
 }
 .nav-actions {
@@ -153,16 +165,16 @@ button:hover {
     cursor: pointer;
     padding: 8px 12px;
     border-radius: 8px;
-    background: white;
-    border: 2px solid #667eea;
-    color: #667eea;
+    background: var(--bg-primary);
+    border: 2px solid var(--primary);
+    color: var(--primary);
     font-size: 18px;
     transition: all 0.3s ease;
 }
 .theme-toggle:hover,
 .lang-toggle:hover {
-    background: #667eea;
-    color: white;
+    background: var(--primary);
+    color: var(--color-white);
     transform: scale(1.05);
 }
 /* Social Login Styles */
@@ -171,7 +183,7 @@ button:hover {
     align-items: center;
     text-align: center;
     margin: 25px 0;
-    color: #6b7280;
+    color: var(--text-secondary);
     font-size: 14px;
 }
 
@@ -179,7 +191,7 @@ button:hover {
 .social-divider::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid #d1d5db;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .social-divider span {
@@ -204,7 +216,9 @@ button:hover {
     font-size: 14px;
     font-weight: 600;
     transition: all 0.2s ease;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--border-color);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .social-btn svg {
@@ -229,7 +243,7 @@ button:hover {
 /* Facebook */
 .social-btn.facebook {
     background: #1877f2;
-    color: white;
+    color: var(--color-white);
     border-color: #1877f2;
 }
 .social-btn.facebook:hover {
@@ -239,7 +253,7 @@ button:hover {
 /* Instagram */
 .social-btn.instagram {
     background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-    color: white;
+    color: var(--color-white);
     border: none;
 }
 .social-btn.instagram:hover {
@@ -249,7 +263,7 @@ button:hover {
 /* TikTok */
 .social-btn.tiktok {
     background: #000;
-    color: white;
+    color: var(--color-white);
     border-color: #000;
 }
 .social-btn.tiktok:hover {
@@ -259,7 +273,7 @@ button:hover {
 /* Discord */
 .social-btn.discord {
     background: #5865F2;
-    color: white;
+    color: var(--color-white);
     border-color: #5865F2;
 }
 .social-btn.discord:hover {
@@ -269,7 +283,7 @@ button:hover {
 /* Twitch */
 .social-btn.twitch {
     background: #9146FF;
-    color: white;
+    color: var(--color-white);
     border-color: #9146FF;
 }
 .social-btn.twitch:hover {

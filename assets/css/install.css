@@ -67,7 +67,7 @@ h1 {
     width: 100%;
     padding: 12px;
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    color: white;
+    color: var(--color-white);
     border: none;
     border-radius: 6px;
     font-size: 16px;

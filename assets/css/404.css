@@ -9,7 +9,9 @@ body {
 }
 .container {
     text-align: center;
-    color: white;
+    color: var(--color-white);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 h1 {
     font-size: 72px;
