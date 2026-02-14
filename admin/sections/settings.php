@@ -134,11 +134,12 @@ foreach ($all_settings as $setting) {
 }
 
 .setting-item {
-    background: white;
+    background: var(--bg-secondary, #2d2d2d);
     padding: 20px;
     border-radius: 8px;
     border: 1px solid var(--border-color);
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: background-color 0.3s ease;
 }
 
 .setting-item label {
@@ -167,6 +168,17 @@ foreach ($all_settings as $setting) {
     border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 14px;
+    background: var(--bg-primary, #1a1a1a);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.setting-item input:focus,
+.setting-item textarea:focus,
+.setting-item select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(107, 70, 193, 0.2);
 }
 
 .setting-item textarea {
@@ -213,7 +225,7 @@ foreach ($all_settings as $setting) {
 .settings-actions {
     position: sticky;
     bottom: 0;
-    background: white;
+    background: var(--bg-secondary, #2d2d2d);
     padding: 20px;
     border-top: 2px solid var(--primary);
     margin-top: 30px;
@@ -221,6 +233,7 @@ foreach ($all_settings as $setting) {
     gap: 15px;
     justify-content: flex-end;
     box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
 }
 
 .btn-save {
@@ -283,7 +296,9 @@ foreach ($all_settings as $setting) {
     padding: 8px;
     border: 2px solid var(--border-color);
     border-radius: 4px;
-    background: white;
+    background: var(--bg-secondary, #2d2d2d);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease;
 }
 
 .image-upload-wrapper input[type="text"] {
@@ -296,7 +311,9 @@ foreach ($all_settings as $setting) {
     border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 14px;
-    background: white;
+    background: var(--bg-secondary, #2d2d2d);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease;
 }
 
 @media (max-width: 768px) {

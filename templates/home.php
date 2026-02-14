@@ -39,6 +39,18 @@ usort($activeCategories, function($a, $b) {
     return ($a['order'] ?? 0) <=> ($b['order'] ?? 0);
 });
 
+// Get latest blog post
+$posts = get_posts();
+$published_posts = array_filter($posts, function($p) {
+    return ($p['status'] ?? 'published') === 'published';
+});
+usort($published_posts, function($a, $b) {
+    $dateA = $a['created'] ?? '2000-01-01';
+    $dateB = $b['created'] ?? '2000-01-01';
+    return strtotime($dateB) - strtotime($dateA);
+});
+$latest_post = !empty($published_posts) ? reset($published_posts) : null;
+
 $site_title = htmlspecialchars(get_option('site_title', __('site_name')));
 $site_description = htmlspecialchars(get_option('site_description', __('homepage.meta_description')));
 $categoryLabelBySlug = [];
@@ -159,9 +171,6 @@ foreach ($categories as $category) {
                         <?php endif; ?>
                         <div class="category-info">
                             <div class="category-name"><?php echo htmlspecialchars($category['name']); ?></div>
-                            <?php if (!empty($category['description'])): ?>
-                                <div class="category-desc"><?php echo htmlspecialchars(substr($category['description'], 0, 50)) . (strlen($category['description']) > 50 ? '...' : ''); ?></div>
-                            <?php endif; ?>
                         </div>
                     </a>
                 <?php endforeach; ?>
@@ -239,6 +248,36 @@ foreach ($categories as $category) {
             <?php endif; ?>
         </div>
     </section>
+
+    <?php if ($latest_post): ?>
+    <section class="latest-post-section">
+        <div class="container">
+            <h2 class="section-title"><?php echo __('blog'); ?></h2>
+            <div class="latest-post-card">
+                <?php if (!empty($latest_post['featured_image'])): ?>
+                    <div class="post-image">
+                        <img src="<?php echo htmlspecialchars($latest_post['featured_image']); ?>" 
+                             alt="<?php echo htmlspecialchars($latest_post['title']); ?>"
+                             loading="lazy">
+                    </div>
+                <?php endif; ?>
+                <div class="post-content">
+                    <span class="post-category"><?php echo htmlspecialchars($latest_post['category'] ?? 'General'); ?></span>
+                    <h3 class="post-title"><?php echo htmlspecialchars($latest_post['title']); ?></h3>
+                    <?php if (!empty($latest_post['excerpt'])): ?>
+                        <p class="post-excerpt"><?php echo htmlspecialchars($latest_post['excerpt']); ?></p>
+                    <?php endif; ?>
+                    <div class="post-meta">
+                        <span class="post-date"><?php echo date('d M Y', strtotime($latest_post['created'])); ?></span>
+                        <a href="/blog/<?php echo urlencode($latest_post['slug']); ?>" class="btn btn-primary">
+                            <?php echo __('product.learn_more'); ?>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
 
     <footer>
         <p>&copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>. Всички права запазени.</p>
