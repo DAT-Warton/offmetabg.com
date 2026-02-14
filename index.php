@@ -61,7 +61,7 @@ if (serves_static_file($path)) {
 }
 
 // Route: API endpoints
-if (strpos($path, 'api/') === 0) {
+if ($path === 'api' || strpos($path, 'api/') === 0) {
     require CMS_ROOT . '/api/handler.php';
     exit;
 }
