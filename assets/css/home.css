@@ -398,46 +398,28 @@ header {
 .product-title {
     font-size: 24px;
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     color: var(--text-primary);
 }
 
-.product-description {
-    color: var(--text-secondary);
-    font-size: 15px;
-    line-height: 1.6;
-    max-height: 4.8em;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    transition: max-height 0.3s ease;
-}
-
-.product-description-wrapper {
-    margin-bottom: 20px;
-}
-
-.product-description-wrapper.expanded .product-description {
-    max-height: none;
-    -webkit-line-clamp: unset;
-}
-
-.btn-read-more {
-    background: none;
+.btn-learn-more {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    color: var(--color-white);
     border: none;
-    color: var(--primary);
-    font-size: 13px;
+    padding: 12px 20px;
+    border-radius: 8px;
     font-weight: 600;
+    font-size: 14px;
     cursor: pointer;
-    padding: 4px 0;
-    margin-top: 4px;
-    text-decoration: underline;
-    transition: color 0.2s;
+    transition: all 0.3s;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px var(--color-purple-alpha-20);
 }
 
-.btn-read-more:hover {
-    color: var(--primary-hover);
+.btn-learn-more:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--color-purple-alpha-30);
 }
 
 .product-footer {
@@ -916,47 +898,29 @@ footer p {
 .product-title {
     font-size: 19px;
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     color: var(--color-gray-800);
     line-height: 1.3;
 }
 
-.product-description {
-    color: var(--color-gray-500);
-    font-size: 14px;
-    line-height: 1.6;
-    max-height: 4.2em;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    transition: max-height 0.3s ease;
-}
-
-.product-description-wrapper {
-    margin-bottom: 20px;
-}
-
-.product-description-wrapper.expanded .product-description {
-    max-height: none;
-    -webkit-line-clamp: unset;
-}
-
-.btn-read-more {
-    background: none;
+.btn-learn-more {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    color: var(--color-white);
     border: none;
-    color: var(--primary);
-    font-size: 13px;
+    padding: 12px 20px;
+    border-radius: 8px;
     font-weight: 600;
+    font-size: 14px;
     cursor: pointer;
-    padding: 4px 0;
-    margin-top: 4px;
-    text-decoration: underline;
-    transition: color 0.2s;
+    transition: all 0.3s;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px var(--color-purple-alpha-20);
 }
 
-.btn-read-more:hover {
-    color: var(--primary-hover);
+.btn-learn-more:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--color-purple-alpha-30);
 }
 
 .product-footer {
