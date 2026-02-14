@@ -7,6 +7,7 @@
 $importMessage = '';
 $importSuccess = false;
 $importedCount = 0;
+$importedProducts = [];
 
 if (isset($_POST['import_products'])) {
     $importType = $_POST['import_type'] ?? 'csv';
@@ -16,8 +17,11 @@ if (isset($_POST['import_products'])) {
         if ($file['error'] === UPLOAD_ERR_OK) {
             $products = import_products_from_csv($file['tmp_name']);
             $importedCount = count($products);
+            $importedProducts = $products;
             $importSuccess = true;
             $importMessage = "✅ Успешно импортирани {$importedCount} продукта!";
+        } else {
+            $importMessage = "❌ Грешка при качване на файла.";
         }
     } elseif ($importType === 'json' && isset($_FILES['json_file'])) {
         $file = $_FILES['json_file'];
@@ -25,12 +29,16 @@ if (isset($_POST['import_products'])) {
             $jsonData = file_get_contents($file['tmp_name']);
             $products = import_products_from_json($jsonData);
             $importedCount = count($products);
+            $importedProducts = $products;
             $importSuccess = true;
             $importMessage = "✅ Успешно импортирани {$importedCount} продукта!";
+        } else {
+            $importMessage = "❌ Грешка при качване на файла.";
         }
     } elseif ($importType === 'manual' && !empty($_POST['products_json'])) {
         $products = import_products_from_json($_POST['products_json']);
         $importedCount = count($products);
+        $importedProducts = $products;
         $importSuccess = true;
         $importMessage = "✅ Успешно импортирани {$importedCount} продукта!";
     }
@@ -44,31 +52,82 @@ function import_products_from_csv($filePath) {
     $handle = fopen($filePath, 'r');
     $headers = fgetcsv($handle);
     
-    // Map WordPress/WooCommerce column names
+    // Enhanced column mapping - supports multiple formats
     $columnMap = [
+        // ID variants
         'ID' => 'id',
+        'id' => 'id',
+        'product_id' => 'id',
+        'Post ID' => 'id',
+        
+        // Name variants
         'Name' => 'name',
+        'name' => 'name',
         'post_title' => 'name',
+        'Title' => 'name',
+        'title' => 'name',
+        'Product name' => 'name',
+        'product_name' => 'name',
+        
+        // Description variants
         'Description' => 'description',
+        'description' => 'description',
         'post_content' => 'description',
+        'Content' => 'description',
+        'Short description' => 'description',
+        'short_description' => 'description',
+        
+        // Price variants
         'Regular price' => 'price',
         'regular_price' => 'price',
         'Price' => 'price',
+        'price' => 'price',
+        'Sale price' => 'price',
+        'sale_price' => 'price',
+        
+        // Category variants
         'Categories' => 'category',
+        'categories' => 'category',
         'product_cat' => 'category',
+        'Category' => 'category',
+        'category' => 'category',
+        
+        // Stock variants
         'Stock' => 'stock',
+        'stock' => 'stock',
         'stock_quantity' => 'stock',
+        'Stock quantity' => 'stock',
+        'Quantity' => 'stock',
+        'quantity' => 'stock',
+        
+        // Image variants
         'Images' => 'image',
+        'images' => 'image',
         'image' => 'image',
+        'Image' => 'image',
+        'Featured image' => 'image',
+        'featured_image' => 'image',
+        'thumbnail' => 'image',
+        
+        // Status variants
         'Status' => 'status',
-        'post_status' => 'status'
+        'status' => 'status',
+        'post_status' => 'status',
+        'Published' => 'status'
     ];
     
     while (($row = fgetcsv($handle)) !== false) {
         $product = [];
         foreach ($headers as $index => $header) {
-            $mappedKey = $columnMap[$header] ?? strtolower(str_replace(' ', '_', $header));
-            $product[$mappedKey] = $row[$index] ?? '';
+            $header = trim($header);
+            $mappedKey = $columnMap[$header] ?? strtolower(str_replace([' ', '-'], '_', $header));
+            $value = isset($row[$index]) ? trim($row[$index]) : '';
+            $product[$mappedKey] = $value;
+        }
+        
+        // Skip empty rows
+        if (empty(array_filter($row))) {
+            continue;
         }
         
         // Generate ID if not present
@@ -78,23 +137,51 @@ function import_products_from_csv($filePath) {
             $product['id'] = 'prod_wp_' . $product['id'];
         }
         
-        // Clean and format data
-        $product['name'] = $product['name'] ?? 'Untitled Product';
-        $product['description'] = $product['description'] ?? '';
-        $product['price'] = floatval($product['price'] ?? 0);
-        $product['category'] = $product['category'] ?? 'general';
-        $product['stock'] = intval($product['stock'] ?? 0);
-        $product['status'] = ($product['status'] ?? 'publish') === 'publish' ? 'published' : 'draft';
-        $product['image'] = $product['image'] ?? '';
-        $product['videos'] = [
-            'youtube' => '',
-            'tiktok' => '',
-            'instagram' => ''
-        ];
-        $product['created'] = date('Y-m-d H:i:s');
-        $product['updated'] = date('Y-m-d H:i:s');
+        // Clean and format data with better validation
+        $productName = trim($product['name'] ?? '');
+        if (empty($productName)) {
+            $productName = 'Untitled Product';
+        }
         
-        $products[$product['id']] = $product;
+        $productDescription = trim($product['description'] ?? '');
+        $productPrice = $product['price'] ?? 0;
+        // Remove currency symbols and convert to float
+        $productPrice = preg_replace('/[^\d.,]/', '', $productPrice);
+        $productPrice = str_replace(',', '.', $productPrice);
+        $productPrice = floatval($productPrice);
+        
+        $productCategory = trim($product['category'] ?? 'general');
+        if (empty($productCategory)) {
+            $productCategory = 'general';
+        }
+        
+        $productStock = intval($product['stock'] ?? 0);
+        
+        $productStatus = strtolower(trim($product['status'] ?? 'publish'));
+        $productStatus = in_array($productStatus, ['publish', 'published', '1', 'true']) ? 'published' : 'draft';
+        
+        $productImage = trim($product['image'] ?? '');
+        
+        // Build final product
+        $finalProduct = [
+            'id' => $product['id'],
+            'name' => $productName,
+            'description' => $productDescription,
+            'price' => $productPrice,
+            'category' => $productCategory,
+            'stock' => $productStock,
+            'status' => $productStatus,
+            'image' => $productImage,
+            'videos' => [
+                'youtube' => '',
+                'tiktok' => '',
+                'instagram' => ''
+            ],
+            'created' => date('Y-m-d H:i:s'),
+            'updated' => date('Y-m-d H:i:s')
+        ];
+        
+        $products[$finalProduct['id']] = $finalProduct;
     }
     
     fclose($handle);
@@ -195,6 +282,50 @@ function save_imported_products($newProducts) {
                 <a href="?section=products" class="btn btn-sm ml-auto">Виж продуктите →</a>
             <?php endif; ?>
         </div>
+        
+        <?php if ($importSuccess && !empty($importedProducts)): ?>
+            <div class="card card-lg mt-20">
+                <h3>📋 Импортирани продукти</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Име</th>
+                                <th>Цена</th>
+                                <th>Категория</th>
+                                <th>Наличност</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $counter = 0;
+                            foreach ($importedProducts as $prod): 
+                                if ($counter >= 10) break; // Show max 10
+                                $counter++;
+                            ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($prod['name']); ?></td>
+                                    <td>$<?php echo number_format($prod['price'], 2); ?></td>
+                                    <td><?php echo htmlspecialchars($prod['category']); ?></td>
+                                    <td><?php echo $prod['stock']; ?></td>
+                                    <td>
+                                        <?php if ($prod['status'] === 'published'): ?>
+                                            <span class="badge badge-success">Published</span>
+                                        <?php else: ?>
+                                            <span class="badge badge-secondary">Draft</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <?php if (count($importedProducts) > 10): ?>
+                        <p class="text-muted text-center">...и още <?php echo count($importedProducts) - 10; ?> продукта</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
     <?php endif; ?>
 
     <div class="card card-lg">
