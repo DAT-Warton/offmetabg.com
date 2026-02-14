@@ -4,7 +4,9 @@
  * Central dashboard for website management
  */
 
-define('CMS_ROOT', dirname(__DIR__));
+if (!defined('CMS_ROOT')) {
+    define('CMS_ROOT', dirname(__DIR__));
+}
 
 // Define CMS constants
 if (!defined('CMS_VERSION')) {
