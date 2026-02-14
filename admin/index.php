@@ -4,6 +4,18 @@
  * Central dashboard for website management
  */
 
+// Enable error logging for debugging
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/../logs/admin-errors.log');
+
+// Only display errors in development
+if (getenv('CMS_ENV') === 'development') {
+    ini_set('display_errors', 1);
+    error_reporting(E_ALL);
+} else {
+    ini_set('display_errors', 0);
+}
+
 if (!defined('CMS_ROOT')) {
     define('CMS_ROOT', dirname(__DIR__));
 }
@@ -16,15 +28,21 @@ if (!defined('CMS_ENV')) {
     define('CMS_ENV', getenv('CMS_ENV') ?: 'production');
 }
 
-// Load CMS functions
-// @phpstan-ignore-next-line
-require_once CMS_ROOT . '/includes/functions.php';
-// @phpstan-ignore-next-line
-require_once CMS_ROOT . '/includes/database.php';
-// @phpstan-ignore-next-line
-require_once CMS_ROOT . '/includes/language.php';
-// @phpstan-ignore-next-line
-require_once CMS_ROOT . '/includes/icons.php';
+// Load CMS functions with error handling
+try {
+    // @phpstan-ignore-next-line
+    require_once CMS_ROOT . '/includes/functions.php';
+    // @phpstan-ignore-next-line
+    require_once CMS_ROOT . '/includes/database.php';
+    // @phpstan-ignore-next-line
+    require_once CMS_ROOT . '/includes/language.php';
+    // @phpstan-ignore-next-line
+    require_once CMS_ROOT . '/includes/icons.php';
+} catch (Exception $e) {
+    error_log('Admin index.php include error: ' . $e->getMessage());
+    http_response_code(500);
+    die('System error. Please check configuration.');
+}
 
 // Session
 if (session_status() === PHP_SESSION_NONE) {
