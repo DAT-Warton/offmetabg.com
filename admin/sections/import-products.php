@@ -8,8 +8,13 @@ $importMessage = '';
 $importSuccess = false;
 $importedCount = 0;
 $importedProducts = [];
+$importErrors = [];
 
 if (isset($_POST['import_products'])) {
+    // Increase execution time for large imports
+    set_time_limit(300); // 5 minutes
+    ini_set('memory_limit', '256M');
+    
     $importType = $_POST['import_type'] ?? 'csv';
     
     if ($importType === 'csv' && isset($_FILES['csv_file'])) {
@@ -20,6 +25,11 @@ if (isset($_POST['import_products'])) {
             $importedProducts = $products;
             $importSuccess = true;
             $importMessage = "✅ Успешно импортирани {$importedCount} продукта!";
+            
+            // Check for errors during save
+            if (!empty($importErrors)) {
+                $importMessage .= "<br>⚠️ " . count($importErrors) . " продукта с грешки.";
+            }
         } else {
             $importMessage = "❌ Грешка при качване на файла.";
         }
@@ -32,6 +42,11 @@ if (isset($_POST['import_products'])) {
             $importedProducts = $products;
             $importSuccess = true;
             $importMessage = "✅ Успешно импортирани {$importedCount} продукта!";
+            
+            // Check for errors during save
+            if (!empty($importErrors)) {
+                $importMessage .= "<br>⚠️ " . count($importErrors) . " продукта с грешки.";
+            }
         } else {
             $importMessage = "❌ Грешка при качване на файла.";
         }
@@ -41,6 +56,11 @@ if (isset($_POST['import_products'])) {
         $importedProducts = $products;
         $importSuccess = true;
         $importMessage = "✅ Успешно импортирани {$importedCount} продукта!";
+        
+        // Check for errors during save
+        if (!empty($importErrors)) {
+            $importMessage .= "<br>⚠️ " . count($importErrors) . " продукта с грешки.";
+        }
     }
 }
 
@@ -50,7 +70,26 @@ if (isset($_POST['import_products'])) {
 function import_products_from_csv($filePath) {
     $products = [];
     $handle = fopen($filePath, 'r');
+    
+    // Try to detect and set correct encoding
+    $firstLine = fgets($handle);
+    rewind($handle);
+    
+    // Check if file is UTF-8 with BOM
+    if (substr($firstLine, 0, 3) === "\xEF\xBB\xBF") {
+        // Skip BOM
+        fseek($handle, 3);
+    }
+    
     $headers = fgetcsv($handle);
+    if (!$headers) {
+        fclose($handle);
+        return [];
+    }
+    
+    $rowCount = 0;
+    $skippedCount = 0;
+    $processedCount = 0;
     
     // Enhanced column mapping - supports multiple formats including Bulgarian
     $columnMap = [
@@ -133,6 +172,7 @@ function import_products_from_csv($filePath) {
     ];
     
     while (($row = fgetcsv($handle)) !== false) {
+        $rowCount++;
         $product = [];
         foreach ($headers as $index => $header) {
             $header = trim($header);
@@ -143,6 +183,7 @@ function import_products_from_csv($filePath) {
         
         // Skip empty rows
         if (empty(array_filter($row))) {
+            $skippedCount++;
             continue;
         }
         
@@ -150,6 +191,7 @@ function import_products_from_csv($filePath) {
         if (isset($product['type'])) {
             $productType = strtolower($product['type']);
             if ($productType === 'variation') {
+                $skippedCount++;
                 continue; // Skip variations, we only want main products
             }
         }
@@ -165,8 +207,11 @@ function import_products_from_csv($filePath) {
         $productName = trim($product['name'] ?? '');
         if (empty($productName)) {
             // Skip products without names
+            $skippedCount++;
             continue;
         }
+        
+        $processedCount++;
         
         // Description - clean HTML and get first part
         $productDescription = trim($product['description'] ?? '');
@@ -262,8 +307,12 @@ function import_products_from_csv($filePath) {
     
     fclose($handle);
     
+    // Log import statistics
+    error_log("CSV Import: Total rows: $rowCount, Skipped: $skippedCount, Processed: $processedCount, Products created: " . count($products));
+    
     // Save products
-    save_imported_products($products);
+    $saveResult = save_imported_products($products);
+    error_log("CSV Save: Saved: {$saveResult['saved']}, Failed: {$saveResult['failed']}");
     
     return $products;
 }
@@ -339,10 +388,28 @@ function import_products_from_json($jsonData) {
  * Save imported products to storage (JSON or Database)
  */
 function save_imported_products($newProducts) {
+    $saved = 0;
+    $failed = 0;
+    $errors = [];
+    
     foreach ($newProducts as $product) {
-        // Use the standard save_product_data function which handles both JSON and DB
-        save_product_data($product);
+        try {
+            // Use the standard save_product_data function which handles both JSON and DB
+            save_product_data($product);
+            $saved++;
+        } catch (Exception $e) {
+            $failed++;
+            $errors[] = "Product '{$product['name']}': " . $e->getMessage();
+            // Log error but continue processing
+            error_log("Import error for product '{$product['name']}': " . $e->getMessage());
+        }
     }
+    
+    return [
+        'saved' => $saved,
+        'failed' => $failed,
+        'errors' => $errors
+    ];
 }
 ?>
 
