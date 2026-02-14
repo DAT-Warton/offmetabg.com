@@ -826,37 +826,123 @@ function save_product_data($data) {
     }
 
     ensure_db_schema();
-    $table = db_table('products');
+    $pdo = Database::getInstance()->getPDO();
     $product_id = $data['id'] ?: uniqid('prod_');
-    $videos = $data['videos'] ?? [];
-    $mediaPayload = json_encode([
-        'primary' => $data['image'] ?? '',
-        'videos' => $videos
-    ], JSON_UNESCAPED_UNICODE);
-
-    $payload = [
-        'slug' => $data['slug'] ?? generate_slug($data['name'] ?? $product_id),
-        'name' => $data['name'] ?? '',
-        'description' => $data['description'] ?? '',
-        'price' => floatval($data['price'] ?? 0),
-        'category' => $data['category'] ?? 'general',
-        'images' => $mediaPayload,
-        'stock' => intval($data['stock'] ?? 0),
-        'status' => $data['status'] ?? 'published',
-        'updated_at' => date('Y-m-d H:i:s')
-    ];
-
-    $existing = $table->find('id', $product_id);
-    if ($existing) {
-        $table->update($product_id, $payload);
-    } else {
-        $payload['id'] = $product_id;
-        $payload['created_at'] = date('Y-m-d H:i:s');
-        $table->insert($payload);
+    $lang = $_SESSION['lang'] ?? 'bg';
+    
+    try {
+        $pdo->beginTransaction();
+        
+        // 1. Insert/Update main product record
+        $stmt = $pdo->prepare("
+            INSERT INTO products (id, sku, slug, status, featured, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+            ON CONFLICT (id) DO UPDATE SET
+                sku = EXCLUDED.sku,
+                slug = EXCLUDED.slug,
+                status = EXCLUDED.status,
+                featured = EXCLUDED.featured,
+                updated_at = CURRENT_TIMESTAMP
+        ");
+        $stmt->execute([
+            $product_id,
+            $data['sku'] ?? '',
+            $data['slug'] ?? generate_slug($data['name'] ?? $product_id),
+            $data['status'] ?? 'published',
+            $data['featured'] ?? false
+        ]);
+        
+        // 2. Insert/Update product description
+        $stmt = $pdo->prepare("
+            INSERT INTO product_descriptions (product_id, language_code, name, short_description, description)
+            VALUES (?, ?, ?, ?, ?)
+            ON CONFLICT (product_id, language_code) DO UPDATE SET
+                name = EXCLUDED.name,
+                short_description = EXCLUDED.short_description,
+                description = EXCLUDED.description
+        ");
+        $stmt->execute([
+            $product_id,
+            $lang,
+            $data['name'] ?? '',
+            $data['short_description'] ?? '',
+            $data['description'] ?? ''
+        ]);
+        
+        // 3. Insert/Update product price - first deactivate old prices, then insert new
+        $stmt = $pdo->prepare("UPDATE product_prices SET is_active = false WHERE product_id = ?");
+        $stmt->execute([$product_id]);
+        
+        $stmt = $pdo->prepare("
+            INSERT INTO product_prices (product_id, price, compare_price, currency, is_active, valid_from)
+            VALUES (?, ?, ?, ?, true, CURRENT_TIMESTAMP)
+        ");
+        $stmt->execute([
+            $product_id,
+            floatval($data['price'] ?? 0),
+            floatval($data['compare_price'] ?? 0),
+            $data['currency'] ?? 'BGN'
+        ]);
+        
+        // 4. Insert/Update product image
+        if (!empty($data['image'])) {
+            $videos = $data['videos'] ?? [];
+            $imageData = json_encode([
+                'primary' => $data['image'],
+                'videos' => $videos
+            ], JSON_UNESCAPED_UNICODE);
+            
+            $stmt = $pdo->prepare("
+                INSERT INTO product_images (product_id, image_url, image_type, sort_order)
+                VALUES (?, ?, 'primary', 0)
+                ON CONFLICT (product_id, image_type) DO UPDATE SET
+                    image_url = EXCLUDED.image_url
+            ");
+            $stmt->execute([$product_id, $imageData]);
+        }
+        
+        // 5. Insert/Update product inventory
+        $stmt = $pdo->prepare("
+            INSERT INTO product_inventory (product_id, quantity)
+            VALUES (?, ?)
+            ON CONFLICT (product_id) DO UPDATE SET
+                quantity = EXCLUDED.quantity
+        ");
+        $stmt->execute([
+            $product_id,
+            intval($data['stock'] ?? 0)
+        ]);
+        
+        // 6. Link to category if provided
+        if (!empty($data['category'])) {
+            // Find category by slug or name
+            $stmt = $pdo->prepare("
+                SELECT id FROM categories 
+                WHERE slug = ? OR LOWER(name) = LOWER(?)
+                LIMIT 1
+            ");
+            $stmt->execute([$data['category'], $data['category']]);
+            $category = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($category) {
+                $stmt = $pdo->prepare("
+                    INSERT INTO product_category_links (product_id, category_id, is_primary)
+                    VALUES (?, ?, false)
+                    ON CONFLICT (product_id, category_id) DO NOTHING
+                ");
+                $stmt->execute([$product_id, $category['id']]);
+            }
+        }
+        
+        $pdo->commit();
+        update_category_product_counts();
+        return $product_id;
+        
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        error_log("Error saving product: " . $e->getMessage());
+        throw $e;
     }
-
-    update_category_product_counts();
-    return $product_id;
 }
 
 function delete_product_data($product_id) {
@@ -869,9 +955,19 @@ function delete_product_data($product_id) {
     }
 
     ensure_db_schema();
-    db_table('products')->delete($product_id);
-    update_category_product_counts();
-    return true;
+    $pdo = Database::getInstance()->getPDO();
+    
+    try {
+        // Cascade delete will handle related records due to ON DELETE CASCADE
+        $stmt = $pdo->prepare("DELETE FROM products WHERE id = ?");
+        $stmt->execute([$product_id]);
+        
+        update_category_product_counts();
+        return true;
+    } catch (Exception $e) {
+        error_log("Error deleting product: " . $e->getMessage());
+        throw $e;
+    }
 }
 
 function get_categories_data() {
