@@ -173,12 +173,13 @@ function import_products_from_json($jsonData) {
 }
 
 /**
- * Save imported products to storage
+ * Save imported products to storage (JSON or Database)
  */
 function save_imported_products($newProducts) {
-    $existingProducts = load_json('storage/products.json');
-    $merged = array_merge($existingProducts, $newProducts);
-    save_json('storage/products.json', $merged);
+    foreach ($newProducts as $product) {
+        // Use the standard save_product_data function which handles both JSON and DB
+        save_product_data($product);
+    }
 }
 ?>
 
