@@ -307,3 +307,13 @@ class DatabaseTable {
         return $stmt->fetchColumn();
     }
 }
+
+/**
+ * Helper function to get PDO database connection
+ * Used by site-settings and other modules
+ * @return PDO|null
+ */
+function get_database() {
+    $db = Database::getInstance();
+    return $db->getPDO();
+}
