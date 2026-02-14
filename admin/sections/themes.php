@@ -7,11 +7,16 @@
 defined('CMS_ROOT') or die('Access denied');
 
 // Get current theme from options
-$db = new Database();
+$db = Database::getInstance();
 $currentTheme = $db->getOption('active_theme', 'default');
 
 // Get custom themes from database
-$customThemes = $db->query("SELECT * FROM themes WHERE type = 'custom' ORDER BY created_at DESC")->fetchAll();
+$pdo = $db->getPDO();
+$customThemes = [];
+if ($pdo) {
+    $stmt = $pdo->query("SELECT * FROM themes WHERE type = 'custom' ORDER BY created_at DESC");
+    $customThemes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 
 <div class="theme-manager-section">
