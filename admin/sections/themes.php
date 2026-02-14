@@ -186,10 +186,10 @@ if ($pdo) {
 
                 <div class="customizer-actions">
                     <button class="btn btn-primary" onclick="ThemeAdmin.applyCustomColors()">
-                        <span class="icon">✨</span> Apply Custom Colors
+                        <span class="icon">✨</span> Apply & Save Theme
                     </button>
                     <button class="btn btn-success" onclick="ThemeAdmin.saveCustomTheme()">
-                        <span class="icon">💾</span> Save as New Theme
+                        <span class="icon">💾</span> Save with Custom Name
                     </button>
                     <button class="btn btn-secondary" onclick="ThemeAdmin.resetCustomizer()">
                         <span class="icon">🔄</span> Reset
