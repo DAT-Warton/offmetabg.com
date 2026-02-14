@@ -165,3 +165,130 @@ button:hover {
     color: white;
     transform: scale(1.05);
 }
+/* Social Login Styles */
+.social-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 25px 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.social-divider::before,
+.social-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #d1d5db;
+}
+
+.social-divider span {
+    padding: 0 15px;
+}
+
+.social-login {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border: 1px solid #d1d5db;
+}
+
+.social-btn svg {
+    flex-shrink: 0;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Google */
+.social-btn.google {
+    background: #fff;
+    color: #3c4043;
+    border-color: #dadce0;
+}
+.social-btn.google:hover {
+    background: #f8f9fa;
+}
+
+/* Facebook */
+.social-btn.facebook {
+    background: #1877f2;
+    color: white;
+    border-color: #1877f2;
+}
+.social-btn.facebook:hover {
+    background: #166fe5;
+}
+
+/* Instagram */
+.social-btn.instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white;
+    border: none;
+}
+.social-btn.instagram:hover {
+    opacity: 0.9;
+}
+
+/* TikTok */
+.social-btn.tiktok {
+    background: #000;
+    color: white;
+    border-color: #000;
+}
+.social-btn.tiktok:hover {
+    background: #111;
+}
+
+/* Discord */
+.social-btn.discord {
+    background: #5865F2;
+    color: white;
+    border-color: #5865F2;
+}
+.social-btn.discord:hover {
+    background: #4752c4;
+}
+
+/* Twitch */
+.social-btn.twitch {
+    background: #9146FF;
+    color: white;
+    border-color: #9146FF;
+}
+.social-btn.twitch:hover {
+    background: #7f3dd9;
+}
+
+/* Kick */
+.social-btn.kick {
+    background: #53fc18;
+    color: #000;
+    border-color: #53fc18;
+}
+.social-btn.kick:hover {
+    background: #48dc15;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .social-login {
+        grid-template-columns: 1fr;
+    }
+}
