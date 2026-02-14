@@ -10,6 +10,7 @@ $translations = [
     'login' => 'Login',
     'register' => 'Register',
     'admin_panel' => 'Admin Panel',
+    'about_link' => 'About Us',
     'save' => 'Save',
     'delete' => 'Delete',
     'edit' => 'Edit',

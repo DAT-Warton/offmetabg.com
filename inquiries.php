@@ -157,7 +157,7 @@ $status_labels = [
             </form>
         </div>
         
-        <h2 style="margin-top: 40px; margin-bottom: 20px;"><?php echo icon_clipboard(24); ?> <?php echo __('inquiry.your_inquiries'); ?></h2>
+        <h2 class="inquiries-section-title"><?php echo icon_clipboard(24); ?> <?php echo __('inquiry.your_inquiries'); ?></h2>
         
         <div class="inquiries-list">
             <?php if (empty($user_inquiries)): ?>

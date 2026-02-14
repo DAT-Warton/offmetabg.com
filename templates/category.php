@@ -54,7 +54,7 @@ $pageTitle = htmlspecialchars($category['name']);
                     <a href="/cart.php" class="btn btn-primary">
                         <?php echo icon_cart(18); ?> <?php echo __('cart_button'); ?>
                         <?php if ($cart_count > 0): ?>
-                            <span style="background: white; color: #667eea; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 700;">
+                            <span class="cart-badge">
                                 <?php echo $cart_count; ?>
                             </span>
                         <?php endif; ?>
@@ -91,7 +91,7 @@ $pageTitle = htmlspecialchars($category['name']);
                 <p class="category-description"><?php echo nl2br(htmlspecialchars($category['description'])); ?></p>
             <?php endif; ?>
             
-            <p style="color: var(--text-secondary, #6b7280); font-size: 0.95rem;">
+            <p class="product-count">
                 <?php echo count($categoryProducts); ?> <?php echo count($categoryProducts) === 1 ? __('product.product') : __('products'); ?>
             </p>
         </div>
@@ -101,7 +101,7 @@ $pageTitle = htmlspecialchars($category['name']);
             <div class="no-products">
                 <div class="no-products-icon"><?php echo icon_package(64, '#9ca3af'); ?></div>
                 <h2><?php echo __('no_products_in_category'); ?></h2>
-                <p style="color: var(--text-secondary, #6b7280); margin-bottom: 1.5rem;">
+                <p class="no-products-description">
                     <?php echo __('check_back_later'); ?>
                 </p>
                 <a href="/" class="btn btn-primary"><?php echo __('back_to_home'); ?></a>
@@ -115,7 +115,7 @@ $pageTitle = htmlspecialchars($category['name']);
                                  alt="<?php echo htmlspecialchars($product['name']); ?>"
                                  class="product-image">
                         <?php else: ?>
-                            <div class="product-image" style="display: flex; align-items: center; justify-content: center;">
+                            <div class="product-image product-image-placeholder">
                                 <?php echo icon_package(48, '#9ca3af'); ?>
                             </div>
                         <?php endif; ?>
@@ -128,7 +128,7 @@ $pageTitle = htmlspecialchars($category['name']);
                                 <span class="product-price">$<?php echo number_format($product['price'], 2); ?></span>
                                 
                                 <?php if ($is_logged_in): ?>
-                                    <form method="POST" action="/cart.php" style="margin: 0;">
+                                    <form method="POST" action="/cart.php" class="inline-form">
                                         <input type="hidden" name="action" value="add">
                                         <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($id); ?>">
                                         <button type="submit" class="add-to-cart">
@@ -136,7 +136,7 @@ $pageTitle = htmlspecialchars($category['name']);
                                         </button>
                                     </form>
                                 <?php else: ?>
-                                    <a href="/auth.php?action=login" class="btn btn-primary" style="font-size: 0.9rem;">
+                                    <a href="/auth.php?action=login" class="btn btn-primary btn-small">
                                         <?php echo __('login_to_buy'); ?>
                                     </a>
                                 <?php endif; ?>

@@ -237,3 +237,42 @@ body {
     align-items: center;
     gap: 6px;
 }
+
+/* Cart Badge */
+.cart-badge {
+    background: white;
+    color: #667eea;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Product Count */
+.product-count {
+    color: var(--text-secondary, #6b7280);
+    font-size: 0.95rem;
+}
+
+/* No Products Description */
+.no-products-description {
+    color: var(--text-secondary, #6b7280);
+    margin-bottom: 1.5rem;
+}
+
+/* Product Image Placeholder */
+.product-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Inline Form */
+.inline-form {
+    margin: 0;
+}
+
+/* Small Button */
+.btn-small {
+    font-size: 0.9rem;
+}

@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo __('password_reset.title'); ?> - OffMeta</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/password-reset.css">
     <link rel="stylesheet" href="assets/css/dark-theme.css" id="dark-theme-style" disabled>
 </head>
 <body>
@@ -215,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
                 <button onclick="toggleTheme()" class="theme-btn" id="theme-btn">
                     <span class="theme-icon"><?php echo icon_moon(18); ?></span>
                 </button>
-                <a href="?lang=<?= opposite_lang() ?><?= isset($_GET['token']) ? '&token=' . htmlspecialchars($_GET['token']) : '' ?>" class="lang-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+                <a href="?lang=<?= opposite_lang() ?><?= isset($_GET['token']) ? '&token=' . htmlspecialchars($_GET['token']) : '' ?>" class="lang-btn">
                     <span class="lang-flag"><?= lang_flag(opposite_lang()) ?></span>
                     <span class="lang-text"><?= strtoupper(opposite_lang()) ?></span>
                 </a>
@@ -260,7 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
                 </form>
             <?php elseif (!$message): ?>
                 <!-- Request Reset Form -->
-                <p style="text-align: center; color: #666; margin-bottom: 20px;">
+                <p class="reset-instructions">
                     <?php echo __('password_reset.enter_email_instructions'); ?>
                 </p>
                 
@@ -276,7 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
                 </form>
             <?php endif; ?>
             
-            <div style="text-align: center; margin-top: 20px;">
+            <div class="back-link-container">
                 <a href="auth.php?action=login" class="btn-link">
                     <?php echo __('back_to_shop'); ?>
                 </a>

@@ -446,6 +446,11 @@ h2, h3, h4 { color: #ffffff; transition: color 0.3s ease; }
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+.media-card form {
+    margin-top: 10px;
+}
+
 .btn-sm {
     padding: 6px 12px;
     font-size: 13px;
@@ -689,6 +694,15 @@ th {
 tr:hover {
     background: #383838;
 }
+
+.order-items-table {
+    width: 100%;
+}
+
+.order-items-table th:first-child {
+    text-align: left;
+}
+
 .section-header {
     display: flex;
     justify-content: space-between;

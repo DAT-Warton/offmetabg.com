@@ -37,42 +37,31 @@ if (!$isLoggedIn && isset($_POST['login'])) {
     $password = $_POST['password'] ?? '';
     $loginSuccess = false;
 
-    // Check admins.json first
-    $admins = load_json('storage/admins.json');
-    foreach ($admins as $admin) {
-        if ($admin['username'] === $username && password_verify($password, $admin['password'])) {
-            $_SESSION['admin_user'] = $admin['username'];
+    // Check database for admin credentials
+    if (db_enabled()) {
+        // Check admins table first
+        $adminRecord = db_table('admins')->find('username', $username);
+        if ($adminRecord && password_verify($password, $adminRecord['password'])) {
+            $_SESSION['admin_user'] = $adminRecord['username'];
             $_SESSION['user_role'] = 'admin';
             $_SESSION['admin'] = true;
-            $_SESSION['user_id'] = $admin['id'];
+            $_SESSION['user_id'] = $adminRecord['id'];
             $loginSuccess = true;
-            break;
         }
-    }
 
-    // Check customers with admin role (from dashboard-created admins)
-    if (!$loginSuccess) {
-        $customers = get_customers_data();
-        foreach ($customers as $customer) {
-            if ($customer['username'] === $username && 
-                password_verify($password, $customer['password']) && 
-                ($customer['role'] ?? 'customer') === 'admin') {
-                $_SESSION['admin_user'] = $customer['username'];
+        // If not found, check customers with admin role
+        if (!$loginSuccess) {
+            $customerRecord = db_table('customers')->find('username', $username);
+            if ($customerRecord && 
+                password_verify($password, $customerRecord['password']) && 
+                ($customerRecord['role'] ?? 'customer') === 'admin') {
+                $_SESSION['admin_user'] = $customerRecord['username'];
                 $_SESSION['user_role'] = 'admin';
                 $_SESSION['admin'] = true;
-                $_SESSION['user_id'] = $customer['id'];
+                $_SESSION['user_id'] = $customerRecord['id'];
                 $loginSuccess = true;
-                break;
             }
         }
-    }
-
-    // Fallback: hardcoded admin credentials
-    if (!$loginSuccess && $username === 'Warton' && $password === 'Warton2026') {
-        $_SESSION['admin_user'] = $username;
-        $_SESSION['user_role'] = 'admin';
-        $_SESSION['admin'] = true;
-        $loginSuccess = true;
     }
 
     if ($loginSuccess) {
@@ -114,18 +103,17 @@ if (!$isLoggedIn) {
             <form method="POST">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required autofocus value="admin">
+                    <input type="text" id="username" name="username" required autofocus>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required value="admin">
+                    <input type="password" id="password" name="password" required>
                 </div>
                 <button type="submit" name="login" value="1">Login to Dashboard</button>
             </form>
 
             <div class="note">
-                <?php echo icon_edit(18); ?> Default credentials: admin / admin
-                <br><strong>Change this after first login!</strong>
+                <?php echo icon_edit(18); ?> Contact administrator for credentials
             </div>
         </div>
     </body>

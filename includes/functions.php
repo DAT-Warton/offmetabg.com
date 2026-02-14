@@ -322,6 +322,11 @@ function get_post($slug) {
 
 // Save post
 function save_post($slug, $data) {
+    // Generate slug from title if empty
+    if (empty($slug) && !empty($data['title'])) {
+        $slug = generate_slug($data['title']);
+    }
+    
     if (db_enabled()) {
         $table = db_table('posts');
         $existing = $table->find('slug', $slug);
@@ -339,13 +344,13 @@ function save_post($slug, $data) {
 
         if ($existing) {
             $table->update($existing['id'], $payload);
-            return true;
+            return $slug;
         }
 
         $payload['id'] = uniqid('post_');
         $payload['created_at'] = date('Y-m-d H:i:s');
         $table->insert($payload);
-        return true;
+        return $slug;
     }
 
     $posts = get_posts();
@@ -362,7 +367,7 @@ function save_post($slug, $data) {
         'updated' => date('Y-m-d H:i:s'),
     ]);
     save_json('storage/posts.json', $posts);
-    return true;
+    return $slug;
 }
 
 // Delete post
@@ -863,9 +868,10 @@ function get_customers_data() {
     }
 
     ensure_db_schema();
-    $rows = db_table('customers')->all();
     $customers = [];
-
+    
+    // Get customers from customers table
+    $rows = db_table('customers')->all();
     foreach ($rows as $row) {
         $permissions = parse_json_field($row['permissions'] ?? null);
         $customers[$row['id']] = [
@@ -875,6 +881,21 @@ function get_customers_data() {
             'password' => $row['password'] ?? '',
             'role' => $row['role'] ?? 'customer',
             'permissions' => is_array($permissions) ? $permissions : [],
+            'created' => $row['created_at'] ?? '',
+            'updated' => $row['updated_at'] ?? ''
+        ];
+    }
+    
+    // Get admins from admins table
+    $adminRows = db_table('admins')->all();
+    foreach ($adminRows as $row) {
+        $customers[$row['id']] = [
+            'id' => $row['id'],
+            'username' => $row['username'] ?? '',
+            'email' => $row['email'] ?? '',
+            'password' => $row['password'] ?? '',
+            'role' => 'admin',
+            'permissions' => ['full_access'],
             'created' => $row['created_at'] ?? '',
             'updated' => $row['updated_at'] ?? ''
         ];
@@ -903,33 +924,57 @@ function save_customer_data($data) {
     }
 
     ensure_db_schema();
-    $table = db_table('customers');
-    $customer_id = $data['id'] ?: uniqid('cust_');
-    $permissions = json_encode($data['permissions'] ?? ['view_products', 'place_orders'], JSON_UNESCAPED_UNICODE);
-
+    $role = $data['role'] ?? 'customer';
+    
+    // Determine which table to use based on role
+    if ($role === 'admin') {
+        $table = db_table('admins');
+        $customer_id = $data['id'] ?: uniqid('admin_');
+    } else {
+        $table = db_table('customers');
+        $customer_id = $data['id'] ?: uniqid('cust_');
+    }
+    
     $existing = $table->find('id', $customer_id);
     $password = $data['password'] ?? '';
     if ($existing && $password === '') {
         $password = $existing['password'] ?? '';
     }
 
-    $payload = [
-        'username' => $data['username'] ?? '',
-        'email' => $data['email'] ?? '',
-        'password' => $password,
-        'role' => $data['role'] ?? 'customer',
-        'permissions' => $permissions,
-        'updated_at' => date('Y-m-d H:i:s')
-    ];
+    if ($role === 'admin') {
+        // Admins table has simpler schema
+        $payload = [
+            'username' => $data['username'] ?? '',
+            'email' => $data['email'] ?? '',
+            'password' => $password,
+            'role' => 'admin',
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+    } else {
+        // Customers table has more fields
+        $permissions = json_encode($data['permissions'] ?? ['view_products', 'place_orders'], JSON_UNESCAPED_UNICODE);
+        $payload = [
+            'username' => $data['username'] ?? '',
+            'email' => $data['email'] ?? '',
+            'password' => $password,
+            'role' => 'customer',
+            'permissions' => $permissions,
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+    }
 
     if ($existing) {
         $table->update($customer_id, $payload);
     } else {
         $payload['id'] = $customer_id;
         $payload['created_at'] = date('Y-m-d H:i:s');
-        $payload['activated'] = true;
-        $payload['email_verified'] = true;
-        $payload['activated_at'] = date('Y-m-d H:i:s');
+        
+        if ($role === 'customer') {
+            $payload['activated'] = true;
+            $payload['email_verified'] = true;
+            $payload['activated_at'] = date('Y-m-d H:i:s');
+        }
+        
         $table->insert($payload);
     }
 
@@ -945,7 +990,23 @@ function delete_customer_data($customer_id) {
     }
 
     ensure_db_schema();
-    db_table('customers')->delete($customer_id);
+    
+    // Try to delete from both tables (admins and customers)
+    // Check which table has the record
+    if (strpos($customer_id, 'admin_') === 0) {
+        db_table('admins')->delete($customer_id);
+    } else {
+        // Check in both tables just to be safe
+        $admin = db_table('admins')->find('id', $customer_id);
+        $customer = db_table('customers')->find('id', $customer_id);
+        
+        if ($admin) {
+            db_table('admins')->delete($customer_id);
+        } elseif ($customer) {
+            db_table('customers')->delete($customer_id);
+        }
+    }
+    
     return true;
 }
 
