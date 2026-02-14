@@ -108,30 +108,6 @@ function db_set_option($key, $value) {
 }
 
 /**
- * Get site setting from database
- * Retrieves setting value from site_settings table
- * 
- * @param string $key Setting key
- * @param mixed $default Default value if not found
- * @return mixed Setting value or default
- */
-function get_site_setting($key, $default = null) {
-    try {
-        $db = get_database();
-        if (!$db) return $default;
-        
-        $stmt = $db->prepare("SELECT setting_value FROM site_settings WHERE setting_key = ? AND is_public = true LIMIT 1");
-        $stmt->execute([$key]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        return $result ? $result['setting_value'] : $default;
-    } catch (Exception $e) {
-        error_log("Failed to get site setting '{$key}': " . $e->getMessage());
-        return $default;
-    }
-}
-
-/**
  * Get custom theme CSS variables for inline injection
  * Returns inline style tag with CSS variables for custom themes
  */
