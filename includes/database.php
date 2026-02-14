@@ -45,7 +45,12 @@ class Database {
         }
 
         // Priority 3: Config file (legacy/fallback)
-        $config = load_json('config/database.json');
+        $configPath = __DIR__ . '/../config/database.json';
+        $config = [];
+        if (file_exists($configPath)) {
+            $content = file_get_contents($configPath);
+            $config = json_decode($content, true) ?? [];
+        }
 
         if (!empty($config['driver'])) {
             if ($config['driver'] === 'mysql') {
