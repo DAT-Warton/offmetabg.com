@@ -123,30 +123,47 @@ const ThemeAdmin = {
      */
     async activateTheme(slug) {
         try {
-            // Save to database first 
-            const response = await fetch(`${window.location.origin}/api/handler.php?action=set-theme`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ theme: slug })
-            });
+            // Apply theme on frontend first (immediate feedback)
+            window.themeManager.applyTheme(slug);
+            
+            // Try to save to database 
+            try {
+                const response = await fetch(`${window.location.origin}/api/handler.php?action=set-theme`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ theme: slug })
+                });
 
-            const data = await response.json();
+                // Check if we got valid JSON response
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json();
 
-            if (data.success) {
-                // Apply theme on frontend
-                window.themeManager.applyTheme(slug);
+                    if (data.success) {
+                        this.showNotification('Theme activated and saved! Reloading...', 'success');
+                        this.highlightActiveTheme();
+                        
+                        // Reload page to apply theme everywhere
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                        return;
+                    }
+                }
                 
-                this.showNotification('Theme activated successfully! Reloading...', 'success');
+                // API blocked or failed - fallback to localStorage only
+                throw new Error('API temporarily unavailable');
+                
+            } catch (apiError) {
+                console.warn('API save failed, using localStorage:', apiError.message);
+                
+                // Theme is already applied via localStorage, just notify user
+                this.showNotification('Theme applied locally. Configure Cloudflare Page Rule for API to persist across devices.', 'warning');
                 this.highlightActiveTheme();
-                
-                // Reload page to apply theme everywhere
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
-            } else {
-                throw new Error(data.message || 'Failed to save theme');
             }
         } catch (error) {
             console.error('Error activating theme:', error);

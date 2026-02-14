@@ -70,26 +70,69 @@ try {
             break;
             
         case 'save-custom-theme':
-            // Save custom theme to database
+            // Save custom theme to database (insert or update)
             if (empty($input['name']) || empty($input['slug']) || empty($input['variables'])) {
                 throw new Exception('Theme name, slug, and variables are required');
             }
             
-            $themeId = $db->insert('themes', [
+            // Check if theme with this slug already exists
+            $pdo = $db->getPDO();
+            $existingTheme = null;
+            
+            if ($pdo) {
+                $stmt = $pdo->prepare("SELECT id FROM themes WHERE slug = ?");
+                $stmt->execute([$input['slug']]);
+                $existingTheme = $stmt->fetch(PDO::FETCH_ASSOC);
+            } else {
+                // JSON fallback
+                $existingTheme = $db->table('themes')->find('slug', $input['slug']);
+            }
+            
+            $themeData = [
                 'name' => $input['name'],
                 'slug' => $input['slug'],
                 'description' => $input['description'] ?? '',
                 'type' => 'custom',
                 'category' => $input['category'] ?? 'light',
                 'variables' => json_encode($input['variables']),
-                'version' => $input['version'] ?? '1.0',
-                'is_active' => false
-            ]);
+                'version' => $input['version'] ?? '1.0'
+            ];
+            
+            if ($existingTheme) {
+                // Update existing theme
+                $themeId = $existingTheme['id'];
+                
+                if ($pdo) {
+                    $stmt = $pdo->prepare("
+                        UPDATE themes 
+                        SET name = ?, description = ?, category = ?, variables = ?, version = ?, updated_at = CURRENT_TIMESTAMP 
+                        WHERE id = ?
+                    ");
+                    $stmt->execute([
+                        $themeData['name'],
+                        $themeData['description'],
+                        $themeData['category'],
+                        $themeData['variables'],
+                        $themeData['version'],
+                        $themeId
+                    ]);
+                } else {
+                    $db->table('themes')->update($themeId, $themeData);
+                }
+                
+                $message = 'Theme updated successfully';
+            } else {
+                // Insert new theme
+                $themeData['is_active'] = false;
+                $themeId = $db->insert('themes', $themeData);
+                $message = 'Theme saved successfully';
+            }
             
             $response = [
                 'success' => true,
-                'message' => 'Theme saved successfully',
-                'theme_id' => $themeId
+                'message' => $message,
+                'theme_id' => $themeId,
+                'updated' => $existingTheme !== null
             ];
             break;
             
