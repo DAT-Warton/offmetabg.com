@@ -11,6 +11,7 @@ $action = $_GET['action'] ?? '';
 $sectionTitles = [
     'dashboard' => __('menu.dashboard'),
     'products' => __('menu.products'),
+    'import-products' => 'Импорт на продукти',
     'categories' => __('admin.categories'),
     'orders' => __('menu.orders'),
     'promotions' => __('admin.promotions'),
@@ -410,6 +411,7 @@ $stats = get_dashboard_stats();
                 <p class="sidebar-section-title">E-Commerce</p>
                 <ul>
                     <li><a href="?section=products" class="<?php echo $section === 'products' ? 'active' : ''; ?>"><?php echo icon_package(18); ?> <?php echo __('menu.products'); ?></a></li>
+                    <li><a href="?section=import-products" class="<?php echo $section === 'import-products' ? 'active' : ''; ?>"><?php echo icon_upload(18); ?> 📥 Импорт</a></li>
                     <li><a href="?section=categories" class="<?php echo $section === 'categories' ? 'active' : ''; ?>"><?php echo icon_folder(18); ?> <?php echo __('admin.categories'); ?></a></li>
                     <li><a href="?section=orders" class="<?php echo $section === 'orders' ? 'active' : ''; ?>"><?php echo icon_cart(18); ?> <?php echo __('menu.orders'); ?></a></li>
                 </ul>
