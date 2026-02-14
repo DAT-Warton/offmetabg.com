@@ -65,8 +65,23 @@ foreach ($categories as $category) {
 <body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <header>
         <div class="header-container">
-            <div class="logo">
-                <h1><?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></h1>
+            <div class="logo" style="justify-content: <?php echo get_site_setting('logo_position', 'left'); ?>;">
+                <?php 
+                $logo_url = get_site_setting('logo_url', '');
+                $logo_max_height = get_site_setting('logo_max_height', '50');
+                $logo_max_width = get_site_setting('logo_max_width', '200');
+                $show_site_name = get_site_setting('show_site_name', 'true') === 'true';
+                
+                if (!empty($logo_url)): 
+                ?>
+                    <img src="<?php echo htmlspecialchars($logo_url); ?>" 
+                         alt="<?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>"
+                         style="max-height: <?php echo intval($logo_max_height); ?>px; max-width: <?php echo intval($logo_max_width); ?>px; object-fit: contain;">
+                <?php endif; ?>
+                
+                <?php if ($show_site_name || empty($logo_url)): ?>
+                    <h1><?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></h1>
+                <?php endif; ?>
             </div>
             <div class="nav-buttons">
                 <a href="/blog" class="btn btn-secondary"><?php echo __('menu.blog_posts'); ?></a>

@@ -3,8 +3,35 @@
  * Site Settings Section - Database-Driven Configuration
  */
 
+// Handle image uploads
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES)) {
+    $upload_dir = __DIR__ . '/../../uploads/settings/';
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
+    
+    foreach ($_FILES as $input_name => $file) {
+        if ($file['error'] === UPLOAD_ERR_OK) {
+            $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
+            
+            if (in_array($extension, $allowed_extensions)) {
+                $filename = $input_name . '_' . time() . '.' . $extension;
+                $upload_path = $upload_dir . $filename;
+                
+                if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+                    $_POST[$input_name] = '/uploads/settings/' . $filename;
+                }
+            }
+        }
+    }
+}
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_settings') {
+    if (!function_exists('get_database')) {
+        die('Error: Database function not available');
+    }
     $db = get_database();
     $updated = 0;
     
@@ -36,6 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 // Load all settings grouped by category
+if (!function_exists('get_database')) {
+    die('Error: Database function not available');
+}
 $db = get_database();
 $stmt = $db->query("SELECT * FROM site_settings ORDER BY category, display_order, setting_key");
 $all_settings = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -234,6 +264,41 @@ foreach ($all_settings as $setting) {
     to { opacity: 1; transform: translateY(0); }
 }
 
+.image-upload-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.image-upload-wrapper .current-image {
+    padding: 10px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 2px dashed var(--border-color);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.image-upload-wrapper input[type="file"] {
+    padding: 8px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    background: white;
+}
+
+.image-upload-wrapper input[type="text"] {
+    margin-top: 8px;
+}
+
+.image-upload-wrapper select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+}
+
 @media (max-width: 768px) {
     .settings-grid {
         grid-template-columns: 1fr;
@@ -270,7 +335,7 @@ foreach ($all_settings as $setting) {
         <?php endforeach; ?>
     </div>
     
-    <form method="POST" id="settingsForm">
+    <form method="POST" id="settingsForm" enctype="multipart/form-data">
         <input type="hidden" name="action" value="update_settings">
         
         <?php foreach ($settings_by_category as $category => $settings): ?>
@@ -303,6 +368,49 @@ foreach ($all_settings as $setting) {
                         $name = htmlspecialchars($setting['setting_key']);
                         
                         switch ($setting['setting_type']):
+                            case 'image':
+                                ?>
+                                <div class="image-upload-wrapper">
+                                    <?php if (!empty($value)): ?>
+                                        <div class="current-image">
+                                            <img src="<?php echo htmlspecialchars($value); ?>" 
+                                                 alt="<?php echo htmlspecialchars($setting['label']); ?>" 
+                                                 style="max-width: 200px; max-height: 100px; object-fit: contain; margin-bottom: 10px;">
+                                        </div>
+                                    <?php endif; ?>
+                                    <input type="file" 
+                                           name="<?php echo $name; ?>" 
+                                           accept="image/*"
+                                           style="margin-bottom: 8px;">
+                                    <input type="text" 
+                                           name="<?php echo $name; ?>" 
+                                           value="<?php echo htmlspecialchars($value); ?>"
+                                           placeholder="Or enter image URL">
+                                    <small style="color: var(--text-secondary);">Upload image or enter URL</small>
+                                </div>
+                                <?php
+                                break;
+                            
+                            case 'select':
+                                ?>
+                                <select name="<?php echo $name; ?>">
+                                    <?php
+                                    // Extract options from description or use defaults
+                                    $options = [];
+                                    if ($name === 'logo_position') {
+                                        $options = ['left' => 'Left', 'center' => 'Center', 'right' => 'Right'];
+                                    }
+                                    foreach ($options as $opt_value => $opt_label):
+                                    ?>
+                                        <option value="<?php echo $opt_value; ?>" 
+                                                <?php echo $value === $opt_value ? 'selected' : ''; ?>>
+                                            <?php echo $opt_label; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <?php
+                                break;
+                            
                             case 'boolean':
                                 ?>
                                 <div class="checkbox-wrapper">
