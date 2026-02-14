@@ -381,12 +381,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $stats = get_dashboard_stats();
 ?>
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo __('admin.cms_dashboard'); ?></title>
     <link rel="stylesheet" href="../assets/css/themes.css">
+    <?php echo get_custom_theme_css(); ?>
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/admin-dashboard-section.css">
 </head>
