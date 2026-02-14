@@ -3,10 +3,9 @@
  * API Request Handler
  */
 
-// Ensure we're accessed through index.php
+// Define CMS_ROOT if not already defined
 if (!defined('CMS_ROOT')) {
-    http_response_code(403);
-    die('Direct access not allowed');
+    define('CMS_ROOT', dirname(__DIR__));
 }
 
 // Set JSON headers
