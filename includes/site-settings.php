@@ -23,6 +23,11 @@ function get_site_setting($key, $default = null, $category = null) {
     try {
         $db = get_database();
         
+        // Return default if no database connection
+        if (!$db) {
+            return $default;
+        }
+        
         if ($category) {
             $stmt = $db->prepare("SELECT setting_value, setting_type FROM site_settings WHERE category = ? AND setting_key = ? LIMIT 1");
             $stmt->execute([$category, $key]);
@@ -56,6 +61,11 @@ function get_site_setting($key, $default = null, $category = null) {
 function set_site_setting($key, $value, $category = null) {
     try {
         $db = get_database();
+        
+        // Return false if no database connection
+        if (!$db) {
+            return false;
+        }
         
         // Convert value to string for storage
         if (is_bool($value)) {
