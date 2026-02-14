@@ -122,8 +122,7 @@ try {
                 
                 $message = 'Theme updated successfully';
             } else {
-                // Insert new theme
-                $themeData['is_active'] = false;
+                // Insert new theme (is_active defaults to false in database)
                 $themeId = $db->insert('themes', $themeData);
                 $message = 'Theme saved successfully';
             }
