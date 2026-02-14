@@ -188,6 +188,18 @@ class ThemeManager {
                 const customTheme = data.themes.find(t => t.slug === slug);
                 
                 if (customTheme) {
+                    console.log('Found custom theme in database:', customTheme.name);
+                    
+                    // Parse variables if they're a string (from database JSON column)
+                    if (typeof customTheme.variables === 'string') {
+                        try {
+                            customTheme.variables = JSON.parse(customTheme.variables);
+                            console.log('Parsed theme variables:', customTheme.variables);
+                        } catch (e) {
+                            console.error('Failed to parse theme variables:', e);
+                        }
+                    }
+                    
                     this.applyCustomTheme(customTheme);
                     return;
                 }
@@ -451,13 +463,20 @@ class ThemeManager {
      * Apply custom theme from imported data
      */
     applyCustomTheme(themeData) {
+        console.log('Applying custom theme:', themeData.name, 'with variables:', themeData.variables);
+        
         const root = document.documentElement;
         
         // Set all CSS variables
         if (themeData.variables && typeof themeData.variables === 'object') {
+            let appliedCount = 0;
             Object.entries(themeData.variables).forEach(([varName, value]) => {
                 root.style.setProperty(`--${varName}`, value);
+                appliedCount++;
             });
+            console.log(`Applied ${appliedCount} CSS variables for theme: ${themeData.name}`);
+        } else {
+            console.error('Theme variables are not an object:', typeof themeData.variables, themeData.variables);
         }
         
         // Set theme attribute to the theme's slug
