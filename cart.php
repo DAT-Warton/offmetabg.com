@@ -314,6 +314,7 @@ $total = max(0, $subtotal - $discount_amount);
     <title><?php echo __('cart_page.title'); ?> - <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></title>
     <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/cart.css">
+    <?php echo get_custom_theme_css(); ?>
 </head>
 <body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
 <?php if ($show_success && $order): ?>

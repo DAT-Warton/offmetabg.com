@@ -16,6 +16,7 @@ arsort($publishedPosts);
     <title>Blog - <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></title>
     <link rel="stylesheet" href="/assets/css/themes.css">
     <link rel="stylesheet" href="/assets/css/blog.css">
+    <?php echo get_custom_theme_css(); ?>
 </head>
 <body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <header>

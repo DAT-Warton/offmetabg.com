@@ -207,6 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
     <title><?php echo __('password_reset.title'); ?> - OffMeta</title>
     <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/password-reset.css">
+    <?php echo get_custom_theme_css(); ?>
 </head>
 <body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <div class="auth-container">

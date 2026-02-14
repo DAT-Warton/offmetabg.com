@@ -176,6 +176,7 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
     <title><?php echo $pageTitle; ?> - OffMeta</title>
     <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/auth.css">
+    <?php echo get_custom_theme_css(); ?>
 </head>
 <body class="auth-page" data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <div class="nav-actions">
