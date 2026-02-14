@@ -1,13 +1,13 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #f9fafb;
-    color: #1f2937;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
 }
 
 /* Header */
 header {
-    background: white;
+    background: var(--bg-primary);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
@@ -23,7 +23,7 @@ header {
 }
 .logo h1 {
     font-size: 28px;
-    color: #3498db;
+    color: var(--primary);
 }
 .nav-buttons {
     display: flex;
@@ -40,17 +40,17 @@ header {
     cursor: pointer;
 }
 .btn-primary {
-    background: #3498db;
+    background: var(--primary);
     color: white;
 }
 .btn-primary:hover {
-    background: #5568d3;
+    background: var(--primary-hover);
     transform: translateY(-2px);
 }
 .btn-secondary {
-    background: white;
-    color: #3498db;
-    border: 2px solid #3498db;
+    background: var(--bg-primary);
+    color: var(--primary);
+    border: 2px solid var(--primary);
 }
 
 /* Container */
@@ -61,13 +61,13 @@ header {
 }
 
 h1 {
-    color: #1f2937;
+    color: var(--text-primary);
     margin-bottom: 30px;
     font-size: 32px;
 }
 
 h2.inquiries-section-title {
-    color: #1f2937;
+    color: var(--text-primary);
     margin-top: 40px;
     margin-bottom: 20px;
     font-size: 24px;
@@ -75,7 +75,7 @@ h2.inquiries-section-title {
 
 /* Form Section */
 .form-section {
-    background: white;
+    background: var(--bg-primary);
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -90,7 +90,7 @@ label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #374151;
+    color: var(--text-secondary);
 }
 
 input[type="text"],
@@ -111,25 +111,25 @@ textarea {
 
 .message {
     padding: 15px;
-    background: #d4edda;
-    border: 1px solid #c3e6cb;
-    color: #155724;
+    background: var(--success-bg, #d4edda);
+    border: 1px solid var(--success-border, #c3e6cb);
+    color: var(--success-text, #155724);
     border-radius: 6px;
     margin-bottom: 20px;
 }
 
 .error {
     padding: 15px;
-    background: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
+    background: var(--error-bg, #f8d7da);
+    border: 1px solid var(--error-border, #f5c6cb);
+    color: var(--error-text, #721c24);
     border-radius: 6px;
     margin-bottom: 20px;
 }
 
 /* Inquiries List */
 .inquiries-list {
-    background: white;
+    background: var(--bg-primary);
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -157,7 +157,7 @@ textarea {
 .inquiry-title {
     font-size: 18px;
     font-weight: 600;
-    color: #1f2937;
+    color: var(--text-primary);
 }
 
 .inquiry-status {
@@ -169,23 +169,23 @@ textarea {
 }
 
 .inquiry-meta {
-    color: #6b7280;
+    color: var(--text-secondary);
     font-size: 14px;
     margin-bottom: 10px;
 }
 
 .inquiry-message {
-    color: #374151;
+    color: var(--text-secondary);
     line-height: 1.6;
     padding: 15px;
-    background: #f9fafb;
+    background: var(--bg-secondary);
     border-radius: 6px;
 }
 
 .empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: #6b7280;
+    color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {

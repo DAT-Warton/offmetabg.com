@@ -60,7 +60,7 @@ body {
 }
 
 .btn-primary {
-    background: #667eea;
+    background: var(--primary);
     color: white;
 }
 
@@ -193,7 +193,7 @@ body {
 }
 
 .add-to-cart {
-    background: #667eea;
+    background: var(--primary);
     color: white;
     border: none;
     padding: 8px 16px;
@@ -240,8 +240,8 @@ body {
 
 /* Cart Badge */
 .cart-badge {
-    background: white;
-    color: #667eea;
+    background: var(--bg-primary);
+    color: var(--primary);
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 12px;
