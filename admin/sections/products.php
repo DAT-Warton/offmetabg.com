@@ -125,9 +125,32 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
         </form>
     <?php endif; ?>
 
+    <!-- Bulk Actions Bar -->
+    <?php if (!empty($products)): ?>
+    <div id="bulkActionsBar" class="bulk-actions-bar" style="display: none;">
+        <div class="bulk-actions-content">
+            <span id="selectedCount">0</span> продукта избрани
+            <button type="button" class="btn-bulk-delete" onclick="bulkDeleteProducts()">
+                🗑️ Изтрий избраните
+            </button>
+            <button type="button" class="btn-bulk-cancel" onclick="clearSelection()">
+                Отмени
+            </button>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <form id="bulkDeleteForm" method="POST" style="display: none;">
+        <input type="hidden" name="action" value="bulk_delete_products">
+        <input type="hidden" name="product_ids" id="bulkProductIds" value="">
+    </form>
+
     <table>
         <thead>
             <tr>
+                <th style="width: 40px;">
+                    <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)">
+                </th>
                 <th><?php echo __('admin.product_name'); ?></th>
                 <th><?php echo __('product.price'); ?></th>
                 <th><?php echo __('product.stock'); ?></th>
@@ -138,7 +161,7 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
         <tbody>
             <?php if (empty($products)): ?>
                 <tr>
-                    <td colspan="5" class="table-empty">
+                    <td colspan="6" class="table-empty">
                         <?php echo icon_box(32); ?><br>
                         <?php echo __('admin.no_products_yet'); ?>
                     </td>
@@ -146,6 +169,9 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
             <?php else: ?>
                 <?php foreach ($products as $id => $product): ?>
                     <tr>
+                        <td>
+                            <input type="checkbox" class="product-checkbox" value="<?php echo htmlspecialchars($id); ?>" onchange="updateBulkActions()">
+                        </td>
                         <td><?php echo htmlspecialchars($product['name']); ?></td>
                         <td>€<?php echo number_format($product['price'], 2); ?></td>
                         <td><?php echo $product['stock'] ?? 0; ?></td>
@@ -165,5 +191,148 @@ $editProduct = $editId ? ($products[$editId] ?? null) : null;
             <?php endif; ?>
         </tbody>
     </table>
+
+    <style>
+    .bulk-actions-bar {
+        position: sticky;
+        top: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        z-index: 100;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .bulk-actions-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: 600;
+    }
+
+    #selectedCount {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+    }
+
+    .btn-bulk-delete {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-bulk-delete:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-bulk-cancel {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 8px 20px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-bulk-cancel:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .product-checkbox {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+
+    #selectAll {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+
+    tr:has(.product-checkbox:checked) {
+        background-color: rgba(102, 126, 234, 0.1);
+    }
+    </style>
+
+    <script>
+    function toggleSelectAll(checkbox) {
+        const checkboxes = document.querySelectorAll('.product-checkbox');
+        checkboxes.forEach(cb => {
+            cb.checked = checkbox.checked;
+        });
+        updateBulkActions();
+    }
+
+    function updateBulkActions() {
+        const checkboxes = document.querySelectorAll('.product-checkbox:checked');
+        const count = checkboxes.length;
+        const bulkBar = document.getElementById('bulkActionsBar');
+        const countSpan = document.getElementById('selectedCount');
+        const selectAllCheckbox = document.getElementById('selectAll');
+
+        if (count > 0) {
+            bulkBar.style.display = 'block';
+            countSpan.textContent = count;
+        } else {
+            bulkBar.style.display = 'none';
+        }
+
+        // Update select all checkbox state
+        const allCheckboxes = document.querySelectorAll('.product-checkbox');
+        selectAllCheckbox.checked = allCheckboxes.length > 0 && count === allCheckboxes.length;
+    }
+
+    function clearSelection() {
+        const checkboxes = document.querySelectorAll('.product-checkbox');
+        checkboxes.forEach(cb => {
+            cb.checked = false;
+        });
+        document.getElementById('selectAll').checked = false;
+        updateBulkActions();
+    }
+
+    function bulkDeleteProducts() {
+        const checkboxes = document.querySelectorAll('.product-checkbox:checked');
+        const ids = Array.from(checkboxes).map(cb => cb.value);
+        
+        if (ids.length === 0) {
+            alert('Моля изберете поне един продукт');
+            return;
+        }
+
+        const confirmMsg = `Сигурни ли сте, че искате да изтриете ${ids.length} продукта?\n\nТова действие е необратимо!`;
+        
+        if (confirm(confirmMsg)) {
+            document.getElementById('bulkProductIds').value = ids.join(',');
+            document.getElementById('bulkDeleteForm').submit();
+        }
+    }
+    </script>
 </div>
 
