@@ -211,6 +211,25 @@ CREATE TABLE IF NOT EXISTS options (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Themes table
+CREATE TABLE IF NOT EXISTS themes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    type VARCHAR(50) DEFAULT 'custom', -- 'builtin' or 'custom'
+    category VARCHAR(50) DEFAULT 'light', -- 'light' or 'dark'
+    variables TEXT NOT NULL, -- JSON object with CSS variables
+    version VARCHAR(20) DEFAULT '1.0',
+    is_active BOOLEAN DEFAULT false,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_themes_slug ON themes(slug);
+CREATE INDEX idx_themes_type ON themes(type);
+CREATE INDEX idx_themes_is_active ON themes(is_active);
+
 -- Analytics table
 CREATE TABLE IF NOT EXISTS analytics (
     id SERIAL PRIMARY KEY,

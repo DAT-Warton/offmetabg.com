@@ -1,0 +1,461 @@
+/**
+ * OffMeta Theme System
+ * Complete theming solution with CSS Variables
+ * Supports multiple themes and easy customization
+ */
+
+/* ============================================
+   DEFAULT THEME (Light Purple Gradient)
+   ============================================ */
+:root,
+:root[data-theme="default"] {
+    /* Primary Colors */
+    --primary: #6b46c1;
+    --primary-hover: #7c3aed;
+    --primary-light: #9f7aea;
+    --primary-dark: #553c9a;
+    
+    /* Secondary Colors */
+    --secondary: #10b981;
+    --secondary-hover: #059669;
+    --accent: #ec4899;
+    --accent-hover: #db2777;
+    
+    /* Background Colors */
+    --bg-body: linear-gradient(135deg, #e8ddf5 0%, #decceb 50%, #d4c5e2 100%);
+    --bg-primary: #ffffff;
+    --bg-secondary: rgba(255, 255, 255, 0.72);
+    --bg-tertiary: rgba(200, 185, 217, 0.85);
+    --bg-hover: #f5f3f7;
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --bg-sidebar: #002B4D;
+    
+    /* Text Colors */
+    --text-primary: #1b1430;
+    --text-secondary: #52456d;
+    --text-muted: #8b7fa8;
+    --text-inverse: #ffffff;
+    
+    /* Border Colors */
+    --border-color: rgba(107, 70, 193, 0.15);
+    --border-light: rgba(107, 70, 193, 0.08);
+    --border-dark: rgba(107, 70, 193, 0.25);
+    
+    /* Shadow Colors */
+    --shadow-sm: rgba(107, 70, 193, 0.08);
+    --shadow-md: rgba(107, 70, 193, 0.12);
+    --shadow-lg: rgba(107, 70, 193, 0.16);
+    --shadow-xl: rgba(107, 70, 193, 0.20);
+    
+    /* Status Colors */
+    --success: #10b981;
+    --success-bg: #f0fdf4;
+    --success-border: #86efac;
+    --success-text: #166534;
+    
+    --warning: #f59e0b;
+    --warning-bg: #fffbeb;
+    --warning-border: #fcd34d;
+    --warning-text: #92400e;
+    
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+    --danger-border: #fca5a5;
+    --danger-text: #991b1b;
+    
+    --info: #3b82f6;
+    --info-bg: #eff6ff;
+    --info-border: #93c5fd;
+    --info-text: #1e40af;
+    
+    /* Products Section */
+    --products-section-bg: rgba(107, 70, 193, 0.05);
+    
+    /* Hero Effects */
+    --hero-glow: rgba(124, 58, 237, 0.35);
+    
+    /* Calendar & Icons */
+    --calendar-icon-filter: invert(0);
+}
+
+/* ============================================
+   DARK THEME (Midnight Purple)
+   ============================================ */
+:root[data-theme="dark"] {
+    /* Primary Colors */
+    --primary: #9f7aea;
+    --primary-hover: #b794f4;
+    --primary-light: #d6bcfa;
+    --primary-dark: #805ad5;
+    
+    /* Secondary Colors */
+    --secondary: #34d399;
+    --secondary-hover: #6ee7b7;
+    --accent: #f472b6;
+    --accent-hover: #f9a8d4;
+    
+    /* Background Colors */
+    --bg-body: linear-gradient(135deg, #0f0a1a 0%, #1a1625 50%, #2d1b4e 100%);
+    --bg-primary: #1a1625;
+    --bg-secondary: rgba(26, 22, 37, 0.9);
+    --bg-tertiary: rgba(45, 27, 78, 0.85);
+    --bg-hover: #2d1b4e;
+    --bg-card: rgba(26, 22, 37, 0.95);
+    --bg-sidebar: #0f0a1a;
+    
+    /* Text Colors */
+    --text-primary: #e8e4f0;
+    --text-secondary: #c8c0d8;
+    --text-muted: #a8a0b8;
+    --text-inverse: #1a1625;
+    
+    /* Border Colors */
+    --border-color: #2d1b4e;
+    --border-light: rgba(159, 122, 234, 0.1);
+    --border-dark: rgba(159, 122, 234, 0.3);
+    
+    /* Shadow Colors */
+    --shadow-sm: rgba(0, 0, 0, 0.2);
+    --shadow-md: rgba(0, 0, 0, 0.3);
+    --shadow-lg: rgba(0, 0, 0, 0.4);
+    --shadow-xl: rgba(0, 0, 0, 0.5);
+    
+    /* Status Colors */
+    --success: #34d399;
+    --success-bg: #1e3a2e;
+    --success-border: #2d5a3f;
+    --success-text: #86efac;
+    
+    --warning: #fbbf24;
+    --warning-bg: #3d3520;
+    --warning-border: #78651f;
+    --warning-text: #fcd34d;
+    
+    --danger: #f87171;
+    --danger-bg: #3d1e1e;
+    --danger-border: #783030;
+    --danger-text: #fca5a5;
+    
+    --info: #60a5fa;
+    --info-bg: #1e293b;
+    --info-border: #334155;
+    --info-text: #93c5fd;
+    
+    /* Products Section */
+    --products-section-bg: rgba(159, 122, 234, 0.05);
+    
+    /* Hero Effects */
+    --hero-glow: rgba(159, 122, 234, 0.25);
+    
+    /* Calendar & Icons */
+    --calendar-icon-filter: invert(1);
+}
+
+/* ============================================
+   OCEAN BLUE THEME (Cool & Professional)
+   ============================================ */
+:root[data-theme="ocean"] {
+    /* Primary Colors */
+    --primary: #0284c7;
+    --primary-hover: #0369a1;
+    --primary-light: #38bdf8;
+    --primary-dark: #075985;
+    
+    /* Secondary Colors */
+    --secondary: #06b6d4;
+    --secondary-hover: #0891b2;
+    --accent: #8b5cf6;
+    --accent-hover: #7c3aed;
+    
+    /* Background Colors */
+    --bg-body: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+    --bg-primary: #ffffff;
+    --bg-secondary: rgba(255, 255, 255, 0.8);
+    --bg-tertiary: rgba(186, 230, 253, 0.85);
+    --bg-hover: #f0f9ff;
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --bg-sidebar: #0c4a6e;
+    
+    /* Text Colors */
+    --text-primary: #0c4a6e;
+    --text-secondary: #075985;
+    --text-muted: #0891b2;
+    --text-inverse: #ffffff;
+    
+    /* Border Colors */
+    --border-color: rgba(2, 132, 199, 0.15);
+    --border-light: rgba(2, 132, 199, 0.08);
+    --border-dark: rgba(2, 132, 199, 0.25);
+    
+    /* Shadow Colors */
+    --shadow-sm: rgba(2, 132, 199, 0.08);
+    --shadow-md: rgba(2, 132, 199, 0.12);
+    --shadow-lg: rgba(2, 132, 199, 0.16);
+    --shadow-xl: rgba(2, 132, 199, 0.20);
+    
+    /* Status Colors */
+    --success: #10b981;
+    --success-bg: #f0fdf4;
+    --success-border: #86efac;
+    --success-text: #166534;
+    
+    --warning: #f59e0b;
+    --warning-bg: #fffbeb;
+    --warning-border: #fcd34d;
+    --warning-text: #92400e;
+    
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+    --danger-border: #fca5a5;
+    --danger-text: #991b1b;
+    
+    --info: #3b82f6;
+    --info-bg: #eff6ff;
+    --info-border: #93c5fd;
+    --info-text: #1e40af;
+    
+    /* Products Section */
+    --products-section-bg: rgba(2, 132, 199, 0.05);
+    
+    /* Hero Effects */
+    --hero-glow: rgba(6, 182, 212, 0.35);
+    
+    /* Calendar & Icons */
+    --calendar-icon-filter: invert(0);
+}
+
+/* ============================================
+   FOREST GREEN THEME (Nature & Fresh)
+   ============================================ */
+:root[data-theme="forest"] {
+    /* Primary Colors */
+    --primary: #059669;
+    --primary-hover: #047857;
+    --primary-light: #34d399;
+    --primary-dark: #065f46;
+    
+    /* Secondary Colors */
+    --secondary: #84cc16;
+    --secondary-hover: #65a30d;
+    --accent: #f59e0b;
+    --accent-hover: #d97706;
+    
+    /* Background Colors */
+    --bg-body: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 50%, #6ee7b7 100%);
+    --bg-primary: #ffffff;
+    --bg-secondary: rgba(255, 255, 255, 0.8);
+    --bg-tertiary: rgba(167, 243, 208, 0.85);
+    --bg-hover: #f0fdf4;
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --bg-sidebar: #065f46;
+    
+    /* Text Colors */
+    --text-primary: #064e3b;
+    --text-secondary: #047857;
+    --text-muted: #059669;
+    --text-inverse: #ffffff;
+    
+    /* Border Colors */
+    --border-color: rgba(5, 150, 105, 0.15);
+    --border-light: rgba(5, 150, 105, 0.08);
+    --border-dark: rgba(5, 150, 105, 0.25);
+    
+    /* Shadow Colors */
+    --shadow-sm: rgba(5, 150, 105, 0.08);
+    --shadow-md: rgba(5, 150, 105, 0.12);
+    --shadow-lg: rgba(5, 150, 105, 0.16);
+    --shadow-xl: rgba(5, 150, 105, 0.20);
+    
+    /* Status Colors */
+    --success: #10b981;
+    --success-bg: #f0fdf4;
+    --success-border: #86efac;
+    --success-text: #166534;
+    
+    --warning: #f59e0b;
+    --warning-bg: #fffbeb;
+    --warning-border: #fcd34d;
+    --warning-text: #92400e;
+    
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+    --danger-border: #fca5a5;
+    --danger-text: #991b1b;
+    
+    --info: #3b82f6;
+    --info-bg: #eff6ff;
+    --info-border: #93c5fd;
+    --info-text: #1e40af;
+    
+    /* Products Section */
+    --products-section-bg: rgba(5, 150, 105, 0.05);
+    
+    /* Hero Effects */
+    --hero-glow: rgba(52, 211, 153, 0.35);
+    
+    /* Calendar & Icons */
+    --calendar-icon-filter: invert(0);
+}
+
+/* ============================================
+   SUNSET ORANGE THEME (Warm & Energetic)
+   ============================================ */
+:root[data-theme="sunset"] {
+    /* Primary Colors */
+    --primary: #ea580c;
+    --primary-hover: #c2410c;
+    --primary-light: #fb923c;
+    --primary-dark: #9a3412;
+    
+    /* Secondary Colors */
+    --secondary: #f59e0b;
+    --secondary-hover: #d97706;
+    --accent: #ec4899;
+    --accent-hover: #db2777;
+    
+    /* Background Colors */
+    --bg-body: linear-gradient(135deg, #fed7aa 0%, #fdba74 50%, #fb923c 100%);
+    --bg-primary: #ffffff;
+    --bg-secondary: rgba(255, 255, 255, 0.8);
+    --bg-tertiary: rgba(253, 186, 116, 0.85);
+    --bg-hover: #fff7ed;
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --bg-sidebar: #7c2d12;
+    
+    /* Text Colors */
+    --text-primary: #7c2d12;
+    --text-secondary: #9a3412;
+    --text-muted: #c2410c;
+    --text-inverse: #ffffff;
+    
+    /* Border Colors */
+    --border-color: rgba(234, 88, 12, 0.15);
+    --border-light: rgba(234, 88, 12, 0.08);
+    --border-dark: rgba(234, 88, 12, 0.25);
+    
+    /* Shadow Colors */
+    --shadow-sm: rgba(234, 88, 12, 0.08);
+    --shadow-md: rgba(234, 88, 12, 0.12);
+    --shadow-lg: rgba(234, 88, 12, 0.16);
+    --shadow-xl: rgba(234, 88, 12, 0.20);
+    
+    /* Status Colors */
+    --success: #10b981;
+    --success-bg: #f0fdf4;
+    --success-border: #86efac;
+    --success-text: #166534;
+    
+    --warning: #f59e0b;
+    --warning-bg: #fffbeb;
+    --warning-border: #fcd34d;
+    --warning-text: #92400e;
+    
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+    --danger-border: #fca5a5;
+    --danger-text: #991b1b;
+    
+    --info: #3b82f6;
+    --info-bg: #eff6ff;
+    --info-border: #93c5fd;
+    --info-text: #1e40af;
+    
+    /* Products Section */
+    --products-section-bg: rgba(234, 88, 12, 0.05);
+    
+    /* Hero Effects */
+    --hero-glow: rgba(251, 146, 60, 0.35);
+    
+    /* Calendar & Icons */
+    --calendar-icon-filter: invert(0);
+}
+
+/* ============================================
+   ROSE PINK THEME (Elegant & Modern)
+   ============================================ */
+:root[data-theme="rose"] {
+    /* Primary Colors */
+    --primary: #e11d48;
+    --primary-hover: #be123c;
+    --primary-light: #fb7185;
+    --primary-dark: #9f1239;
+    
+    /* Secondary Colors */
+    --secondary: #ec4899;
+    --secondary-hover: #db2777;
+    --accent: #a855f7;
+    --accent-hover: #9333ea;
+    
+    /* Background Colors */
+    --bg-body: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f9a8d4 100%);
+    --bg-primary: #ffffff;
+    --bg-secondary: rgba(255, 255, 255, 0.8);
+    --bg-tertiary: rgba(251, 207, 232, 0.85);
+    --bg-hover: #fdf2f8;
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --bg-sidebar: #881337;
+    
+    /* Text Colors */
+    --text-primary: #881337;
+    --text-secondary: #9f1239;
+    --text-muted: #be123c;
+    --text-inverse: #ffffff;
+    
+    /* Border Colors */
+    --border-color: rgba(225, 29, 72, 0.15);
+    --border-light: rgba(225, 29, 72, 0.08);
+    --border-dark: rgba(225, 29, 72, 0.25);
+    
+    /* Shadow Colors */
+    --shadow-sm: rgba(225, 29, 72, 0.08);
+    --shadow-md: rgba(225, 29, 72, 0.12);
+    --shadow-lg: rgba(225, 29, 72, 0.16);
+    --shadow-xl: rgba(225, 29, 72, 0.20);
+    
+    /* Status Colors */
+    --success: #10b981;
+    --success-bg: #f0fdf4;
+    --success-border: #86efac;
+    --success-text: #166534;
+    
+    --warning: #f59e0b;
+    --warning-bg: #fffbeb;
+    --warning-border: #fcd34d;
+    --warning-text: #92400e;
+    
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+    --danger-border: #fca5a5;
+    --danger-text: #991b1b;
+    
+    --info: #3b82f6;
+    --info-bg: #eff6ff;
+    --info-border: #93c5fd;
+    --info-text: #1e40af;
+    
+    /* Products Section */
+    --products-section-bg: rgba(225, 29, 72, 0.05);
+    
+    /* Hero Effects */
+    --hero-glow: rgba(251, 113, 133, 0.35);
+    
+    /* Calendar & Icons */
+    --calendar-icon-filter: invert(0);
+}
+
+/* ============================================
+   APPLY THEME TO BODY
+   ============================================ */
+body {
+    background: var(--bg-body);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+/* Smooth transitions for theme changes */
+* {
+    transition: background-color 0.3s ease, 
+                color 0.3s ease, 
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+}

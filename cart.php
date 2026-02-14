@@ -312,10 +312,10 @@ $total = max(0, $subtotal - $discount_amount);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo __('cart_page.title'); ?> - <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></title>
-    <link rel="stylesheet" href="assets/css/dark-theme.css" id="dark-theme-style" disabled>
+    <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/cart.css">
 </head>
-<body>
+<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
 <?php if ($show_success && $order): ?>
         <!-- Order Success Page -->
         <header>
@@ -601,7 +601,7 @@ $total = max(0, $subtotal - $discount_amount);
     </div>
     <?php endif; // End cart vs success page ?>
 
-    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/theme-manager.js"></script>
 </body>
 </html>
 

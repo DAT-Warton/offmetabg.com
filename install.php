@@ -190,9 +190,10 @@ if (PHP_SAPI !== 'cli') {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>OffMeta Installation</title>
+        <link rel="stylesheet" href="assets/css/themes.css">
         <link rel="stylesheet" href="assets/css/install.css">
     </head>
-    <body>
+    <body data-theme="default">
         <div class="container">
             <h1>✓ Инсталацията завърши успешно!</h1>
             
@@ -220,6 +221,8 @@ if (PHP_SAPI !== 'cli') {
             <a href="admin/" class="btn">Влез в Админ Панела</a>
             <a href="index.php" class="btn btn-success">Виж Сайта</a>
         </div>
+
+        <script src="assets/js/theme-manager.js"></script>
     </body>
     </html>
     <?php

@@ -136,14 +136,17 @@ header('HTTP/1.1 404 Not Found');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Not Found - <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></title>
+    <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/404.css">
 </head>
-<body>
+<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <div class="container">
         <h1>404</h1>
         <p>Page Not Found</p>
         <a href="/">Go Home</a>
     </div>
+
+    <script src="assets/js/theme-manager.js"></script>
 </body>
 </html>
 

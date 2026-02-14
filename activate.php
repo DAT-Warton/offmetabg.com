@@ -111,10 +111,10 @@ if (empty($token)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $success ? __('auth.activation_success_title') : __('auth.activation_title'); ?> - OffMeta</title>
-    <link rel="stylesheet" href="assets/css/dark-theme.css" id="dark-theme-style" disabled>
+    <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/activate.css">
 </head>
-<body>
+<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <div class="container">
         <?php if ($success): ?>
             <div class="icon"><?php echo icon_check_circle(64, '#27ae60'); ?></div>
@@ -132,6 +132,8 @@ if (empty($token)) {
             <a href="index.php" class="btn btn-secondary"><?php echo __('back_to_shop'); ?></a>
         <?php endif; ?>
     </div>
+
+    <script src="assets/js/theme-manager.js"></script>
 </body>
 </html>
 

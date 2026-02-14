@@ -385,11 +385,11 @@ $stats = get_dashboard_stats();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo __('admin.cms_dashboard'); ?></title>
-    <link rel="stylesheet" href="../assets/css/dark-theme.css" id="dark-theme-style">
+    <link rel="stylesheet" href="../assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/admin-dashboard-section.css">
 </head>
-<body>
+<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <div class="container">
         <!-- Sidebar -->
         <aside class="sidebar">
@@ -429,6 +429,7 @@ $stats = get_dashboard_stats();
                     <li><a href="?section=pages" class="<?php echo $section === 'pages' ? 'active' : ''; ?>"><?php echo icon_home(18); ?> <?php echo __('menu.pages'); ?></a></li>
                     <li><a href="?section=posts" class="<?php echo $section === 'posts' ? 'active' : ''; ?>"><?php echo icon_check(18); ?> <?php echo __('menu.blog_posts'); ?></a></li>
                     <li><a href="?section=media" class="<?php echo $section === 'media' ? 'active' : ''; ?>"><?php echo icon_package(18); ?> <?php echo __('menu.media'); ?></a></li>
+                    <li><a href="?section=themes" class="<?php echo $section === 'themes' ? 'active' : ''; ?>"><?php echo icon_edit(18); ?> Themes</a></li>
                 </ul>
             </div>
 
@@ -510,6 +511,7 @@ $stats = get_dashboard_stats();
             </div>
         </main>
     </div>
+    <script src="../assets/js/theme-manager.js"></script>
     <script src="assets/js/admin.js"></script>
 </body>
 </html>
