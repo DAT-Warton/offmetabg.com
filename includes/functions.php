@@ -687,45 +687,88 @@ function get_products_data() {
     }
 
     ensure_db_schema();
-    $rows = db_table('products')->all();
+    $pdo = Database::getInstance()->getPDO();
+    
+    if (!$pdo) {
+        // Fallback to JSON if no PDO
+        return load_json('storage/products.json');
+    }
+
+    // Get current language or default to 'bg'
+    $lang = $_SESSION['lang'] ?? 'bg';
+    
+    // Query with JOINs to get all product data from normalized tables
+    $query = "
+        SELECT 
+            p.id,
+            p.sku,
+            p.slug,
+            p.status,
+            p.featured,
+            p.created_at,
+            p.updated_at,
+            pd.name,
+            pd.short_description,
+            pd.description,
+            pp.price,
+            pp.compare_price,
+            pp.currency,
+            pi.image_url,
+            pv.video_url,
+            pv.platform as video_platform,
+            pinv.quantity as stock
+        FROM products p
+        LEFT JOIN product_descriptions pd ON p.id = pd.product_id AND pd.language_code = ?
+        LEFT JOIN product_prices pp ON p.id = pp.product_id AND pp.is_active = true
+        LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.image_type = 'primary'
+        LEFT JOIN product_videos pv ON p.id = pv.product_id AND pv.sort_order = 0
+        LEFT JOIN product_inventory pinv ON p.id = pinv.product_id
+        ORDER BY p.created_at DESC
+    ";
+    
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([$lang]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
     $products = [];
-
+    
     foreach ($rows as $row) {
-        $images = parse_json_field($row['images'] ?? null);
+        // Parse image_url if it's JSON
+        $imageData = $row['image_url'] ? json_decode($row['image_url'], true) : null;
         $image = '';
-        $videos = [
-            'youtube' => '',
-            'tiktok' => '',
-            'instagram' => ''
-        ];
-
-        if (is_array($images)) {
-            if (isset($images['primary'])) {
-                $image = $images['primary'] ?? '';
-                if (isset($images['videos']) && is_array($images['videos'])) {
-                    $videos = array_merge($videos, $images['videos']);
-                }
-            } elseif (isset($images['image'])) {
-                $image = $images['image'] ?? '';
-                if (isset($images['videos']) && is_array($images['videos'])) {
-                    $videos = array_merge($videos, $images['videos']);
-                }
-            } elseif (array_values($images) === $images && !empty($images[0])) {
-                $image = $images[0];
+        $videos = ['youtube' => '', 'tiktok' => '', 'instagram' => ''];
+        
+        if (is_array($imageData)) {
+            $image = $imageData['primary'] ?? '';
+            if (isset($imageData['videos']) && is_array($imageData['videos'])) {
+                $videos = array_merge($videos, $imageData['videos']);
             }
-        } elseif (is_string($images)) {
-            $image = $images;
+        } elseif (is_string($imageData)) {
+            $image = $imageData;
+        } elseif (is_string($row['image_url'])) {
+            $image = $row['image_url'];
         }
-
+        
+        // Add video from product_videos table if available
+        if (!empty($row['video_platform']) && !empty($row['video_url'])) {
+            $videos[$row['video_platform']] = $row['video_url'];
+        }
+        
         $products[$row['id']] = [
             'id' => $row['id'],
+            'sku' => $row['sku'] ?? '',
+            'slug' => $row['slug'] ?? '',
             'name' => $row['name'] ?? '',
-            'description' => $row['description'] ?? '',
+            'description' => $row['description'] ?? $row['short_description'] ?? '',
+            'short_description' => $row['short_description'] ?? '',
             'price' => floatval($row['price'] ?? 0),
+            'compare_price' => floatval($row['compare_price'] ?? 0),
+            'currency' => $row['currency'] ?? 'BGN',
             'image' => $image,
-            'category' => $row['category'] ?? '',
+            'category' => '', // Will be filled separately if needed
             'stock' => intval($row['stock'] ?? 0),
             'status' => $row['status'] ?? 'published',
+            'featured' => (bool)($row['featured'] ?? false),
             'videos' => $videos,
             'created' => $row['created_at'] ?? '',
             'updated' => $row['updated_at'] ?? ''
