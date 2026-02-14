@@ -746,7 +746,7 @@ function get_products_data() {
         LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.image_type = 'primary'
         LEFT JOIN product_videos pv ON p.id = pv.product_id AND pv.sort_order = 0
         LEFT JOIN product_inventory pinv ON p.id = pinv.product_id
-        LEFT JOIN product_category_links pcl ON p.id = pcl.product_id AND pcl.is_primary = true
+        LEFT JOIN product_category_links pcl ON p.id = pcl.product_id
         LEFT JOIN categories c ON pcl.category_id = c.id
         ORDER BY p.created_at DESC
     ";
