@@ -486,6 +486,8 @@ $stats = get_dashboard_stats();
                     include_once 'sections/dashboard.php';
                 } elseif ($section === 'products') {
                     include_once 'sections/products.php';
+                } elseif ($section === 'import-products') {
+                    include_once 'sections/import-products.php';
                 } elseif ($section === 'categories') {
                     include_once 'sections/categories.php';
                 } elseif ($section === 'orders') {
