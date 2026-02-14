@@ -129,7 +129,6 @@ foreach ($categories as $category) {
     <div class="hero">
         <div class="hero-inner">
             <p class="hero-kicker"><?php echo __('homepage.hero_kicker'); ?></p>
-            <h2><?php echo __('homepage.hero_title'); ?> <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>!</h2>
             <p class="hero-subtitle"><?php echo __('homepage.hero_subtitle'); ?></p>
             <div class="hero-actions">
                 <a class="btn btn-primary hero-cta" href="#products"><?php echo __('homepage.hero_cta_products'); ?></a>
