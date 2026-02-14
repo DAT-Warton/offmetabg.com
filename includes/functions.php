@@ -101,6 +101,55 @@ function db_set_option($key, $value) {
     return Database::getInstance()->setOption($key, $value);
 }
 
+/**
+ * Get custom theme CSS variables for inline injection
+ * Returns inline style tag with CSS variables for custom themes
+ */
+function get_custom_theme_css() {
+    $activeTheme = db_get_option('active_theme', 'default');
+    
+    // Built-in themes don't need inline CSS
+    $builtInThemes = ['default', 'dark', 'ocean', 'forest', 'sunset', 'rose'];
+    if (in_array($activeTheme, $builtInThemes)) {
+        return '';
+    }
+    
+    // Load custom theme from database
+    try {
+        $db = Database::getInstance();
+        $pdo = $db->getPDO();
+        
+        if ($pdo) {
+            $stmt = $pdo->prepare("SELECT variables FROM themes WHERE slug = ? LIMIT 1");
+            $stmt->execute([$activeTheme]);
+            $theme = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($theme && !empty($theme['variables'])) {
+                // Parse JSON variables
+                $variables = is_string($theme['variables']) 
+                    ? json_decode($theme['variables'], true) 
+                    : $theme['variables'];
+                
+                if ($variables && is_array($variables)) {
+                    // Generate CSS variables
+                    $cssVars = [];
+                    foreach ($variables as $varName => $value) {
+                        $cssVars[] = "    --{$varName}: {$value};";
+                    }
+                    
+                    $css = ":root[data-theme=\"{$activeTheme}\"] {\n" . implode("\n", $cssVars) . "\n}";
+                    
+                    return "<style id=\"custom-theme-vars\">\n{$css}\n</style>";
+                }
+            }
+        }
+    } catch (Exception $e) {
+        error_log("Failed to load custom theme CSS: " . $e->getMessage());
+    }
+    
+    return '';
+}
+
 function ensure_db_schema() {
     static $done = false;
 

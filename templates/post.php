@@ -13,6 +13,7 @@ $post = $post ?? [];
     <meta name="description" content="<?php echo htmlspecialchars($post['meta_description'] ?? ''); ?>">
     <link rel="stylesheet" href="/assets/css/themes.css">
     <link rel="stylesheet" href="/assets/css/post.css">
+    <?php echo get_custom_theme_css(); ?>
 </head>
 <body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <header>
