@@ -18,6 +18,7 @@ $sectionTitles = [
     'pages' => __('menu.pages'),
     'posts' => __('menu.blog_posts'),
     'media' => __('menu.media'),
+    'themes' => 'Themes',
     'inquiries' => __('inquiry.title'),
     'users' => __('menu.users'),
     'database' => __('menu.database'),
@@ -498,6 +499,8 @@ $stats = get_dashboard_stats();
                     include_once 'sections/posts.php';
                 } elseif ($section === 'media') {
                     include_once 'sections/media.php';
+                } elseif ($section === 'themes') {
+                    include_once 'sections/themes.php';
                 } elseif ($section === 'users') {
                     include_once 'sections/users.php';
                 } elseif ($section === 'database') {
