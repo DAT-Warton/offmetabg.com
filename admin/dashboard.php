@@ -200,6 +200,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = __('admin.product_deleted');
             break;
 
+        case 'bulk_delete_products':
+            $product_ids = $_POST['product_ids'] ?? '';
+            if (!empty($product_ids)) {
+                $ids = explode(',', $product_ids);
+                $deleted_count = 0;
+                foreach ($ids as $product_id) {
+                    $product_id = trim($product_id);
+                    if (!empty($product_id)) {
+                        delete_product_data($product_id);
+                        $deleted_count++;
+                    }
+                }
+                $message = "✅ Изтрити {$deleted_count} продукта успешно!";
+            } else {
+                $message = "⚠️ Не са избрани продукти за изтриване";
+            }
+            break;
+
         case 'save_customer':
             $customer_id = $_POST['customer_id'] ?: uniqid('cust_');
             $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : '';
