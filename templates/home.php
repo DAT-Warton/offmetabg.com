@@ -205,9 +205,11 @@ foreach ($categories as $category) {
                                     <span class="product-category"><?php echo htmlspecialchars($productCategoryLabel); ?></span>
                                 <?php endif; ?>
                                 <h3 class="product-title"><?php echo htmlspecialchars($product['name']); ?></h3>
-                                <button class="btn-learn-more" onclick="window.location.href='#product-<?php echo $product['id']; ?>'">
-                                    📖 Научи повече
-                                </button>
+                                <?php if (!empty($product['slug'])): ?>
+                                    <a href="/product/<?php echo urlencode($product['slug']); ?>" class="btn-learn-more">
+                                        📖 <?php echo __('product.learn_more'); ?>
+                                    </a>
+                                <?php endif; ?>
                                 
                                 <div class="product-footer">
                                     <div>
