@@ -16,6 +16,7 @@ $action = $_GET['action'] ?? '';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 // Initialize database
+require_once CMS_ROOT . '/includes/functions.php';
 require_once CMS_ROOT . '/includes/database.php';
 $db = Database::getInstance();
 
