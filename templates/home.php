@@ -84,7 +84,7 @@ foreach ($categories as $category) {
                             <span class="cart-badge"><?php echo $cart_count; ?></span>
                         <?php endif; ?>
                     </a>
-                    <a href="auth.php?logout=1" class="btn btn-secondary"><?php echo __('logout'); ?></a>
+                    <a href="/auth.php?logout=1" class="btn btn-secondary"><?php echo __('logout'); ?></a>
                 <?php else: ?>
                     <a href="auth.php?action=login" class="btn btn-primary"><?php echo __('login'); ?></a>
                     <a href="cart.php" class="btn btn-cart">
