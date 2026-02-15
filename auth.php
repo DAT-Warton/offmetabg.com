@@ -160,7 +160,7 @@ if (isset($_POST['login'])) {
                     $_SESSION['customer_user'] = $customer['username'];
                     $_SESSION['user_role'] = $customer['role'] ?? 'customer';
                     $found = true;
-                    header('Location: index.php');
+                    header('Location: /');
                     exit;
                 }
             }
