@@ -3,6 +3,12 @@
  * CMS Admin Dashboard
  */
 
+// Block prefetch/prerender requests to avoid Cloudflare 503 errors
+if (isset($_SERVER['HTTP_SEC_PURPOSE']) && in_array($_SERVER['HTTP_SEC_PURPOSE'], ['prefetch', 'prerender'])) {
+    http_response_code(204); // No Content
+    exit;
+}
+
 // Start session
 session_start();
 
