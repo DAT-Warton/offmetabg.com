@@ -16,7 +16,7 @@ body {
     width: 260px;
     background: var(--bg-sidebar);
     color: var(--text-primary);
-    padding: 20px 0;
+    padding: 10px 0;
     box-shadow: 2px 0 20px var(--shadow-md);
     transition: background-color 0.3s ease;
 }
@@ -81,14 +81,14 @@ body {
 }
 .main {
     flex: 1;
-    padding: 30px;
+    padding: 15px;
     background: var(--bg-primary);
 }
 .header {
     background: var(--bg-secondary);
     backdrop-filter: blur(10px);
-    padding: 20px;
-    border-radius: 12px;
+    padding: 10px;
+    border-radius: 6px;
     margin-bottom: 30px;
     display: flex;
     justify-content: space-between;
@@ -194,12 +194,12 @@ h2, h3, h4 { color: var(--text-primary); transition: color 0.3s ease; }
 }
 .card {
     background: var(--bg-secondary);
-    padding: 20px;
-    border-radius: 12px;
+    padding: 10px;
+    border-radius: 6px;
     box-shadow: 0 2px 4px var(--shadow);
     border: 1px solid var(--border-color);
 }
-.card-lg { padding: 25px; }
+.card-lg { padding: 15px; }
 .card-muted {
     background: var(--bg-primary);
     border: 1px solid var(--border-color);

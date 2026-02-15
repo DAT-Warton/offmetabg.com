@@ -48,7 +48,7 @@ body {
     --color-gray-400: var(--text-muted);
     --color-gray-500: var(--text-secondary);
     --color-gray-700: #e8e4f0;
-    --color-gray-800: #0f0a1a;
+    --color-gray-800: #202020;
     --color-purple-bg-light: rgba(159, 122, 234, 0.1);
     --color-blue-bg-light: var(--info-bg);
     --color-green-shadow: var(--shadow-md);
@@ -124,8 +124,8 @@ header {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    color: var(--color-white);
+    background: var(--gradient-light-purple);
+    color: var(--color-gray-700);
 }
 
 .btn-primary:hover {
@@ -163,9 +163,9 @@ header {
 
 /* Hero */
 .hero {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    color: var(--text-primary);
-    padding: 30px 40px 40px;
+    background: var(--gradient-dark-purple);
+    color: var(--color-gray-700);
+    padding: 20px 30px 30px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -250,8 +250,8 @@ header {
 
 /* Categories */
 .categories-section {
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-    padding: 20px 0;
+    background: var(--gradient-light-purple);
+    padding: 15px 0;
 }
 
 .categories-grid {
@@ -262,12 +262,12 @@ header {
 }
 
 .category-card {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    border-radius: 16px;
-    padding: 25px 20px;
+    background: var(--gradient-light-purple);
+    border-radius: 6px;
+    padding: 15px 10px;
     text-align: center;
     text-decoration: none;
-    color: var(--color-white);
+    color: var(--color-gray-700);
     transition: all 0.3s;
     box-shadow: 0 5px 20px var(--color-purple-alpha-30);
     word-wrap: break-word;
@@ -310,8 +310,8 @@ header {
 
 /* Products */
 .products-section {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    padding: 20px 0;
+    background: var(--gradient-dark-purple);
+    padding: 15px 0;
 }
 
 .products-grid {
@@ -369,17 +369,17 @@ header {
     position: absolute;
     top: 15px;
     right: 15px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    color: var(--color-white);
-    padding: 8px 16px;
-    border-radius: 20px;
+    background: var(--gradient-light-purple);
+    color: var(--color-gray-700);
+    padding: 5px 10px;
+    border-radius: 6px;
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
 }
 
 .product-info {
-    padding: 20px;
+    padding: 10px;
     word-wrap: break-word;
     overflow-wrap: break-word;
     display: flex;
@@ -406,11 +406,11 @@ header {
 
 .btn-learn-more {
     width: 100%;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    color: var(--color-white);
+    background: var(--gradient-light-purple);
+    color: var(--color-gray-700);
     border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
+    padding: 5px 10px;
+    border-radius: 6px;
     font-weight: 600;
     font-size: 13px;
     cursor: pointer;
@@ -436,9 +436,7 @@ header {
 .product-price {
     font-size: 36px;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--color-gray-700);
 }
 
 .product-price .currency {
@@ -516,8 +514,8 @@ footer p {
 
 /* Latest Post Section */
 .latest-post-section {
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-    padding: 25px 0;
+    background: var(--gradient-light-purple);
+    padding: 15px 0;
     margin-top: 0;
 }
 
@@ -722,24 +720,12 @@ footer p {
 
 /* Hero */
 .hero {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    color: var(--text-primary);
-    padding: 30px 40px 40px;
+    background: var(--gradient-dark-purple);
+    color: var(--color-gray-700);
+    padding: 20px 30px 30px;
     text-align: center;
     position: relative;
     overflow: hidden;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,122.7C1248,128,1344,160,1392,176L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') bottom center no-repeat;
-    background-size: cover;
-    opacity: 0.3;
 }
 
 .hero > * {
@@ -938,9 +924,9 @@ footer p {
 .product-category-badge {
     display: inline-block;
     padding: 4px 12px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    color: var(--color-white);
-    border-radius: 12px;
+    background: var(--gradient-light-purple);
+    color: var(--color-gray-700);
+    border-radius: 6px;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
@@ -1019,11 +1005,11 @@ footer p {
 
 .btn-learn-more {
     width: 100%;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    color: var(--color-white);
+    background: var(--gradient-light-purple);
+    color: var(--color-gray-700);
     border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
+    padding: 5px 10px;
+    border-radius: 6px;
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
@@ -1049,18 +1035,15 @@ footer p {
 .product-price {
     font-size: 28px;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--color-gray-700);
 }
 
 .btn-add-cart {
-    padding: 10px 20px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    color: var(--color-white);
+    padding: 5px 10px;
+    background: var(--gradient-light-purple);
+    color: var(--color-gray-700);
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: 700;
     font-size: 14px;
@@ -1201,10 +1184,10 @@ footer {
 
 /* Categories Section */
 .categories-section {
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    background: var(--gradient-light-purple);
     backdrop-filter: blur(10px);
     box-shadow: 0 2px 10px var(--color-purple-alpha-10);
-    padding: 25px 0;
+    padding: 15px 0;
 }
 
 .categories-container {
