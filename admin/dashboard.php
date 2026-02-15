@@ -23,6 +23,7 @@ $sectionTitles = [
     'inquiries' => __('inquiry.title'),
     'users' => __('menu.users'),
     'database' => __('menu.database'),
+    'database-browser' => 'Database Browser',
     'settings' => __('menu.settings'),
     'tools' => __('menu.tools'),
 ];
@@ -474,6 +475,7 @@ $stats = get_dashboard_stats();
                 <p class="sidebar-section-title">Система</p>
                 <ul>
                     <li><a href="?section=database" class="<?php echo $section === 'database' ? 'active' : ''; ?>"><?php echo icon_settings(18); ?> <?php echo __('menu.database'); ?></a></li>
+                    <li><a href="?section=database-browser" class="<?php echo $section === 'database-browser' ? 'active' : ''; ?>">🗄️ Database Browser</a></li>
                     <li><a href="?section=settings" class="<?php echo $section === 'settings' ? 'active' : ''; ?>"><?php echo icon_settings(18); ?> <?php echo __('menu.settings'); ?></a></li>
                     <li><a href="?section=tools" class="<?php echo $section === 'tools' ? 'active' : ''; ?>"><?php echo icon_alert(18); ?> <?php echo __('menu.tools'); ?></a></li>
                 </ul>
@@ -533,6 +535,8 @@ $stats = get_dashboard_stats();
                     include_once 'sections/users.php';
                 } elseif ($section === 'database') {
                     include_once 'sections/database.php';
+                } elseif ($section === 'database-browser') {
+                    include_once 'sections/database-browser.php';
                 } elseif ($section === 'settings') {
                     include_once 'sections/settings.php';
                 } elseif ($section === 'tools') {
