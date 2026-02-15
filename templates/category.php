@@ -74,8 +74,10 @@ $pageTitle = htmlspecialchars($category['name']);
         <!-- Category Header -->
         <div class="category-header">
             <div class="breadcrumb">
-                <a href="/"><?php echo __('home'); ?></a>
-                <span>›</span>
+                <a href="/" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    ← <?php echo __('home'); ?>
+                </a>
+                <span style="margin: 0 0.5rem;">›</span>
                 <span><?php echo __('categories'); ?></span>
                 <span>›</span>
                 <span><?php echo htmlspecialchars($category['name']); ?></span>
@@ -123,9 +125,9 @@ $pageTitle = htmlspecialchars($category['name']);
                         
                         <div class="product-info">
                             <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
-                            <button class="btn-learn-more" onclick="window.location.href='#product-<?php echo htmlspecialchars($id); ?>'">
+                            <a href="/product/<?php echo urlencode($product['slug']); ?>" class="btn-learn-more">
                                 📖 Научи повече
-                            </button>
+                            </a>
                             
                             <div class="product-footer">
                                 <span class="product-price">€<?php echo number_format($product['price'], 2); ?></span>

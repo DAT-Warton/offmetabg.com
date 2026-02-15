@@ -52,6 +52,21 @@ $editPost = $editSlug ? get_post($editSlug) : null;
                 </select>
             </div>
 
+            <div class="form-group">
+                <label>Дата и час (DD/MM/YYYY HH:MM)</label>
+                <?php 
+                    $created_dt = '';
+                    if (isset($editPost['created']) && !empty($editPost['created'])) {
+                        $dt = DateTime::createFromFormat('Y-m-d H:i:s', $editPost['created']);
+                        if ($dt) {
+                            $created_dt = $dt->format('d/m/Y H:i');
+                        }
+                    }
+                ?>
+                <input type="text" name="created_datetime" value="<?php echo htmlspecialchars($created_dt); ?>" placeholder="16/02/2026 14:30" pattern="\d{2}/\d{2}/\d{4} \d{2}:\d{2}">
+                <small style="color: #666; font-size: 0.85em;">Формат: ДД/ММ/ГГГГ ЧЧ:ММ (напр. 16/02/2026 14:30)</small>
+            </div>
+
             <button type="submit"><?php echo __('save'); ?> статия</button>
         </form>
     <?php endif; ?>
@@ -72,7 +87,14 @@ $editPost = $editSlug ? get_post($editSlug) : null;
                     <td><?php echo htmlspecialchars($post['title']); ?></td>
                     <td><?php echo htmlspecialchars($post['category']); ?></td>
                     <td><?php echo ucfirst($post['status']); ?></td>
-                    <td><?php echo substr($post['created'], 0, 10); ?></td>
+                    <td>
+                        <?php 
+                            if (!empty($post['created'])) {
+                                $dt = DateTime::createFromFormat('Y-m-d H:i:s', $post['created']);
+                                echo $dt ? $dt->format('d/m/Y H:i') : substr($post['created'], 0, 10);
+                            }
+                        ?>
+                    </td>
                     <td>
                         <div class="btn-group">
                             <a href="?section=posts&edit=<?php echo $slug; ?>" class="btn-small"><?php echo __('edit'); ?></a>

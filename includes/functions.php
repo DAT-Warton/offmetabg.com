@@ -396,6 +396,15 @@ function save_post($slug, $data) {
         $slug = generate_slug($data['title']);
     }
     
+    // Parse custom datetime if provided (DD/MM/YYYY HH:MM)
+    $custom_datetime = null;
+    if (!empty($data['created_datetime'])) {
+        $dt = DateTime::createFromFormat('d/m/Y H:i', $data['created_datetime']);
+        if ($dt) {
+            $custom_datetime = $dt->format('Y-m-d H:i:s');
+        }
+    }
+    
     if (db_enabled()) {
         $table = db_table('posts');
         $existing = $table->find('slug', $slug);
@@ -412,12 +421,16 @@ function save_post($slug, $data) {
         ];
 
         if ($existing) {
+            // Only update created_at if custom_datetime provided and different
+            if ($custom_datetime && $custom_datetime !== $existing['created_at']) {
+                $payload['created_at'] = $custom_datetime;
+            }
             $table->update($existing['id'], $payload);
             return $slug;
         }
 
         $payload['id'] = uniqid('post_');
-        $payload['created_at'] = date('Y-m-d H:i:s');
+        $payload['created_at'] = $custom_datetime ?? date('Y-m-d H:i:s');
         $table->insert($payload);
         return $slug;
     }
