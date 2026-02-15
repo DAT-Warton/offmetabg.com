@@ -74,21 +74,12 @@ foreach ($categories as $category) {
     <!-- zaeshkatadupka will be removed in near future-->
     <link rel="dns-prefetch" href="https://zaeshkatadupka.eu">
     
-    <script>
-        // Apply theme immediately from localStorage to prevent flash
-        (function() {
-            const storedTheme = localStorage.getItem('offmeta_theme');
-            if (storedTheme) {
-                document.documentElement.setAttribute('data-theme', storedTheme);
-            }
-        })();
-    </script>
     <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/home.css">
     <link rel="stylesheet" href="assets/css/profile-dropdown.css" media="print" onload="this.media='all'; this.onload=null;">
     <?php echo get_custom_theme_css(); ?>
 </head>
-<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
+<body>
     <header>
         <div class="header-container">
             <div class="logo" style="justify-content: <?php echo get_site_setting('logo_position', 'left'); ?>;">

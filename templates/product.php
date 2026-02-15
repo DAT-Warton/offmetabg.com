@@ -29,20 +29,11 @@ $currency_symbol = $product['currency'] === 'BGN' ? 'лв.' : ($product['currenc
     <?php if (!empty($product['image'])): ?>
         <meta property="og:image" content="<?php echo htmlspecialchars($product['image']); ?>">
     <?php endif; ?>
-    <script>
-        // Apply theme immediately from localStorage to prevent flash
-        (function() {
-            const storedTheme = localStorage.getItem('offmeta_theme');
-            if (storedTheme) {
-                document.documentElement.setAttribute('data-theme', storedTheme);
-            }
-        })();
-    </script>
     <link rel="stylesheet" href="/assets/css/themes.css">
     <link rel="stylesheet" href="/assets/css/product.css">
     <?php echo get_custom_theme_css(); ?>
 </head>
-<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
+<body>
     <!-- Header -->
     <header class="header">
         <div class="header-content">
@@ -50,9 +41,6 @@ $currency_symbol = $product['currency'] === 'BGN' ? 'лв.' : ($product['currenc
             
             <nav class="nav-buttons">
                 <a href="/" class="btn btn-secondary"><?php echo __('home'); ?></a>
-                <button type="button" onclick="toggleTheme()" class="theme-toggle" title="<?php echo __('theme.switch'); ?>">
-                    <span id="theme-icon"><?php echo icon_moon(18); ?></span>
-                </button>
                 
                 <?php if ($is_logged_in): ?>
                     <a href="/cart.php" class="btn btn-primary">

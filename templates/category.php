@@ -36,29 +36,17 @@ $pageTitle = htmlspecialchars($category['name']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></title>
     <meta name="description" content="<?php echo htmlspecialchars($category['description'] ?? ''); ?>">
-    <script>
-        // Apply theme immediately from localStorage to prevent flash
-        (function() {
-            const storedTheme = localStorage.getItem('offmeta_theme');
-            if (storedTheme) {
-                document.documentElement.setAttribute('data-theme', storedTheme);
-            }
-        })();
-    </script>
     <link rel="stylesheet" href="/assets/css/themes.css">
     <link rel="stylesheet" href="/assets/css/category.css">
     <?php echo get_custom_theme_css(); ?>
 </head>
-<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
+<body>
     <!-- Header -->
     <header class="header">
         <div class="header-content">
             <a href="/" class="logo"><?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></a>
             
             <nav class="nav-buttons">
-                <button type="button" onclick="toggleTheme()" class="theme-toggle" title="<?php echo __('theme.switch'); ?>">
-                    <span id="theme-icon"><?php echo icon_moon(18); ?></span>
-                </button>
                 
                 <?php if ($is_logged_in): ?>
                     <a href="/cart.php" class="btn btn-primary">
