@@ -65,6 +65,12 @@ id_rsa*
 id_ed25519*
 authorized_keys
 
+# Temporary password change scripts
+*.sql
+*-password.sh
+database-new.json
+pw.sql
+
 # OS files
 .DS_Store
 Thumbs.db
