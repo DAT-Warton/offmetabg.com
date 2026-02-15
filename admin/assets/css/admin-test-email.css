@@ -128,10 +128,10 @@ h1 {
 }
 .note {
     font-size: 13px;
-    color: var(--text-secondary, #666);
+    color: var(--text-secondary);
     margin-top: 5px;
 }
 .subtitle {
-    color: var(--text-secondary, #666);
+    color: var(--text-secondary);
     margin-bottom: 30px;
 }
