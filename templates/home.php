@@ -72,6 +72,7 @@ foreach ($categories as $category) {
     <meta property="og:description" content="<?php echo $site_description; ?>">
     <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/home.css">
+    <link rel="stylesheet" href="assets/css/profile-dropdown.css">
     <?php echo get_custom_theme_css(); ?>
 </head>
 <body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
@@ -102,17 +103,13 @@ foreach ($categories as $category) {
                     <?php echo strtoupper(opposite_lang()); ?>
                 </a>
                 <?php if ($is_logged_in): ?>
-                    <span class="user-info"><?php echo htmlspecialchars($user_name); ?></span>
-                    <?php if ($user_role === 'admin'): ?>
-                        <a href="admin/index.php" class="btn btn-primary"><?php echo __('admin_panel'); ?></a>
-                    <?php endif; ?>
+                    <?php require_once __DIR__ . '/../includes/profile-dropdown.php'; ?>
                     <a href="cart.php" class="btn btn-cart">
                         <?php echo __('cart_button'); ?>
                         <?php if ($cart_count > 0): ?>
                             <span class="cart-badge"><?php echo $cart_count; ?></span>
                         <?php endif; ?>
                     </a>
-                    <a href="/auth.php?logout=1" class="btn btn-secondary"><?php echo __('logout'); ?></a>
                 <?php else: ?>
                     <a href="auth.php?action=login" class="btn btn-primary"><?php echo __('login'); ?></a>
                     <a href="cart.php" class="btn btn-cart">
