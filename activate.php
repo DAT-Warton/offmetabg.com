@@ -56,6 +56,16 @@ if (empty($token)) {
                     'activation_token_expires' => null,
                     'updated_at' => date('Y-m-d H:i:s')
                 ]);
+                
+                // Auto-login the user after successful activation
+                // Clear any existing session data first (e.g., if admin was logged in)
+                $_SESSION = [];
+                session_regenerate_id(true);
+                
+                $_SESSION['customer_id'] = $customer['id'];
+                $_SESSION['customer_user'] = $customer['username'];
+                $_SESSION['user_role'] = $customer['role'] ?? 'customer';
+                
                 $message = __('auth.activated_successfully');
                 $success = true;
             }
@@ -124,9 +134,8 @@ if (empty($token)) {
             <div class="icon"><?php echo icon_check_circle(64, '#27ae60'); ?></div>
             <h1><?php echo __('auth.activation_success'); ?></h1>
             <div class="message"><?php echo htmlspecialchars($message); ?></div>
-            <p><?php echo __('auth.you_can_login_now'); ?></p>
-            <a href="/auth.php?action=login" class="btn"><?php echo __('auth.login_button'); ?></a>
-            <a href="/" class="btn btn-secondary"><?php echo __('back_to_shop'); ?></a>
+            <p><?php echo __('auth.logged_in_automatically'); ?></p>
+            <a href="/" class="btn"><?php echo __('back_to_shop'); ?></a>
         <?php else: ?>
             <div class="icon"><?php echo icon_x_circle(64, '#ef4444'); ?></div>
             <h1><?php echo __('auth.activation_error'); ?></h1>
