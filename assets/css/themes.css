@@ -8,6 +8,10 @@
    Dark mode with purple accents
    ============================================ */
 :root {
+    /* Base Colors */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    
     /* Primary Colors */
     --primary: #9f7aea;
     --primary-hover: #b794f4;

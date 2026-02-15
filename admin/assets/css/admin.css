@@ -5,7 +5,7 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: var(--bg-primary);
-    color: var(--text-inverse);
+    color: var(--text-primary);
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 .container {
@@ -15,7 +15,7 @@ body {
 .sidebar {
     width: 260px;
     background: var(--bg-sidebar);
-    color: var(--text-inverse);
+    color: var(--text-primary);
     padding: 20px 0;
     box-shadow: 2px 0 20px var(--shadow-md);
     transition: background-color 0.3s ease;
@@ -24,7 +24,7 @@ body {
     padding: 0 20px 15px;
     font-size: 16px;
     border-bottom: 1px solid var(--border-light);
-    color: var(--text-inverse);
+    color: var(--text-primary);
     margin-bottom: 0;
 }
 .sidebar-section {
@@ -67,13 +67,13 @@ body {
 }
 .sidebar a:hover {
     background: var(--bg-hover);
-    color: var(--text-inverse);
+    color: var(--text-primary);
     padding-left: 24px;
 }
 .sidebar a.active {
     background: var(--primary);
-    border-left-color: var(--text-inverse);
-    color: var(--text-inverse);
+    border-left-color: var(--text-primary);
+    color: var(--text-primary);
 }
 .sidebar a.back-to-site {
     background: var(--bg-hover);
@@ -107,7 +107,7 @@ body {
     padding: 8px 16px;
     border-radius: 6px;
     background: var(--primary);
-    color: var(--text-inverse);
+    color: var(--text-primary);
     border: none;
     cursor: pointer;
     transition: all 0.2s;
@@ -127,7 +127,7 @@ h2, h3, h4 { color: var(--text-primary); transition: color 0.3s ease; }
 .logout-btn {
     padding: 8px 16px;
     background: var(--danger);
-    color: var(--text-inverse);
+    color: var(--text-primary);
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -327,15 +327,15 @@ h2, h3, h4 { color: var(--text-primary); transition: color 0.3s ease; }
 }
 .status-pill-lg { padding: 8px 20px; font-size: 14px; border-radius: 20px; }
 .status-pill-sm { padding: 4px 12px; font-size: 12px; border-radius: 12px; }
-.status-pending { background: var(--warning); color: var(--text-inverse); }
-.status-confirmed { background: var(--info); color: var(--text-inverse); }
-.status-processing { background: var(--accent); color: var(--text-inverse); }
-.status-shipped { background: var(--secondary); color: var(--text-inverse); }
-.status-delivered { background: var(--success); color: var(--text-inverse); }
-.status-cancelled { background: var(--danger); color: var(--text-inverse); }
-.status-in-progress { background: var(--info); color: var(--text-inverse); }
-.status-resolved { background: var(--success); color: var(--text-inverse); }
-.status-closed { background: var(--text-muted); color: var(--text-inverse); }
+.status-pending { background: var(--warning); color: var(--text-primary); }
+.status-confirmed { background: var(--info); color: var(--text-primary); }
+.status-processing { background: var(--accent); color: var(--text-primary); }
+.status-shipped { background: var(--secondary); color: var(--text-primary); }
+.status-delivered { background: var(--success); color: var(--text-primary); }
+.status-cancelled { background: var(--danger); color: var(--text-primary); }
+.status-in-progress { background: var(--info); color: var(--text-primary); }
+.status-resolved { background: var(--success); color: var(--text-primary); }
+.status-closed { background: var(--text-muted); color: var(--text-primary); }
 .status-active { background: var(--success-bg); color: var(--success); border-color: var(--success-border); }
 .status-inactive { background: var(--bg-tertiary); color: var(--text-muted); border-color: var(--border-color); }
 .badge {
@@ -467,13 +467,13 @@ h2, h3, h4 { color: var(--text-primary); transition: color 0.3s ease; }
 .btn-muted {
     padding: 10px 20px;
     background: var(--bg-tertiary);
-    color: var(--text-inverse);
+    color: var(--text-primary);
     text-decoration: none;
     border-radius: 6px;
 }
 .btn-warning {
     background: var(--warning);
-    color: var(--text-inverse);
+    color: var(--text-primary);
 }
 .btn-warning:hover { background: var(--warning-hover); }
 .select-plain {
@@ -645,7 +645,7 @@ input[type="number"] {
 button {
     padding: 10px 20px;
     background: var(--primary);
-    color: var(--text-inverse);
+    color: var(--text-primary);
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -706,7 +706,7 @@ tr:hover {
     gap: 8px;
     padding: 12px 24px;
     background: var(--primary);
-    color: var(--text-inverse);
+    color: var(--text-primary);
     text-decoration: none;
     border: none;
     border-radius: 8px;
@@ -757,7 +757,7 @@ tr:hover {
     padding: 6px 12px;
     font-size: 12px;
     background: var(--primary);
-    color: var(--text-inverse);
+    color: var(--text-primary);
     border: none;
     border-radius: 4px;
     cursor: pointer;

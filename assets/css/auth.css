@@ -44,6 +44,8 @@ input {
     border-radius: 6px;
     font-size: 14px;
     transition: border 0.2s;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
