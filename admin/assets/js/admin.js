@@ -54,3 +54,4 @@ window.addEventListener('resize', function() {
             initSidebarDropdowns();
         }
     }, 250);
+});
