@@ -68,6 +68,11 @@ foreach ($categories as $category) {
     <meta name="description" content="<?php echo $site_description; ?>">
     <meta property="og:title" content="<?php echo $site_title; ?>">
     <meta property="og:description" content="<?php echo $site_description; ?>">
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://zaeshkatadupka.eu">
+    
     <script>
         // Apply theme immediately from localStorage to prevent flash
         (function() {
@@ -79,7 +84,7 @@ foreach ($categories as $category) {
     </script>
     <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/home.css">
-    <link rel="stylesheet" href="assets/css/profile-dropdown.css">
+    <link rel="stylesheet" href="assets/css/profile-dropdown.css" media="print" onload="this.media='all'; this.onload=null;">
     <?php echo get_custom_theme_css(); ?>
 </head>
 <body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
