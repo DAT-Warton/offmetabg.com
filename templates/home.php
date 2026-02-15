@@ -100,7 +100,7 @@ foreach ($categories as $category) {
                 
                 if (!empty($logo_url)): 
                 ?>
-                    <img src="<?php echo htmlspecialchars($logo_url); ?>" 
+                    <img src="<?php echo htmlspecialchars(str_replace('.png', '_small.png', $logo_url)); ?>" 
                          alt="<?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>"
                          width="<?php echo intval($logo_max_width); ?>"
                          height="<?php echo intval($logo_max_height); ?>"
