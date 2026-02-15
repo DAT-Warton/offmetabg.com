@@ -99,8 +99,10 @@ foreach ($categories as $category) {
                 $show_site_name = get_site_setting('show_site_name', 'true') === 'true';
                 
                 if (!empty($logo_url)): 
+                    $logo_small = str_replace('.png', '_small.png', $logo_url);
+                    $cache_buster = '?v=' . filemtime(__DIR__ . '/../uploads/settings/' . basename($logo_small));
                 ?>
-                    <img src="<?php echo htmlspecialchars(str_replace('.png', '_small.png', $logo_url)); ?>" 
+                    <img src="<?php echo htmlspecialchars($logo_small . $cache_buster); ?>" 
                          alt="<?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>"
                          width="<?php echo intval($logo_max_width); ?>"
                          height="<?php echo intval($logo_max_height); ?>"
