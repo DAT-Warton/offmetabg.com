@@ -87,15 +87,21 @@ if (isset($_POST['register'])) {
             
             // Try to send activation email
             $emailSent = false;
+            $emailError = '';
             try {
                 require_once __DIR__ . '/includes/email.php';
                 $emailSender = get_email_sender();
                 $lang = $_SESSION['lang'] ?? 'bg';
                 $emailResult = $emailSender->sendActivationEmail($email, $username, $activationToken, $lang);
                 $emailSent = $emailResult['success'] ?? false;
+                if (!$emailSent) {
+                    $emailError = $emailResult['message'] ?? 'Unknown error';
+                    error_log("Email sending failed: " . $emailError);
+                }
             } catch (Exception $e) {
                 // Log error but continue with registration
-                error_log("Email sending failed: " . $e->getMessage());
+                $emailError = $e->getMessage();
+                error_log("Email sending exception: " . $emailError);
             }
             
             // Store registration info in session
