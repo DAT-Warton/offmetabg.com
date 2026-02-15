@@ -5,19 +5,19 @@
     margin-bottom: 30px;
 }
 .stat-card {
-    background: var(--bg-secondary, white);
+    background: var(--bg-secondary);
     padding: 25px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px var(--shadow, rgba(0,0,0,0.1));
-    border-left: 4px solid #3498db;
+    box-shadow: 0 2px 8px var(--shadow-md);
+    border-left: 4px solid var(--primary);
     transition: transform 0.2s;
 }
 .stat-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--shadow, rgba(0,0,0,0.15));
+    box-shadow: 0 4px 12px var(--shadow-lg);
 }
 .stat-card h3 {
-    color: var(--text-secondary, #6b7280);
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 10px;
@@ -26,45 +26,45 @@
 .stat-card .number {
     font-size: 32px;
     font-weight: bold;
-    color: var(--text-primary, #1f2937);
+    color: var(--text-primary);
     margin-bottom: 5px;
 }
 .stat-card .subtitle {
-    color: var(--text-secondary, #9ca3af);
+    color: var(--text-secondary);
     font-size: 14px;
 }
 .stat-card.revenue {
-    border-left-color: #27ae60;
+    border-left-color: var(--success);
 }
 .stat-card.orders {
-    border-left-color: #3b82f6;
+    border-left-color: var(--info);
 }
 .stat-card.customers {
-    border-left-color: #f59e0b;
+    border-left-color: var(--warning);
 }
 .stat-card.profit {
-    border-left-color: #8b5cf6;
+    border-left-color: var(--accent);
 }
 .stat-card.expenses {
-    border-left-color: #ef4444;
+    border-left-color: var(--danger);
 }
 .stat-card.taxes {
-    border-left-color: #ec4899;
+    border-left-color: var(--primary);
 }
 .stat-card.traffic {
-    border-left-color: #06b6d4;
+    border-left-color: var(--secondary);
 }
 .dashboard-section {
-    background: var(--bg-secondary, white);
+    background: var(--bg-secondary);
     padding: 25px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px var(--shadow, rgba(0,0,0,0.1));
+    box-shadow: 0 2px 8px var(--shadow-md);
     margin-bottom: 25px;
 }
 .dashboard-section h2 {
-    color: var(--text-primary, #1f2937);
+    color: var(--text-primary);
     margin-bottom: 20px;
-    border-bottom: 2px solid var(--border-color, #e5e7eb);
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: 10px;
 }
 .sources-grid {
@@ -74,41 +74,41 @@
 }
 .source-item {
     padding: 15px;
-    background: var(--bg-primary, #f9fafb);
-    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     text-align: center;
 }
 .source-item .source-name {
     font-weight: 600;
-    color: var(--text-secondary, #6b7280);
+    color: var(--text-secondary);
     font-size: 14px;
     margin-bottom: 8px;
 }
 .source-item .source-value {
     font-size: 24px;
     font-weight: bold;
-    color: #3498db;
+    color: var(--primary);
 }
 .recent-orders-table {
     width: 100%;
     border-collapse: collapse;
 }
 .recent-orders-table th {
-    background: var(--bg-primary, #f9fafb);
+    background: var(--bg-primary);
     padding: 12px;
     text-align: left;
     font-weight: 600;
-    color: var(--text-secondary, #6b7280);
-    border-bottom: 2px solid var(--border-color, #e5e7eb);
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
 }
 .recent-orders-table td {
     padding: 12px;
-    border-bottom: 1px solid var(--border-color, #e5e7eb);
-    color: var(--text-primary, #1f2937);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
 }
 .recent-orders-table tr:hover {
-    background: var(--bg-primary, #f9fafb);
+    background: var(--bg-primary);
 }
 .status-badge {
     display: inline-block;
@@ -117,19 +117,19 @@
     font-size: 12px;
     font-weight: 600;
 }
-.badge-pending { background: #fef3c7; color: #92400e; }
-.badge-confirmed { background: #dbeafe; color: #1e40af; }
-.badge-processing { background: #e0e7ff; color: #3730a3; }
-.badge-shipped { background: #d1fae5; color: #065f46; }
-.badge-delivered { background: #d1fae5; color: #065f46; }
-.badge-cancelled { background: #fee2e2; color: #991b1b; }
+.badge-pending { background: var(--warning-bg); color: var(--warning-text); }
+.badge-confirmed { background: var(--info-bg); color: var(--info-text); }
+.badge-processing { background: var(--bg-tertiary); color: var(--primary); }
+.badge-shipped { background: var(--success-bg); color: var(--success-text); }
+.badge-delivered { background: var(--success-bg); color: var(--success-text); }
+.badge-cancelled { background: var(--danger-bg); color: var(--danger-text); }
 .top-products-list {
     list-style: none;
     padding: 0;
 }
 .top-products-list li {
     padding: 12px;
-    border-bottom: 1px solid var(--border-color, #e5e7eb);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -139,11 +139,11 @@
 }
 .product-name {
     font-weight: 600;
-    color: var(--text-primary, #1f2937);
+    color: var(--text-primary);
 }
 .product-stats {
     text-align: right;
-    color: var(--text-secondary, #6b7280);
+    color: var(--text-secondary);
     font-size: 14px;
 }
 .quick-actions {
