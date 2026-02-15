@@ -1,20 +1,20 @@
 /* Profile Page Styles */
 
 .profile-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 16px;
     min-height: 100vh;
 }
 
 .profile-header {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
 }
 
 .header-content {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
 }
 
 .back-link {
@@ -471,13 +471,28 @@
 }
 
 /* Responsive */
+
+/* Tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .profile-container {
+        max-width: 100%;
+        padding: 14px;
+    }
+    
+    .wishlist-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
     .profile-container {
         padding: 10px;
     }
 
     .profile-content {
-        padding: 20px;
+        padding: 16px;
     }
 
     .form-row {
@@ -490,7 +505,8 @@
     }
 
     .wishlist-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
     .profile-tabs {
@@ -501,4 +517,24 @@
     .profile-tabs .tab {
         white-space: nowrap;
     }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .profile-container {
+        padding: 8px;
+    }
+    
+    .profile-content {
+        padding: 12px;
+    }
+    
+    .wishlist-grid {
+        grid-template-columns: 1fr;
 }

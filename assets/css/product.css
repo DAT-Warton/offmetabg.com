@@ -1,7 +1,7 @@
 /* Product Page Styles */
 .product-page {
-    max-width: 1200px;
-    margin: 2rem auto;
+    max-width: 1400px;
+    margin: 1.5rem auto;
     padding: 0 1rem;
 }
 
@@ -9,8 +9,8 @@
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    margin-bottom: 2rem;
-    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
     color: var(--text-secondary);
 }
 
@@ -26,14 +26,29 @@
 .product-detail {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    margin-bottom: 3rem;
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
 }
 
 @media (max-width: 768px) {
     .product-detail {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
+    }
+    
+    .product-page {
+        margin: 1rem auto;
+        padding: 0 0.8rem;
+    }
+    
+    .breadcrumb {
+        margin-bottom: 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .product-description-full {
+        margin-top: 2rem;
+        padding-top: 2rem;
     }
 }
 
@@ -258,8 +273,8 @@
 
 /* Product Description */
 .product-description-full {
-    margin-top: 3rem;
-    padding-top: 3rem;
+    margin-top: 2.5rem;
+    padding-top: 2.5rem;
     border-top: 1px solid var(--bg-secondary);
 }
 
@@ -279,7 +294,7 @@
 .header {
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--bg-primary);
-    padding: 1rem 0;
+    padding: 0.6rem 0;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -336,8 +351,8 @@
 
 /* Footer */
 .footer {
-    margin-top: 4rem;
-    padding: 2rem 0;
+    margin-top: 3rem;
+    padding: 1.5rem 0;
     text-align: center;
     color: var(--text-secondary);
     border-top: 1px solid var(--bg-secondary);
@@ -374,4 +389,37 @@
 
 .btn-secondary:hover {
     background: var(--bg-primary);
+}
+/* Responsive: Tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .product-page {
+        max-width: 100%;
+        padding: 0 1.5rem;
+    }
+    
+    .product-detail {
+        gap: 2rem;
+    }
+}
+
+/* Responsive: Small Mobile */
+@media (max-width: 480px) {
+    .product-page {
+        padding: 0 0.6rem;
+    }
+    
+    .product-detail {
+        gap: 1.2rem;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .nav-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6rem;
+    }
 }
