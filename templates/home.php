@@ -68,6 +68,15 @@ foreach ($categories as $category) {
     <meta name="description" content="<?php echo $site_description; ?>">
     <meta property="og:title" content="<?php echo $site_title; ?>">
     <meta property="og:description" content="<?php echo $site_description; ?>">
+    <script>
+        // Apply theme immediately from localStorage to prevent flash
+        (function() {
+            const storedTheme = localStorage.getItem('offmeta_theme');
+            if (storedTheme) {
+                document.documentElement.setAttribute('data-theme', storedTheme);
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/home.css">
     <link rel="stylesheet" href="assets/css/profile-dropdown.css">
