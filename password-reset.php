@@ -205,8 +205,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo __('password_reset.title'); ?> - OffMeta</title>
-    <link rel="stylesheet" href="assets/css/themes.css">
-    <link rel="stylesheet" href="assets/css/password-reset.css">
+    <link rel="stylesheet" href="/assets/css/themes.css">
+    <link rel="stylesheet" href="/assets/css/password-reset.css">
     <?php echo get_custom_theme_css(); ?>
 </head>
 <body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
@@ -228,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
                 <div class="success-message">
                     <?= htmlspecialchars($message) ?>
                     <br><br>
-                    <a href="auth.php?action=login" class="btn-link">
+                    <a href="/auth.php?action=login" class="btn-link">
                         <?php echo __('password_reset.go_to_login'); ?>
                     </a>
                 </div>
@@ -278,14 +278,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
             <?php endif; ?>
             
             <div class="back-link-container">
-                <a href="auth.php?action=login" class="btn-link">
+                <a href="/auth.php?action=login" class="btn-link">
                     <?php echo __('back_to_shop'); ?>
                 </a>
             </div>
         </div>
     </div>
 
-    <script src="assets/js/theme-manager.js"></script>
+    <script src="/assets/js/theme-manager.js"></script>
 </body>
 </html>
 
