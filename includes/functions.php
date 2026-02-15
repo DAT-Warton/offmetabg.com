@@ -862,7 +862,7 @@ function save_product_data($data) {
             $data['sku'] ?? '',
             $data['slug'] ?? generate_slug($data['name'] ?? $product_id),
             $data['status'] ?? 'published',
-            $data['featured'] ?? false
+            !empty($data['featured']) ? true : false
         ]);
         
         // 2. Insert/Update product description
