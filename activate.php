@@ -126,14 +126,14 @@ if (empty($token)) {
             <div class="message"><?php echo htmlspecialchars($message); ?></div>
             <p><?php echo __('auth.you_can_login_now'); ?></p>
             <a href="/auth.php?action=login" class="btn"><?php echo __('auth.login_button'); ?></a>
-            <a href="/index.php" class="btn btn-secondary"><?php echo __('back_to_shop'); ?></a>
+            <a href="/" class="btn btn-secondary"><?php echo __('back_to_shop'); ?></a>
         <?php else: ?>
             <div class="icon"><?php echo icon_x_circle(64, '#ef4444'); ?></div>
             <h1><?php echo __('auth.activation_error'); ?></h1>
             <div class="error"><?php echo htmlspecialchars($error); ?></div>
             <p><?php echo __('auth.check_email_for_activation'); ?></p>
             <a href="/auth.php?action=register" class="btn"><?php echo __('auth.register_button'); ?></a>
-            <a href="/index.php" class="btn btn-secondary"><?php echo __('back_to_shop'); ?></a>
+            <a href="/" class="btn btn-secondary"><?php echo __('back_to_shop'); ?></a>
         <?php endif; ?>
     </div>
 
