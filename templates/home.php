@@ -71,6 +71,7 @@ foreach ($categories as $category) {
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- zaeshkatadupka will be removed in near future-->
     <link rel="dns-prefetch" href="https://zaeshkatadupka.eu">
     
     <script>
@@ -101,6 +102,9 @@ foreach ($categories as $category) {
                 ?>
                     <img src="<?php echo htmlspecialchars($logo_url); ?>" 
                          alt="<?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>"
+                         width="<?php echo intval($logo_max_width); ?>"
+                         height="<?php echo intval($logo_max_height); ?>"
+                         fetchpriority="high"
                          style="max-height: <?php echo intval($logo_max_height); ?>px; max-width: <?php echo intval($logo_max_width); ?>px; object-fit: contain;">
                 <?php endif; ?>
                 
@@ -255,6 +259,8 @@ foreach ($categories as $category) {
                                 <?php if (!empty($product['image'])): ?>
                                     <img src="<?php echo htmlspecialchars($product['image']); ?>"
                                          alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                         width="400"
+                                         height="400"
                                          loading="lazy"
                                          decoding="async">
                                 <?php endif; ?>
