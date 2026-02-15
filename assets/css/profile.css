@@ -180,6 +180,31 @@
     gap: 20px;
 }
 
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.section-divider {
+    margin: 30px 0 20px;
+    padding: 20px 0 0;
+    border-top: 2px solid var(--border-color);
+}
+
+.section-divider h3 {
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.section-description {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
 .form-group {
     display: flex;
     flex-direction: column;
@@ -453,6 +478,10 @@
 
     .profile-content {
         padding: 20px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
     }
 
     .profile-picture-section {
