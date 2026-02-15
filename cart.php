@@ -392,7 +392,7 @@ $total = max(0, $subtotal - $discount_amount);
                 
                 <div class="order-actions-container">
                     <a href="/" class="btn-continue-shopping">
-                        ← <?php echo __('cart_page.continue_shopping'); ?>
+                        <?php echo __('cart_page.continue_shopping'); ?>
                     </a>
                 </div>
             </div>
@@ -417,7 +417,7 @@ $total = max(0, $subtotal - $discount_amount);
                 <a href="inquiries.php" class="btn btn-secondary"><?php echo icon_mail(18); ?> <?php echo __('inquiry.title'); ?></a>
                 
                 <!-- Home -->
-                <a href="index.php" class="btn btn-secondary">← <?php echo __('home'); ?></a>
+                <a href="index.php" class="btn btn-secondary"><?php echo __('home'); ?></a>
                 
                 <?php if ($is_logged_in): ?>
                     <a href="/auth.php?logout=1" class="btn btn-secondary"><?php echo __('logout'); ?></a>
@@ -429,7 +429,7 @@ $total = max(0, $subtotal - $discount_amount);
     </header>
 
     <div class="container">
-        <a href="/" class="btn-back">← <?php echo __('cart_page.continue_shopping'); ?></a>
+        <a href="/" class="btn-back"><?php echo __('cart_page.continue_shopping'); ?></a>
         
         <?php if ($message): ?>
             <div class="message"><?php echo htmlspecialchars($message); ?></div>

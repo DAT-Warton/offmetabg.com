@@ -16,7 +16,7 @@ $translations = [
     'edit' => 'Edit',
     'cancel' => 'Cancel',
     'back' => 'Back',
-    'back_to_shop' => '← Back to Shop',    'back_to_home' => 'Back to home',
+    'back_to_shop' => 'Back to Shop',    'back_to_home' => 'Back to home',
     'categories' => 'Categories',    'shop_by_category' => 'Shop by Category',
     'explore_our_collections' => 'Explore our collections',
     'view_all' => 'View All',

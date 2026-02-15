@@ -229,7 +229,7 @@ try {
     <div class="profile-container">
         <header class="profile-header">
             <div class="header-content">
-                <a href="/" class="back-link"><?php echo icon_arrow_left(24); ?> <?php echo __('back_to_shop'); ?></a>
+                <a href="/" class="back-link"><?php echo __('back_to_shop'); ?></a>
                 <h1><?php echo __('profile.my_profile'); ?></h1>
             </div>
         </header>

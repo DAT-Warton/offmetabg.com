@@ -84,7 +84,7 @@ $pageTitle = htmlspecialchars($category['name']);
         <div class="category-header">
             <div class="breadcrumb">
                 <a href="/" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
-                    ← <?php echo __('home'); ?>
+                    <?php echo __('home'); ?>
                 </a>
                 <span style="margin: 0 0.5rem;">›</span>
                 <span><?php echo __('categories'); ?></span>

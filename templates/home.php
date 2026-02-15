@@ -136,13 +136,13 @@ foreach ($categories as $category) {
             <p class="hero-subtitle"><?php echo __('homepage.hero_subtitle'); ?></p>
             <div class="hero-actions">
                 <a class="btn btn-primary hero-social" href="https://www.facebook.com/offmetabg" target="_blank" rel="noopener noreferrer" title="Facebook">
-                    📘 Facebook
+                    Facebook
                 </a>
                 <a class="btn btn-primary hero-social" href="https://www.instagram.com/offmetabg" target="_blank" rel="noopener noreferrer" title="Instagram">
-                    📷 Instagram
+                    Instagram
                 </a>
                 <a class="btn btn-primary hero-social" href="https://www.tiktok.com/@offmetabg" target="_blank" rel="noopener noreferrer" title="TikTok">
-                    🎵 TikTok
+                    TikTok
                 </a>
             </div>
             <p class="hero-meta"><?php echo __('homepage.hero_meta'); ?></p>
