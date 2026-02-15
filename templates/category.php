@@ -36,6 +36,15 @@ $pageTitle = htmlspecialchars($category['name']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></title>
     <meta name="description" content="<?php echo htmlspecialchars($category['description'] ?? ''); ?>">
+    <script>
+        // Apply theme immediately from localStorage to prevent flash
+        (function() {
+            const storedTheme = localStorage.getItem('offmeta_theme');
+            if (storedTheme) {
+                document.documentElement.setAttribute('data-theme', storedTheme);
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="/assets/css/themes.css">
     <link rel="stylesheet" href="/assets/css/category.css">
     <?php echo get_custom_theme_css(); ?>

@@ -11,6 +11,15 @@ $page = $page ?? [];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($page['title'] ?? 'Page'); ?> - <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></title>
     <meta name="description" content="<?php echo htmlspecialchars($page['meta_description'] ?? ''); ?>">
+    <script>
+        // Apply theme immediately from localStorage to prevent flash
+        (function() {
+            const storedTheme = localStorage.getItem('offmeta_theme');
+            if (storedTheme) {
+                document.documentElement.setAttribute('data-theme', storedTheme);
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="/assets/css/themes.css">
     <link rel="stylesheet" href="/assets/css/page.css">
     <?php echo get_custom_theme_css(); ?>

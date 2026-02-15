@@ -170,6 +170,15 @@ header('HTTP/1.1 404 Not Found');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Not Found - <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></title>
+    <script>
+        // Apply theme immediately from localStorage to prevent flash
+        (function() {
+            const storedTheme = localStorage.getItem('offmeta_theme');
+            if (storedTheme) {
+                document.documentElement.setAttribute('data-theme', storedTheme);
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="assets/css/themes.css">
     <link rel="stylesheet" href="assets/css/404.css">
 </head>
