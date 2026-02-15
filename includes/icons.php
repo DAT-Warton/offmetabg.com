@@ -338,3 +338,11 @@ function icon_upload($size = 20, $color = 'currentColor') {
         <line x1="12" y1="3" x2="12" y2="15"></line>
     </svg>';
 }
+
+function icon_save($size = 20, $color = 'currentColor') {
+    return '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="' . $color . '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+        <polyline points="7 3 7 8 15 8"></polyline>
+    </svg>';
+}
