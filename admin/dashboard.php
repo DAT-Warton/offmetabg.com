@@ -3,6 +3,10 @@
  * CMS Admin Dashboard
  */
 
+// Load language system
+require_once __DIR__ . '/../includes/language.php';
+require_once __DIR__ . '/../includes/functions.php';
+
 // Get query parameter for current section
 $section = $_GET['section'] ?? 'dashboard';
 $action = $_GET['action'] ?? '';
