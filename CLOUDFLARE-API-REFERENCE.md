@@ -580,8 +580,260 @@ function Remove-CloudflarePageRule {
 
 ---
 
+## WAF (Web Application Firewall) API Endpoints
+
+### Update Zone WAF Ruleset
+**Endpoint:** `PUT /zones/726f6033454c792cbe0ec3de8524e462/rulesets/phases/http_request_firewall_custom/entrypoint`
+
+**Required Permissions:** API Token with `Zone > Zone WAF` or broader permissions
+
+This endpoint allows you to configure custom firewall rules for your zone. You can block, challenge, or allow traffic based on various conditions.
+
+```bash
+curl -X PUT "https://api.cloudflare.com/client/v4/zones/726f6033454c792cbe0ec3de8524e462/rulesets/phases/http_request_firewall_custom/entrypoint" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "rules": [
+      {
+        "description": "Block bad bots",
+        "expression": "(cf.client.bot) and not (cf.verified_bot_category in {\"Search Engine Crawler\" \"Preview Bot\"})",
+        "action": "block"
+      }
+    ]
+  }'
+```
+
+---
+
+## Common WAF Rule Examples
+
+### 1. Block Specific Countries
+```json
+{
+  "rules": [
+    {
+      "description": "Block traffic from specific countries",
+      "expression": "(ip.geoip.country in {\"CN\" \"RU\" \"KP\"})",
+      "action": "block"
+    }
+  ]
+}
+```
+
+### 2. Challenge Suspicious Traffic
+```json
+{
+  "rules": [
+    {
+      "description": "Challenge suspicious user agents",
+      "expression": "(http.user_agent contains \"bot\" or http.user_agent contains \"crawler\") and not cf.verified_bot_category",
+      "action": "managed_challenge"
+    }
+  ]
+}
+```
+
+### 3. Rate Limiting
+```json
+{
+  "rules": [
+    {
+      "description": "Rate limit login attempts",
+      "expression": "(http.request.uri.path eq \"/auth.php\" and http.request.method eq \"POST\")",
+      "action": "challenge",
+      "ratelimit": {
+        "characteristics": ["ip.src"],
+        "period": 60,
+        "requests_per_period": 5,
+        "mitigation_timeout": 600
+      }
+    }
+  ]
+}
+```
+
+### 4. Block Admin Access from Outside Bulgaria
+```json
+{
+  "rules": [
+    {
+      "description": "Restrict admin area to Bulgaria only",
+      "expression": "(http.request.uri.path matches \"^/admin/\" and ip.geoip.country ne \"BG\")",
+      "action": "block"
+    }
+  ]
+}
+```
+
+### 5. Allow Only Verified Bots
+```json
+{
+  "rules": [
+    {
+      "description": "Block unverified bots",
+      "expression": "(cf.client.bot and not cf.verified_bot_category)",
+      "action": "block"
+    }
+  ]
+}
+```
+
+### 6. Protect Against SQL Injection
+```json
+{
+  "rules": [
+    {
+      "description": "Block SQL injection attempts",
+      "expression": "(http.request.uri.query contains \"union select\" or http.request.uri.query contains \"' or '1'='1\")",
+      "action": "block"
+    }
+  ]
+}
+```
+
+### 7. Protect API Endpoints
+```json
+{
+  "rules": [
+    {
+      "description": "Challenge API requests without valid token",
+      "expression": "(http.request.uri.path matches \"^/api/\" and not http.request.headers[\"authorization\"][0] contains \"Bearer\")",
+      "action": "managed_challenge"
+    }
+  ]
+}
+```
+
+---
+
+## WAF Expression Fields
+
+### Common Fields:
+- `ip.src` - Source IP address
+- `ip.geoip.country` - Two-letter country code (ISO 3166-1 Alpha 2)
+- `ip.geoip.continent` - Continent code
+- `http.host` - HTTP Host header
+- `http.request.method` - HTTP method (GET, POST, etc.)
+- `http.request.uri` - Full URI
+- `http.request.uri.path` - URI path only
+- `http.request.uri.query` - Query string
+- `http.user_agent` - User-Agent header
+- `http.referer` - Referer header
+- `cf.client.bot` - Is request from a bot
+- `cf.verified_bot_category` - Verified bot category
+- `cf.threat_score` - Threat score (0-100)
+
+### Operators:
+- `eq` - Equals
+- `ne` - Not equals
+- `contains` - Contains substring
+- `matches` - Regex match
+- `in` - In list
+- `not` - Logical NOT
+- `and` - Logical AND
+- `or` - Logical OR
+
+### Actions:
+- `block` - Block the request
+- `challenge` - Present CAPTCHA challenge
+- `managed_challenge` - Smart challenge (invisible for humans)
+- `js_challenge` - JavaScript challenge
+- `allow` - Allow the request
+- `log` - Log only (no action)
+- `skip` - Skip other rules
+
+---
+
+## PowerShell WAF Management
+
+```powershell
+# Load Cloudflare config
+. .\cloudflare-config.local.ps1
+
+# Update WAF rules
+function Update-CloudflareWAFRules {
+    param([array]$Rules)
+    
+    $headers = @{
+        "Authorization" = "Bearer $CLOUDFLARE_API_TOKEN"
+        "Content-Type" = "application/json"
+    }
+    
+    $body = @{ rules = $Rules } | ConvertTo-Json -Depth 10
+    
+    $response = Invoke-RestMethod `
+        -Uri "$CLOUDFLARE_ZONE_ENDPOINT/rulesets/phases/http_request_firewall_custom/entrypoint" `
+        -Method Put `
+        -Headers $headers `
+        -Body $body
+    
+    if ($response.success) {
+        Write-Host "✓ WAF rules updated successfully" -ForegroundColor Green
+        return $response.result
+    } else {
+        Write-Host "✗ Failed to update WAF rules: $($response.errors)" -ForegroundColor Red
+    }
+}
+
+# Example: Block suspicious traffic and protect admin area
+$wafRules = @(
+    @{
+        description = "Block unverified bots"
+        expression = "(cf.client.bot and not cf.verified_bot_category)"
+        action = "block"
+    },
+    @{
+        description = "Restrict admin to Bulgaria"
+        expression = "(http.request.uri.path matches `"^/admin/`" and ip.geoip.country ne `"BG`")"
+        action = "block"
+    },
+    @{
+        description = "Rate limit login attempts"
+        expression = "(http.request.uri.path eq `"/auth.php`" and http.request.method eq `"POST`")"
+        action = "managed_challenge"
+    }
+)
+
+# Usage
+# Update-CloudflareWAFRules -Rules $wafRules
+```
+
+---
+
+## Security Best Practices
+
+1. **Start with Log Mode:**
+   - Test rules with `"action": "log"` first
+   - Monitor false positives
+   - Switch to blocking after testing
+
+2. **Layer Security:**
+   - Combine multiple rules for defense in depth
+   - Use rate limiting for login pages
+   - Challenge suspicious traffic before blocking
+
+3. **Geographic Restrictions:**
+   - Consider your actual user base
+   - Don't block entire countries unless necessary
+   - Use challenges instead of blocks when possible
+
+4. **Bot Management:**
+   - Allow verified search engine bots
+   - Block unverified bots claiming to be search engines
+   - Use managed challenges for gray area traffic
+
+5. **Monitor and Adjust:**
+   - Regularly review blocked traffic
+   - Adjust rules based on attack patterns
+   - Keep expressions up to date
+
+---
+
 ## Related Documentation
 - [Cloudflare API Docs](https://developers.cloudflare.com/api/)
 - [Cache Configuration Guide](https://developers.cloudflare.com/cache/)
 - [Performance Optimization](https://developers.cloudflare.com/fundamentals/speed/)
 - [Page Rules Documentation](https://developers.cloudflare.com/support/page-rules/)
+- [WAF Rules Reference](https://developers.cloudflare.com/waf/)
+- [Firewall Rules Language](https://developers.cloudflare.com/ruleset-engine/rules-language/)
