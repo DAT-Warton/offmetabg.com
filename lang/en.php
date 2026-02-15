@@ -59,6 +59,9 @@ $translations = [
         'check_back_soon' => 'Check back soon for new products!',
         'product_videos' => 'Product Videos',
         'trusted_store' => 'Your trusted online store for quality products.',
+        'latest_blog_post' => 'Latest Blog Post',
+        'no_blog_posts' => 'No blog posts yet. Check back soon for reviews and articles!',
+        'write_first_post' => 'Write First Post',
     ],
     
     // Navigation
