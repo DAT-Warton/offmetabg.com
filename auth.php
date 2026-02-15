@@ -63,6 +63,12 @@ if (isset($_POST['register'])) {
             $activationExpires = date('Y-m-d H:i:s', strtotime('+24 hours'));
             if (db_enabled()) {
                 ensure_db_schema();
+                $pdo = Database::getInstance()->getPDO();
+                $driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+                
+                // PostgreSQL requires 'f' for false, MySQL/SQLite use 0
+                $boolFalse = ($driver === 'pgsql') ? 'f' : 0;
+                
                 db_table('customers')->insert([
                     'id' => $customerId,
                     'username' => $username,
@@ -70,8 +76,8 @@ if (isset($_POST['register'])) {
                     'password' => password_hash($password, PASSWORD_DEFAULT),
                     'role' => 'customer',
                     'status' => 'pending',
-                    'activated' => false,
-                    'email_verified' => false,
+                    'activated' => $boolFalse,
+                    'email_verified' => $boolFalse,
                     'activation_token' => $activationToken,
                     'activation_token_expires' => $activationExpires,
                     'created_at' => date('Y-m-d H:i:s'),

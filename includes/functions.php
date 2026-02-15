@@ -1216,8 +1216,11 @@ function save_customer_data($data) {
         $payload['created_at'] = date('Y-m-d H:i:s');
         
         if ($role === 'customer') {
-            $payload['activated'] = true;
-            $payload['email_verified'] = true;
+            $pdo = Database::getInstance()->getPDO();
+            $driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+            $boolTrue = ($driver === 'pgsql') ? 't' : 1;
+            $payload['activated'] = $boolTrue;
+            $payload['email_verified'] = $boolTrue;
             $payload['activated_at'] = date('Y-m-d H:i:s');
         }
         

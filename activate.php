@@ -44,9 +44,13 @@ if (empty($token)) {
                 $message = __('auth.already_activated');
                 $success = true;
             } else {
+                $pdo = Database::getInstance()->getPDO();
+                $driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+                $boolTrue = ($driver === 'pgsql') ? 't' : 1;
+                
                 db_table('customers')->update($customer['id'], [
-                    'activated' => true,
-                    'email_verified' => true,
+                    'activated' => $boolTrue,
+                    'email_verified' => $boolTrue,
                     'activated_at' => date('Y-m-d H:i:s'),
                     'activation_token' => null,
                     'activation_token_expires' => null,
