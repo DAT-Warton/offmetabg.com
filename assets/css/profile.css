@@ -106,10 +106,12 @@
     border-radius: 12px;
     padding: 30px;
     box-shadow: 0 2px 8px var(--shadow-md);
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .profile-section {
-    max-width: 800px;
+    max-width: 100%;
 }
 
 .section-header {
