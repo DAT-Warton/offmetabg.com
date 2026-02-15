@@ -66,6 +66,18 @@ if ($path === 'api' || strpos($path, 'api/') === 0) {
     exit;
 }
 
+// Route: Account activation
+if (strpos($path, 'activate/') === 0 || strpos($path, 'activate') === 0) {
+    require CMS_ROOT . '/activate.php';
+    exit;
+}
+
+// Route: Password reset
+if (strpos($path, 'reset/') === 0 || strpos($path, 'reset') === 0) {
+    require CMS_ROOT . '/password-reset.php';
+    exit;
+}
+
 // Frontend routing
 // Homepage
 if (empty($path) || $path === '/') {
