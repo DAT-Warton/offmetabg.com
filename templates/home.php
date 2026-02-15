@@ -131,8 +131,15 @@ foreach ($categories as $category) {
             <p class="hero-kicker"><?php echo __('homepage.hero_kicker'); ?></p>
             <p class="hero-subtitle"><?php echo __('homepage.hero_subtitle'); ?></p>
             <div class="hero-actions">
-                <a class="btn btn-primary hero-cta" href="#products"><?php echo __('homepage.hero_cta_products'); ?></a>
-                <a class="btn btn-secondary hero-cta" href="#categories"><?php echo __('homepage.hero_cta_categories'); ?></a>
+                <a class="btn btn-primary hero-social" href="https://www.facebook.com/offmetabg" target="_blank" rel="noopener noreferrer" title="Facebook">
+                    📘 Facebook
+                </a>
+                <a class="btn btn-primary hero-social" href="https://www.instagram.com/offmetabg" target="_blank" rel="noopener noreferrer" title="Instagram">
+                    📷 Instagram
+                </a>
+                <a class="btn btn-primary hero-social" href="https://www.tiktok.com/@offmetabg" target="_blank" rel="noopener noreferrer" title="TikTok">
+                    🎵 TikTok
+                </a>
             </div>
             <p class="hero-meta"><?php echo __('homepage.hero_meta'); ?></p>
         </div>
@@ -181,6 +188,44 @@ foreach ($categories as $category) {
     <section class="products-section" id="products">
         <div class="container">
             <h2 class="section-title"><?php echo __('homepage.new_products'); ?></h2>
+            
+            <?php if ($latest_post): ?>
+                <div class="latest-post-card" style="margin-bottom: 2rem; padding: 1.5rem; border-radius: 8px; background: var(--card-bg, #fff); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap;">
+                        <?php if (!empty($latest_post['featured_image'])): ?>
+                            <div style="flex: 0 0 200px;">
+                                <img src="<?php echo htmlspecialchars($latest_post['featured_image']); ?>" 
+                                     alt="<?php echo htmlspecialchars($latest_post['title']); ?>"
+                                     style="width: 100%; height: auto; border-radius: 6px; object-fit: cover;">
+                            </div>
+                        <?php endif; ?>
+                        <div style="flex: 1; min-width: 250px;">
+                            <div style="display: inline-block; padding: 0.25rem 0.75rem; background: var(--primary-color, #3b82f6); color: white; border-radius: 4px; font-size: 0.875rem; margin-bottom: 0.75rem;">
+                                📝 <?php echo htmlspecialchars($latest_post['category'] ?? 'Блог'); ?>
+                            </div>
+                            <h3 style="margin: 0 0 0.75rem 0; font-size: 1.5rem; color: var(--text-color, #1f2937);">
+                                <?php echo htmlspecialchars($latest_post['title']); ?>
+                            </h3>
+                            <?php if (!empty($latest_post['excerpt'])): ?>
+                                <p style="margin: 0 0 1rem 0; color: var(--text-secondary, #6b7280); line-height: 1.6;">
+                                    <?php echo htmlspecialchars(substr($latest_post['excerpt'], 0, 200)); ?><?php echo strlen($latest_post['excerpt']) > 200 ? '...' : ''; ?>
+                                </p>
+                            <?php endif; ?>
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                                <span style="color: var(--text-secondary, #6b7280); font-size: 0.875rem;">
+                                    <?php 
+                                        $dt = DateTime::createFromFormat('Y-m-d H:i:s', $latest_post['created']);
+                                        echo $dt ? $dt->format('d/m/Y H:i') : date('d/m/Y', strtotime($latest_post['created'])); 
+                                    ?>
+                                </span>
+                                <a href="/blog/<?php echo urlencode($latest_post['slug']); ?>" class="btn btn-primary">
+                                    📖 <?php echo __('product.learn_more'); ?>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
             
             <?php if (empty($published_products)): ?>
                 <div class="empty-state">
