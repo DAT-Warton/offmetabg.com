@@ -12,7 +12,7 @@ body {
     background: var(--bg-primary);
     padding: 40px;
     border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 60px var(--shadow-xl);
     width: 100%;
     max-width: 400px;
     word-wrap: break-word;
@@ -227,17 +227,17 @@ button:hover {
 
 .social-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px var(--shadow-md);
 }
 
 /* Google */
 .social-btn.google {
-    background: #fff;
-    color: #3c4043;
-    border-color: #dadce0;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
 }
 .social-btn.google:hover {
-    background: #f8f9fa;
+    background: var(--bg-hover);
 }
 
 /* Facebook */
