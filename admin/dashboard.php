@@ -3,9 +3,20 @@
  * CMS Admin Dashboard
  */
 
-// Load language system
+// Start session
+session_start();
+
+// Load required files
+require_once __DIR__ . '/../includes/database.php';
 require_once __DIR__ . '/../includes/language.php';
 require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/icons.php';
+
+// Check authentication
+if (!isset($_SESSION['admin_user'])) {
+    header('Location: /auth.php?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+    exit;
+}
 
 // Get query parameter for current section
 $section = $_GET['section'] ?? 'dashboard';
