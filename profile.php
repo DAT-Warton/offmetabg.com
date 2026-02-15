@@ -46,6 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = trim($_POST['email'] ?? '');
         $full_name = trim($_POST['full_name'] ?? '');
         $phone = trim($_POST['phone'] ?? '');
+        $city = trim($_POST['city'] ?? '');
+        $address = trim($_POST['address'] ?? '');
+        $postal_code = trim($_POST['postal_code'] ?? '');
+        $region = trim($_POST['region'] ?? '');
+        $address_notes = trim($_POST['address_notes'] ?? '');
         
         if (empty($email)) {
             $error = __('auth.invalid_email');
@@ -69,6 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'email' => $email,
                     'full_name' => $full_name,
                     'phone' => $phone,
+                    'city' => $city,
+                    'address' => $address,
+                    'postal_code' => $postal_code,
+                    'region' => $region,
+                    'address_notes' => $address_notes,
                     'updated_at' => date('Y-m-d H:i:s')
                 ]);
                 $customer = db_table('customers')->find('id', $customer_id);
@@ -309,6 +319,38 @@ try {
                         <div class="form-group">
                             <label for="phone"><?php echo __('profile.phone'); ?></label>
                             <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($customer['phone'] ?? ''); ?>">
+                        </div>
+
+                        <div class="section-divider">
+                            <h3><?php echo __('profile.delivery_info'); ?></h3>
+                            <p class="section-description"><?php echo __('profile.delivery_info_description'); ?></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city"><?php echo __('profile.city'); ?></label>
+                            <input type="text" id="city" name="city" value="<?php echo htmlspecialchars($customer['city'] ?? ''); ?>" placeholder="<?php echo __('profile.city_placeholder'); ?>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address"><?php echo __('profile.address'); ?></label>
+                            <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($customer['address'] ?? ''); ?>" placeholder="<?php echo __('profile.address_placeholder'); ?>">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="postal_code"><?php echo __('profile.postal_code'); ?></label>
+                                <input type="text" id="postal_code" name="postal_code" value="<?php echo htmlspecialchars($customer['postal_code'] ?? ''); ?>" placeholder="<?php echo __('profile.postal_code_placeholder'); ?>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="region"><?php echo __('profile.region'); ?></label>
+                                <input type="text" id="region" name="region" value="<?php echo htmlspecialchars($customer['region'] ?? ''); ?>" placeholder="<?php echo __('profile.region_placeholder'); ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address_notes"><?php echo __('profile.address_notes'); ?></label>
+                            <textarea id="address_notes" name="address_notes" rows="3" placeholder="<?php echo __('profile.address_notes_placeholder'); ?>"><?php echo htmlspecialchars($customer['address_notes'] ?? ''); ?></textarea>
                         </div>
 
                         <div class="form-group">
