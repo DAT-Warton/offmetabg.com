@@ -242,7 +242,346 @@ Purge-CloudflareCache
 
 ---
 
+## Page Rules API Endpoints
+
+### 1. List All Page Rules
+**Endpoint:** `GET /zones/726f6033454c792cbe0ec3de8524e462/pagerules`
+
+```bash
+curl -X GET "https://api.cloudflare.com/client/v4/zones/726f6033454c792cbe0ec3de8524e462/pagerules" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json"
+```
+
+**Response:**
+```json
+{
+  "result": [
+    {
+      "id": "page_rule_id_123",
+      "targets": [
+        {
+          "target": "url",
+          "constraint": {
+            "operator": "matches",
+            "value": "offmetabg.com/admin/*"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "id": "cache_level",
+          "value": "bypass"
+        }
+      ],
+      "priority": 1,
+      "status": "active",
+      "created_on": "2026-01-01T00:00:00.000000Z",
+      "modified_on": "2026-02-15T14:00:00.000000Z"
+    }
+  ],
+  "success": true,
+  "errors": [],
+  "messages": []
+}
+```
+
+---
+
+### 2. Get Page Rule Details
+**Endpoint:** `GET /zones/726f6033454c792cbe0ec3de8524e462/pagerules/:identifier`
+
+```bash
+curl -X GET "https://api.cloudflare.com/client/v4/zones/726f6033454c792cbe0ec3de8524e462/pagerules/PAGE_RULE_ID" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json"
+```
+
+---
+
+### 3. Create a Page Rule
+**Endpoint:** `POST /zones/726f6033454c792cbe0ec3de8524e462/pagerules`
+
+```bash
+curl -X POST "https://api.cloudflare.com/client/v4/zones/726f6033454c792cbe0ec3de8524e462/pagerules" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "targets": [
+      {
+        "target": "url",
+        "constraint": {
+          "operator": "matches",
+          "value": "offmetabg.com/assets/*"
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "cache_level",
+        "value": "cache_everything"
+      },
+      {
+        "id": "edge_cache_ttl",
+        "value": 31536000
+      }
+    ],
+    "priority": 1,
+    "status": "active"
+  }'
+```
+
+**Common Page Rule Actions:**
+- `cache_level`: `bypass`, `basic`, `simplified`, `aggressive`, `cache_everything`
+- `edge_cache_ttl`: Edge cache TTL in seconds
+- `browser_cache_ttl`: Browser cache TTL in seconds
+- `security_level`: `off`, `essentially_off`, `low`, `medium`, `high`, `under_attack`
+- `ssl`: `off`, `flexible`, `full`, `strict`
+- `always_use_https`: `true`, `false`
+- `automatic_https_rewrites`: `on`, `off`
+- `minify`: `{"html": "on", "css": "on", "js": "on"}`
+- `rocket_loader`: `on`, `off`
+- `email_obfuscation`: `on`, `off`
+
+---
+
+### 4. Update a Page Rule (Full Replace)
+**Endpoint:** `PUT /zones/726f6033454c792cbe0ec3de8524e462/pagerules/:identifier`
+
+```bash
+curl -X PUT "https://api.cloudflare.com/client/v4/zones/726f6033454c792cbe0ec3de8524e462/pagerules/PAGE_RULE_ID" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "targets": [
+      {
+        "target": "url",
+        "constraint": {
+          "operator": "matches",
+          "value": "offmetabg.com/uploads/*"
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "cache_level",
+        "value": "cache_everything"
+      }
+    ],
+    "priority": 2,
+    "status": "active"
+  }'
+```
+
+---
+
+### 5. Edit a Page Rule (Partial Update)
+**Endpoint:** `PATCH /zones/726f6033454c792cbe0ec3de8524e462/pagerules/:identifier`
+
+```bash
+# Update only priority
+curl -X PATCH "https://api.cloudflare.com/client/v4/zones/726f6033454c792cbe0ec3de8524e462/pagerules/PAGE_RULE_ID" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  --data '{"priority": 3}'
+```
+
+```bash
+# Enable/disable page rule
+curl -X PATCH "https://api.cloudflare.com/client/v4/zones/726f6033454c792cbe0ec3de8524e462/pagerules/PAGE_RULE_ID" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  --data '{"status": "disabled"}'
+```
+
+---
+
+### 6. Delete a Page Rule
+**Endpoint:** `DELETE /zones/726f6033454c792cbe0ec3de8524e462/pagerules/:identifier`
+
+```bash
+curl -X DELETE "https://api.cloudflare.com/client/v4/zones/726f6033454c792cbe0ec3de8524e462/pagerules/PAGE_RULE_ID" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json"
+```
+
+---
+
+## Common Page Rule Examples
+
+### Cache Everything for Static Assets
+```json
+{
+  "targets": [{
+    "target": "url",
+    "constraint": {
+      "operator": "matches",
+      "value": "offmetabg.com/assets/*"
+    }
+  }],
+  "actions": [
+    {"id": "cache_level", "value": "cache_everything"},
+    {"id": "edge_cache_ttl", "value": 31536000},
+    {"id": "browser_cache_ttl", "value": 31536000}
+  ],
+  "priority": 1,
+  "status": "active"
+}
+```
+
+### Bypass Cache for Admin Area
+```json
+{
+  "targets": [{
+    "target": "url",
+    "constraint": {
+      "operator": "matches",
+      "value": "offmetabg.com/admin/*"
+    }
+  }],
+  "actions": [
+    {"id": "cache_level", "value": "bypass"}
+  ],
+  "priority": 2,
+  "status": "active"
+}
+```
+
+### Force HTTPS for Entire Site
+```json
+{
+  "targets": [{
+    "target": "url",
+    "constraint": {
+      "operator": "matches",
+      "value": "offmetabg.com/*"
+    }
+  }],
+  "actions": [
+    {"id": "always_use_https", "value": true}
+  ],
+  "priority": 3,
+  "status": "active"
+}
+```
+
+### Optimize Performance for Product Images
+```json
+{
+  "targets": [{
+    "target": "url",
+    "constraint": {
+      "operator": "matches",
+      "value": "offmetabg.com/uploads/products/*"
+    }
+  }],
+  "actions": [
+    {"id": "cache_level", "value": "cache_everything"},
+    {"id": "edge_cache_ttl", "value": 2678400},
+    {"id": "browser_cache_ttl", "value": 2678400},
+    {"id": "polish", "value": "lossless"}
+  ],
+  "priority": 4,
+  "status": "active"
+}
+```
+
+---
+
+## PowerShell Helper Functions
+
+```powershell
+# Load Cloudflare config
+. .\cloudflare-config.local.ps1
+
+# List all page rules
+function Get-CloudflarePageRules {
+    $headers = @{
+        "Authorization" = "Bearer $CLOUDFLARE_API_TOKEN"
+        "Content-Type" = "application/json"
+    }
+    
+    $response = Invoke-RestMethod -Uri "$CLOUDFLARE_ZONE_ENDPOINT/pagerules" `
+                                  -Method Get `
+                                  -Headers $headers
+    
+    return $response.result
+}
+
+# Create page rule for static assets
+function New-CloudflareStaticCacheRule {
+    param(
+        [string]$UrlPattern = "offmetabg.com/assets/*",
+        [int]$Priority = 1
+    )
+    
+    $headers = @{
+        "Authorization" = "Bearer $CLOUDFLARE_API_TOKEN"
+        "Content-Type" = "application/json"
+    }
+    
+    $body = @{
+        targets = @(
+            @{
+                target = "url"
+                constraint = @{
+                    operator = "matches"
+                    value = $UrlPattern
+                }
+            }
+        )
+        actions = @(
+            @{ id = "cache_level"; value = "cache_everything" },
+            @{ id = "edge_cache_ttl"; value = 31536000 },
+            @{ id = "browser_cache_ttl"; value = 31536000 }
+        )
+        priority = $Priority
+        status = "active"
+    } | ConvertTo-Json -Depth 10
+    
+    $response = Invoke-RestMethod -Uri "$CLOUDFLARE_ZONE_ENDPOINT/pagerules" `
+                                  -Method Post `
+                                  -Headers $headers `
+                                  -Body $body
+    
+    if ($response.success) {
+        Write-Host "✓ Page rule created successfully" -ForegroundColor Green
+        return $response.result
+    } else {
+        Write-Host "✗ Failed to create page rule: $($response.errors)" -ForegroundColor Red
+    }
+}
+
+# Delete page rule
+function Remove-CloudflarePageRule {
+    param([string]$RuleId)
+    
+    $headers = @{
+        "Authorization" = "Bearer $CLOUDFLARE_API_TOKEN"
+        "Content-Type" = "application/json"
+    }
+    
+    $response = Invoke-RestMethod -Uri "$CLOUDFLARE_ZONE_ENDPOINT/pagerules/$RuleId" `
+                                  -Method Delete `
+                                  -Headers $headers
+    
+    if ($response.success) {
+        Write-Host "✓ Page rule deleted successfully" -ForegroundColor Green
+    } else {
+        Write-Host "✗ Failed to delete page rule: $($response.errors)" -ForegroundColor Red
+    }
+}
+
+# Usage examples
+# Get-CloudflarePageRules
+# New-CloudflareStaticCacheRule -UrlPattern "offmetabg.com/uploads/*" -Priority 2
+# Remove-CloudflarePageRule -RuleId "page_rule_id_123"
+```
+
+---
+
 ## Related Documentation
 - [Cloudflare API Docs](https://developers.cloudflare.com/api/)
 - [Cache Configuration Guide](https://developers.cloudflare.com/cache/)
 - [Performance Optimization](https://developers.cloudflare.com/fundamentals/speed/)
+- [Page Rules Documentation](https://developers.cloudflare.com/support/page-rules/)
