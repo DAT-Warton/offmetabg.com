@@ -931,19 +931,35 @@ function save_product_data($data) {
             // Find category by slug or name
             $stmt = $pdo->prepare("
                 SELECT id FROM categories 
-                WHERE slug = ? OR LOWER(name) = LOWER(?)
+                WHERE slug = :slug OR LOWER(name) = LOWER(:name)
                 LIMIT 1
             ");
-            $stmt->execute([$data['category'], $data['category']]);
+            $stmt->execute([
+                ':slug' => $data['category'],
+                ':name' => $data['category']
+            ]);
             $category = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if ($category) {
+                // First delete existing links for this product
+                $stmt = $pdo->prepare("
+                    DELETE FROM product_category_links 
+                    WHERE product_id = :product_id
+                ");
+                $stmt->execute([':product_id' => $product_id]);
+                
+                // Then insert new link
                 $stmt = $pdo->prepare("
                     INSERT INTO product_category_links (product_id, category_id, is_primary)
-                    VALUES (?, ?, false)
-                    ON CONFLICT (product_id, category_id) DO NOTHING
+                    VALUES (:product_id, :category_id, :is_primary)
                 ");
-                $stmt->execute([$product_id, $category['id']]);
+                $stmt->execute([
+                    ':product_id' => $product_id,
+                    ':category_id' => $category['id'],
+                    ':is_primary' => true
+                ]);
+            } else {
+                error_log("Warning: Category '{$data['category']}' not found for product {$product_id}");
             }
         }
         
@@ -952,8 +968,10 @@ function save_product_data($data) {
         return $product_id;
         
     } catch (Exception $e) {
-        $pdo->rollBack();
-        error_log("Error saving product: " . $e->getMessage());
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        error_log("Error saving product [ID: {$product_id}]: " . $e->getMessage() . " | File: " . $e->getFile() . " | Line: " . $e->getLine());
         throw $e;
     }
 }

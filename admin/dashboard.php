@@ -151,46 +151,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             break;
         case 'save_product':
-            $product_id = $_POST['product_id'] ?: uniqid('prod_');
-            
-            // Handle image upload
-            $imagePath = sanitize($_POST['image'] ?? '');
-            if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = CMS_ROOT . '/uploads/';
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
+            try {
+                $product_id = $_POST['product_id'] ?: uniqid('prod_');
                 
-                $fileExtension = strtolower(pathinfo($_FILES['product_image']['name'], PATHINFO_EXTENSION));
-                $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-                
-                if (in_array($fileExtension, $allowedExtensions) && $_FILES['product_image']['size'] <= 5242880) {
-                    $fileName = 'product_' . $product_id . '_' . time() . '.' . $fileExtension;
-                    $targetPath = $uploadDir . $fileName;
+                // Handle image upload
+                $imagePath = sanitize($_POST['image'] ?? '');
+                if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] === UPLOAD_ERR_OK) {
+                    $uploadDir = CMS_ROOT . '/uploads/';
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0755, true);
+                    }
                     
-                    if (move_uploaded_file($_FILES['product_image']['tmp_name'], $targetPath)) {
-                        $imagePath = '/uploads/' . $fileName;
+                    $fileExtension = strtolower(pathinfo($_FILES['product_image']['name'], PATHINFO_EXTENSION));
+                    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                    
+                    if (in_array($fileExtension, $allowedExtensions) && $_FILES['product_image']['size'] <= 5242880) {
+                        $fileName = 'product_' . $product_id . '_' . time() . '.' . $fileExtension;
+                        $targetPath = $uploadDir . $fileName;
+                        
+                        if (move_uploaded_file($_FILES['product_image']['tmp_name'], $targetPath)) {
+                            $imagePath = '/uploads/' . $fileName;
+                        }
                     }
                 }
+                
+                save_product_data([
+                    'id' => $product_id,
+                    'name' => sanitize($_POST['name']),
+                    'description' => sanitize($_POST['description']),
+                    'price' => floatval($_POST['price']),
+                    'image' => $imagePath,
+                    'category' => sanitize($_POST['category'] ?? 'general'),
+                    'stock' => intval($_POST['stock'] ?? 0),
+                    'status' => $_POST['status'] ?? 'published',
+                    'videos' => [
+                        'youtube' => sanitize($_POST['video_youtube'] ?? ''),
+                        'tiktok' => sanitize($_POST['video_tiktok'] ?? ''),
+                        'instagram' => sanitize($_POST['video_instagram'] ?? ''),
+                    ],
+                ]);
+                
+                $message = __('admin.product_saved');
+            } catch (Exception $e) {
+                error_log("Product save failed: " . $e->getMessage() . " | Trace: " . $e->getTraceAsString());
+                $message = "⚠️ Error saving product: " . htmlspecialchars($e->getMessage());
             }
-            
-            save_product_data([
-                'id' => $product_id,
-                'name' => sanitize($_POST['name']),
-                'description' => sanitize($_POST['description']),
-                'price' => floatval($_POST['price']),
-                'image' => $imagePath,
-                'category' => sanitize($_POST['category'] ?? 'general'),
-                'stock' => intval($_POST['stock'] ?? 0),
-                'status' => $_POST['status'] ?? 'published',
-                'videos' => [
-                    'youtube' => sanitize($_POST['video_youtube'] ?? ''),
-                    'tiktok' => sanitize($_POST['video_tiktok'] ?? ''),
-                    'instagram' => sanitize($_POST['video_instagram'] ?? ''),
-                ],
-            ]);
-            
-            $message = __('admin.product_saved');
             break;
 
         case 'delete_product':

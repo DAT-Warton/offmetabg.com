@@ -102,17 +102,17 @@ $currency_symbol = $product['currency'] === 'BGN' ? 'лв.' : ($product['currenc
                     <div class="product-videos">
                         <?php if (!empty($product['videos']['youtube'])): ?>
                             <a href="<?php echo htmlspecialchars($product['videos']['youtube']); ?>" target="_blank" rel="noopener" class="video-link">
-                                📺 YouTube
+                                YouTube
                             </a>
                         <?php endif; ?>
                         <?php if (!empty($product['videos']['tiktok'])): ?>
                             <a href="<?php echo htmlspecialchars($product['videos']['tiktok']); ?>" target="_blank" rel="noopener" class="video-link">
-                                🎵 TikTok
+                                TikTok
                             </a>
                         <?php endif; ?>
                         <?php if (!empty($product['videos']['instagram'])): ?>
                             <a href="<?php echo htmlspecialchars($product['videos']['instagram']); ?>" target="_blank" rel="noopener" class="video-link">
-                                📷 Instagram
+                                Instagram
                             </a>
                         <?php endif; ?>
                     </div>
