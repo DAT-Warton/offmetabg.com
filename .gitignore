@@ -43,6 +43,12 @@ test-system.php
 reset-admin-passwords.php
 update-stefie-password.php
 create-admin.php
+test-*.php
+**/test-*.php
+test-*.html
+VPS-TEST-REPORT.md
+*.local.md
+config/cloudflare-dns-setup.php
 
 # Deployment and setup scripts with sensitive data
 setup-vps.sh
