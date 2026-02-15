@@ -722,7 +722,7 @@ footer p {
 .hero {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
     color: var(--text-primary);
-    padding: 56px 20px 64px;
+    padding: 30px 40px 40px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -1400,7 +1400,7 @@ footer {
     }
 
     .hero {
-        padding: 40px 20px 50px;
+        padding: 25px 20px 35px;
     }
 
     .hero-inner {
