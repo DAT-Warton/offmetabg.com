@@ -29,29 +29,39 @@ function require_admin() {
 
 // Get CMS setting
 function get_option($key, $default = null) {
-    $pdo = Database::getInstance()->getPDO();
-    try {
-        $stmt = $pdo->prepare('SELECT option_value FROM options WHERE option_key = ?');
-        $stmt->execute([$key]);
-        $value = $stmt->fetchColumn();
-        return $value !== false ? $value : $default;
-    } catch (PDOException $e) {
-        error_log("Error getting option {$key}: " . $e->getMessage());
-        return $default;
+    if (db_enabled()) {
+        $pdo = Database::getInstance()->getPDO();
+        try {
+            $stmt = $pdo->prepare('SELECT option_value FROM options WHERE option_key = ?');
+            $stmt->execute([$key]);
+            $value = $stmt->fetchColumn();
+            return $value !== false ? $value : $default;
+        } catch (PDOException $e) {
+            // Fallback to JSON on error.
+        }
     }
+
+    $options = load_json('storage/options.json');
+    return $options[$key] ?? $default;
 }
 
 // Update CMS setting
 function update_option($key, $value) {
-    $pdo = Database::getInstance()->getPDO();
-    try {
-        $stmt = $pdo->prepare('INSERT INTO options (option_key, option_value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) ON CONFLICT (option_key) DO UPDATE SET option_value = EXCLUDED.option_value, updated_at = CURRENT_TIMESTAMP');
-        $stmt->execute([$key, $value]);
-        return true;
-    } catch (PDOException $e) {
-        error_log("Error updating option {$key}: " . $e->getMessage());
-        return false;
+    if (db_enabled()) {
+        $pdo = Database::getInstance()->getPDO();
+        try {
+            $stmt = $pdo->prepare('INSERT INTO options (option_key, option_value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) ON CONFLICT (option_key) DO UPDATE SET option_value = EXCLUDED.option_value, updated_at = CURRENT_TIMESTAMP');
+            $stmt->execute([$key, $value]);
+            return true;
+        } catch (PDOException $e) {
+            // Fallback to JSON on error.
+        }
     }
+
+    $options = load_json('storage/options.json');
+    $options[$key] = $value;
+    save_json('storage/options.json', $options);
+    return true;
 }
 
 // Load JSON file
@@ -197,25 +207,29 @@ function parse_json_field($value) {
 
 // Get all pages
 function get_pages() {
-    $rows = db_table('pages')->all();
-    $pages = [];
-    foreach ($rows as $row) {
-        $slug = $row['slug'] ?? '';
-        if ($slug === '') {
-            continue;
+    if (db_enabled()) {
+        $rows = db_table('pages')->all();
+        $pages = [];
+        foreach ($rows as $row) {
+            $slug = $row['slug'] ?? '';
+            if ($slug === '') {
+                continue;
+            }
+            $pages[$slug] = [
+                'id' => $row['id'] ?? $slug,
+                'slug' => $slug,
+                'title' => $row['title'] ?? '',
+                'content' => $row['content'] ?? '',
+                'meta_description' => $row['meta_description'] ?? '',
+                'status' => $row['status'] ?? 'published',
+                'created' => $row['created_at'] ?? '',
+                'updated' => $row['updated_at'] ?? '',
+            ];
         }
-        $pages[$slug] = [
-            'id' => $row['id'] ?? $slug,
-            'slug' => $slug,
-            'title' => $row['title'] ?? '',
-            'content' => $row['content'] ?? '',
-            'meta_description' => $row['meta_description'] ?? '',
-            'status' => $row['status'] ?? 'published',
-            'created' => $row['created_at'] ?? '',
-            'updated' => $row['updated_at'] ?? '',
-        ];
+        return $pages;
     }
-    return $pages;
+
+    return load_json('storage/pages.json');
 }
 
 // Get page by slug
@@ -252,71 +266,105 @@ function save_page($slug, $data) {
         $slug = 'page-' . substr(uniqid('', true), -6);
     }
 
-    $table = db_table('pages');
+    if (db_enabled()) {
+        $table = db_table('pages');
+        if ($originalSlug === '') {
+            $baseSlug = $slug;
+            $counter = 2;
+            while ($table->find('slug', $slug)) {
+                $slug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+        }
+
+        $existing = $table->find('slug', $slug);
+        $payload = [
+            'slug' => $slug,
+            'title' => $data['title'] ?? '',
+            'content' => $data['content'] ?? '',
+            'meta_description' => $data['meta_description'] ?? '',
+            'status' => $data['status'] ?? 'published',
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        if ($existing) {
+            $table->update($existing['id'], $payload);
+            return true;
+        }
+
+        $payload['id'] = uniqid('page_');
+        $payload['created_at'] = date('Y-m-d H:i:s');
+        $table->insert($payload);
+        return true;
+    }
+
+    $pages = get_pages();
     if ($originalSlug === '') {
         $baseSlug = $slug;
         $counter = 2;
-        while ($table->find('slug', $slug)) {
+        while (isset($pages[$slug])) {
             $slug = $baseSlug . '-' . $counter;
             $counter++;
         }
     }
-
-    $existing = $table->find('slug', $slug);
-    $payload = [
+    $pages[$slug] = array_merge($pages[$slug] ?? [], [
         'slug' => $slug,
         'title' => $data['title'] ?? '',
         'content' => $data['content'] ?? '',
         'meta_description' => $data['meta_description'] ?? '',
         'status' => $data['status'] ?? 'published',
-        'updated_at' => date('Y-m-d H:i:s'),
-    ];
-
-    if ($existing) {
-        $table->update($existing['id'], $payload);
-        return true;
-    }
-
-    $payload['id'] = uniqid('page_');
-    $payload['created_at'] = date('Y-m-d H:i:s');
-    $table->insert($payload);
+        'created' => $pages[$slug]['created'] ?? date('Y-m-d H:i:s'),
+        'updated' => date('Y-m-d H:i:s'),
+    ]);
+    save_json('storage/pages.json', $pages);
     return true;
 }
 
 // Delete page
 function delete_page($slug) {
-    $table = db_table('pages');
-    $existing = $table->find('slug', $slug);
-    if ($existing) {
-        $table->delete($existing['id']);
+    if (db_enabled()) {
+        $table = db_table('pages');
+        $existing = $table->find('slug', $slug);
+        if ($existing) {
+            $table->delete($existing['id']);
+        }
+        return true;
     }
+
+    $pages = get_pages();
+    unset($pages[$slug]);
+    save_json('storage/pages.json', $pages);
     return true;
 }
 
 // Get all posts
 function get_posts() {
-    $rows = db_table('posts')->all();
-    $posts = [];
-    foreach ($rows as $row) {
-        $slug = $row['slug'] ?? '';
-        if ($slug === '') {
-            continue;
+    if (db_enabled()) {
+        $rows = db_table('posts')->all();
+        $posts = [];
+        foreach ($rows as $row) {
+            $slug = $row['slug'] ?? '';
+            if ($slug === '') {
+                continue;
+            }
+            $posts[$slug] = [
+                'id' => $row['id'] ?? $slug,
+                'slug' => $slug,
+                'title' => $row['title'] ?? '',
+                'content' => $row['content'] ?? '',
+                'excerpt' => $row['excerpt'] ?? '',
+                'meta_description' => $row['meta_description'] ?? '',
+                'featured_image' => $row['featured_image'] ?? '',
+                'category' => $row['category'] ?? 'uncategorized',
+                'status' => $row['status'] ?? 'published',
+                'created' => $row['created_at'] ?? '',
+                'updated' => $row['updated_at'] ?? '',
+            ];
         }
-        $posts[$slug] = [
-            'id' => $row['id'] ?? $slug,
-            'slug' => $slug,
-            'title' => $row['title'] ?? '',
-            'content' => $row['content'] ?? '',
-            'excerpt' => $row['excerpt'] ?? '',
-            'meta_description' => $row['meta_description'] ?? '',
-            'featured_image' => $row['featured_image'] ?? '',
-            'category' => $row['category'] ?? 'uncategorized',
-            'status' => $row['status'] ?? 'published',
-            'created' => $row['created_at'] ?? '',
-            'updated' => $row['updated_at'] ?? '',
-        ];
+        return $posts;
     }
-    return $posts;
+
+    return load_json('storage/posts.json');
 }
 
 // Get post by slug
@@ -361,9 +409,38 @@ function save_post($slug, $data) {
         }
     }
     
-    $table = db_table('posts');
-    $existing = $table->find('slug', $slug);
-    $payload = [
+    if (db_enabled()) {
+        $table = db_table('posts');
+        $existing = $table->find('slug', $slug);
+        $payload = [
+            'slug' => $slug,
+            'title' => $data['title'] ?? '',
+            'content' => $data['content'] ?? '',
+            'excerpt' => $data['excerpt'] ?? '',
+            'meta_description' => $data['meta_description'] ?? '',
+            'featured_image' => $data['featured_image'] ?? '',
+            'status' => $data['status'] ?? 'published',
+            'category' => $data['category'] ?? 'uncategorized',
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        if ($existing) {
+            // Only update created_at if custom_datetime provided and different
+            if ($custom_datetime && $custom_datetime !== $existing['created_at']) {
+                $payload['created_at'] = $custom_datetime;
+            }
+            $table->update($existing['id'], $payload);
+            return $slug;
+        }
+
+        $payload['id'] = uniqid('post_');
+        $payload['created_at'] = $custom_datetime ?? date('Y-m-d H:i:s');
+        $table->insert($payload);
+        return $slug;
+    }
+
+    $posts = get_posts();
+    $posts[$slug] = array_merge($posts[$slug] ?? [], [
         'slug' => $slug,
         'title' => $data['title'] ?? '',
         'content' => $data['content'] ?? '',
@@ -372,31 +449,27 @@ function save_post($slug, $data) {
         'featured_image' => $data['featured_image'] ?? '',
         'status' => $data['status'] ?? 'published',
         'category' => $data['category'] ?? 'uncategorized',
-        'updated_at' => date('Y-m-d H:i:s'),
-    ];
-
-    if ($existing) {
-        // Only update created_at if custom_datetime provided and different
-        if ($custom_datetime && $custom_datetime !== $existing['created_at']) {
-            $payload['created_at'] = $custom_datetime;
-        }
-        $table->update($existing['id'], $payload);
-        return $slug;
-    }
-
-    $payload['id'] = uniqid('post_');
-    $payload['created_at'] = $custom_datetime ?? date('Y-m-d H:i:s');
-    $table->insert($payload);
+        'created' => $posts[$slug]['created'] ?? date('Y-m-d H:i:s'),
+        'updated' => date('Y-m-d H:i:s'),
+    ]);
+    save_json('storage/posts.json', $posts);
     return $slug;
 }
 
 // Delete post
 function delete_post($slug) {
-    $table = db_table('posts');
-    $existing = $table->find('slug', $slug);
-    if ($existing) {
-        $table->delete($existing['id']);
+    if (db_enabled()) {
+        $table = db_table('posts');
+        $existing = $table->find('slug', $slug);
+        if ($existing) {
+            $table->delete($existing['id']);
+        }
+        return true;
     }
+
+    $posts = get_posts();
+    unset($posts[$slug]);
+    save_json('storage/posts.json', $posts);
     return true;
 }
 
@@ -527,18 +600,10 @@ function render($template, $data = []) {
 
 // Get stats for dashboard
 function get_dashboard_stats() {
-    $totalUsers = 0;
-    try {
-        $customers = db_table('customers')->all();
-        $totalUsers = count($customers);
-    } catch (Exception $e) {
-        // If table doesn't exist yet, return 0
-    }
-    
     return [
         'total_pages' => count(get_pages()),
         'total_posts' => count(get_posts()),
-        'total_users' => $totalUsers,
+        'total_users' => count(load_json('storage/users.json')),
         'site_views' => get_option('site_views', 0),
     ];
 }
@@ -952,6 +1017,27 @@ function get_categories_data() {
 }
 
 function save_category_data($data) {
+    if (!db_enabled()) {
+        $categories = load_json('storage/categories.json');
+        $category_id = $data['id'] ?: uniqid('cat_');
+        $categories[$category_id] = [
+            'id' => $category_id,
+            'name' => $data['name'] ?? '',
+            'slug' => $data['slug'] ?? '',
+            'description' => $data['description'] ?? '',
+            'parent_id' => $data['parent_id'] ?? '',
+            'icon' => $data['icon'] ?? '',
+            'order' => intval($data['order'] ?? 0),
+            'active' => !empty($data['active']),
+            'product_count' => $categories[$category_id]['product_count'] ?? 0,
+            'created' => $categories[$category_id]['created'] ?? date('Y-m-d H:i:s'),
+            'updated' => date('Y-m-d H:i:s')
+        ];
+        save_json('storage/categories.json', $categories);
+        update_category_product_counts();
+        return $category_id;
+    }
+
     ensure_db_schema();
     $table = db_table('categories');
     $category_id = $data['id'] ?: uniqid('cat_');
@@ -995,6 +1081,10 @@ function delete_category_data($category_id) {
 }
 
 function get_customers_data() {
+    if (!db_enabled()) {
+        return load_json('storage/customers.json');
+    }
+
     ensure_db_schema();
     $customers = [];
     
@@ -1033,6 +1123,24 @@ function get_customers_data() {
 }
 
 function save_customer_data($data) {
+    if (!db_enabled()) {
+        $customers = load_json('storage/customers.json');
+        $customer_id = $data['id'] ?: uniqid('cust_');
+        $customers[$customer_id] = [
+            'id' => $customer_id,
+            'username' => $data['username'] ?? '',
+            'email' => $data['email'] ?? '',
+            'password' => $data['password'] ?? ($customers[$customer_id]['password'] ?? ''),
+            'role' => $data['role'] ?? 'customer',
+            'permissions' => $data['permissions'] ?? ['view_products', 'place_orders'],
+            'activated' => $customers[$customer_id]['activated'] ?? true,
+            'created' => $customers[$customer_id]['created'] ?? date('Y-m-d H:i:s'),
+            'updated' => date('Y-m-d H:i:s')
+        ];
+        save_json('storage/customers.json', $customers);
+        return $customer_id;
+    }
+
     ensure_db_schema();
     $role = $data['role'] ?? 'customer';
     
@@ -1095,6 +1203,13 @@ function save_customer_data($data) {
 }
 
 function delete_customer_data($customer_id) {
+    if (!db_enabled()) {
+        $customers = load_json('storage/customers.json');
+        unset($customers[$customer_id]);
+        save_json('storage/customers.json', $customers);
+        return true;
+    }
+
     ensure_db_schema();
     
     // Try to delete from both tables (admins and customers)
@@ -1117,6 +1232,10 @@ function delete_customer_data($customer_id) {
 }
 
 function get_orders_data() {
+    if (!db_enabled()) {
+        return load_json('storage/orders.json');
+    }
+
     $rows = db_table('orders')->all();
     $orders = [];
     foreach ($rows as $row) {
@@ -1163,6 +1282,14 @@ function get_orders_data() {
 }
 
 function save_order_data($orderData) {
+    if (!db_enabled()) {
+        $orders = load_json('storage/orders.json');
+        $order_id = $orderData['id'] ?? uniqid('order_');
+        $orders[$order_id] = $orderData;
+        save_json('storage/orders.json', $orders);
+        return $order_id;
+    }
+
     $table = db_table('orders');
     $order_id = $orderData['id'] ?? uniqid('order_');
     $itemsPayload = json_encode($orderData['items'] ?? [], JSON_UNESCAPED_UNICODE);
@@ -1207,7 +1334,15 @@ function save_order_data($orderData) {
 }
 
 function update_order_status_data($order_id, $status) {
-    return true;
+    if (!db_enabled()) {
+        $orders = load_json('storage/orders.json');
+        if (isset($orders[$order_id])) {
+            $orders[$order_id]['status'] = $status;
+            $orders[$order_id]['updated'] = date('Y-m-d H:i:s');
+            save_json('storage/orders.json', $orders);
+        }
+        return true;
+    }
 
     db_table('orders')->update($order_id, [
         'status' => $status,
@@ -1217,11 +1352,22 @@ function update_order_status_data($order_id, $status) {
 }
 
 function delete_order_data($order_id) {
+    if (!db_enabled()) {
+        $orders = load_json('storage/orders.json');
+        unset($orders[$order_id]);
+        save_json('storage/orders.json', $orders);
+        return true;
+    }
+
     db_table('orders')->delete($order_id);
     return true;
 }
 
 function get_inquiries_data() {
+    if (!db_enabled()) {
+        return load_json('storage/inquiries.json');
+    }
+
     $rows = db_table('inquiries')->all();
     $inquiries = [];
     foreach ($rows as $row) {
@@ -1245,6 +1391,14 @@ function get_inquiries_data() {
 }
 
 function save_inquiry_data($data) {
+    if (!db_enabled()) {
+        $inquiries = load_json('storage/inquiries.json');
+        $inquiry_id = $data['id'] ?? uniqid('inq_');
+        $inquiries[$inquiry_id] = $data;
+        save_json('storage/inquiries.json', $inquiries);
+        return $inquiry_id;
+    }
+
     $table = db_table('inquiries');
     $inquiry_id = $data['id'] ?? uniqid('inq_');
     $notesPayload = json_encode([
@@ -1276,6 +1430,16 @@ function save_inquiry_data($data) {
 }
 
 function update_inquiry_status_data($inquiry_id, $status) {
+    if (!db_enabled()) {
+        $inquiries = load_json('storage/inquiries.json');
+        if (isset($inquiries[$inquiry_id])) {
+            $inquiries[$inquiry_id]['status'] = $status;
+            $inquiries[$inquiry_id]['updated'] = date('Y-m-d H:i:s');
+            save_json('storage/inquiries.json', $inquiries);
+        }
+        return true;
+    }
+
     db_table('inquiries')->update($inquiry_id, [
         'status' => $status,
         'updated_at' => date('Y-m-d H:i:s')
@@ -1284,11 +1448,22 @@ function update_inquiry_status_data($inquiry_id, $status) {
 }
 
 function delete_inquiry_data($inquiry_id) {
+    if (!db_enabled()) {
+        $inquiries = load_json('storage/inquiries.json');
+        unset($inquiries[$inquiry_id]);
+        save_json('storage/inquiries.json', $inquiries);
+        return true;
+    }
+
     db_table('inquiries')->delete($inquiry_id);
     return true;
 }
 
 function get_discounts_data() {
+    if (!db_enabled()) {
+        return load_json('storage/discounts.json');
+    }
+
     ensure_db_schema();
     $rows = db_table('discounts')->all();
     $discounts = [];
@@ -1314,6 +1489,14 @@ function get_discounts_data() {
 }
 
 function save_discount_data($data) {
+    if (!db_enabled()) {
+        $discounts = load_json('storage/discounts.json');
+        $discount_id = $data['id'] ?: uniqid('disc_');
+        $discounts[$discount_id] = $data;
+        save_json('storage/discounts.json', $discounts);
+        return $discount_id;
+    }
+
     ensure_db_schema();
     $table = db_table('discounts');
     $discount_id = $data['id'] ?: uniqid('disc_');
@@ -1345,11 +1528,27 @@ function save_discount_data($data) {
 }
 
 function delete_discount_data($discount_id) {
+    if (!db_enabled()) {
+        $discounts = load_json('storage/discounts.json');
+        unset($discounts[$discount_id]);
+        save_json('storage/discounts.json', $discounts);
+        return true;
+    }
+
     db_table('discounts')->delete($discount_id);
     return true;
 }
 
 function update_discount_usage($discount_id) {
+    if (!db_enabled()) {
+        $discounts = load_json('storage/discounts.json');
+        if (isset($discounts[$discount_id])) {
+            $discounts[$discount_id]['used_count'] = intval($discounts[$discount_id]['used_count'] ?? 0) + 1;
+            save_json('storage/discounts.json', $discounts);
+        }
+        return true;
+    }
+
     $row = db_table('discounts')->find('id', $discount_id);
     if ($row) {
         $current = intval($row['uses_count'] ?? 0) + 1;
@@ -1362,6 +1561,10 @@ function update_discount_usage($discount_id) {
 }
 
 function get_promotions_data() {
+    if (!db_enabled()) {
+        return load_json('storage/promotions.json');
+    }
+
     ensure_db_schema();
     $rows = db_table('promotions')->all();
     $promotions = [];
@@ -1390,6 +1593,14 @@ function get_promotions_data() {
 }
 
 function save_promotion_data($data) {
+    if (!db_enabled()) {
+        $promotions = load_json('storage/promotions.json');
+        $promotion_id = $data['id'] ?: uniqid('promo_');
+        $promotions[$promotion_id] = $data;
+        save_json('storage/promotions.json', $promotions);
+        return $promotion_id;
+    }
+
     ensure_db_schema();
     $table = db_table('promotions');
     $promotion_id = $data['id'] ?: uniqid('promo_');
@@ -1419,6 +1630,13 @@ function save_promotion_data($data) {
 }
 
 function delete_promotion_data($promotion_id) {
+    if (!db_enabled()) {
+        $promotions = load_json('storage/promotions.json');
+        unset($promotions[$promotion_id]);
+        save_json('storage/promotions.json', $promotions);
+        return true;
+    }
+
     db_table('promotions')->delete($promotion_id);
     return true;
 }
@@ -1428,6 +1646,32 @@ function delete_promotion_data($promotion_id) {
  * Counts how many published products belong to each category
  */
 function update_category_product_counts() {
+    if (!db_enabled()) {
+        $categories = load_json('storage/categories.json');
+        $products = load_json('storage/products.json');
+
+        foreach ($categories as &$category) {
+            $category['product_count'] = 0;
+        }
+
+        foreach ($products as $product) {
+            $categorySlug = $product['category'] ?? '';
+            if (empty($categorySlug)) {
+                continue;
+            }
+
+            foreach ($categories as &$category) {
+                if ($category['slug'] === $categorySlug) {
+                    $category['product_count'] = ($category['product_count'] ?? 0) + 1;
+                    break;
+                }
+            }
+        }
+
+        save_json('storage/categories.json', $categories);
+        return;
+    }
+
     ensure_db_schema();
     $categories = db_table('categories')->all();
     $products = db_table('products')->all();

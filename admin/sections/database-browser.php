@@ -5,19 +5,6 @@
 
 require_admin();
 
-if (!db_enabled()) {
-    echo '<div class="card card-warning">';
-    echo '<h2>⚠️ Database Not Enabled</h2>';
-    echo '<p>Currently using JSON file storage. To use database browser:</p>';
-    echo '<ol>';
-    echo '<li>Go to <a href="?section=database">Database Configuration</a></li>';
-    echo '<li>Configure MySQL or PostgreSQL connection</li>';
-    echo '<li>Save and return here</li>';
-    echo '</ol>';
-    echo '</div>';
-    return;
-}
-
 $pdo = Database::getInstance()->getPDO();
 $driver = Database::getInstance()->getDriver();
 $selectedTable = $_GET['table'] ?? '';
