@@ -30,11 +30,9 @@ $user_role = $_SESSION['user_role'] ?? 'guest';
 $cart = $_SESSION['cart'] ?? [];
 $cart_count = array_sum(array_column($cart, 'quantity'));
 
-// Get categories
+// Get categories - show ALL categories
 $categories = get_categories_data();
-$activeCategories = array_filter($categories, function($cat) {
-    return $cat['active'] ?? true;
-});
+$activeCategories = $categories; // Show all categories, not just active ones
 usort($activeCategories, function($a, $b) {
     return ($a['order'] ?? 0) <=> ($b['order'] ?? 0);
 });
@@ -290,10 +288,10 @@ foreach ($categories as $category) {
         </div>
     </section>
 
-    <?php if ($latest_post): ?>
-    <section class="latest-post-section">
+    <section class="latest-post-section" id="blog">
         <div class="container">
-            <h2 class="section-title"><?php echo __('blog'); ?></h2>
+            <h2 class="section-title"><?php echo __('homepage.latest_blog_post'); ?></h2>
+            <?php if ($latest_post): ?>
             <div class="latest-post-card">
                 <?php if (!empty($latest_post['featured_image'])): ?>
                     <div class="post-image">
@@ -316,9 +314,14 @@ foreach ($categories as $category) {
                     </div>
                 </div>
             </div>
+            <?php else: ?>
+                <div class="empty-state">
+                    <p><?php echo __('homepage.no_blog_posts'); ?></p>
+                    <a href="/admin/index.php?section=posts" class="btn btn-primary"><?php echo __('homepage.write_first_post'); ?></a>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
-    <?php endif; ?>
 
     <footer>
         <p>&copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?>. Всички права запазени.</p>

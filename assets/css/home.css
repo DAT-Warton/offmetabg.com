@@ -163,7 +163,7 @@ header {
 .hero {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
     color: var(--text-primary);
-    padding: 60px 40px 70px;
+    padding: 30px 40px 40px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -1318,7 +1318,7 @@ footer {
 
 @media (max-width: 480px) {
     .hero {
-        padding: 35px 20px 45px;
+        padding: 20px 20px 30px;
     }
 
     .hero h2 {
