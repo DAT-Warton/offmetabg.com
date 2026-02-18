@@ -53,14 +53,22 @@ if (session_status() === PHP_SESSION_NONE) {
 $isLoggedIn = isset($_SESSION['admin_user']) && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
 
 if (!$isLoggedIn && isset($_POST['login'])) {
-    $username = $_POST['username'] ?? '';
+    $usernameOrEmail = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
     $loginSuccess = false;
 
     // Check database for admin credentials
     if (db_enabled()) {
-        // Check admins table first
-        $adminRecord = db_table('admins')->find('username', $username);
+        $adminRecord = null;
+        
+        // Try to find by username first
+        $adminRecord = db_table('admins')->find('username', $usernameOrEmail);
+        
+        // If not found, try by email
+        if (!$adminRecord) {
+            $adminRecord = db_table('admins')->find('email', $usernameOrEmail);
+        }
+        
         if ($adminRecord && password_verify($password, $adminRecord['password'])) {
             $_SESSION['admin_user'] = $adminRecord['username'];
             $_SESSION['user_role'] = 'admin';
@@ -71,7 +79,13 @@ if (!$isLoggedIn && isset($_POST['login'])) {
 
         // If not found, check customers with admin role
         if (!$loginSuccess) {
-            $customerRecord = db_table('customers')->find('username', $username);
+            $customerRecord = db_table('customers')->find('username', $usernameOrEmail);
+            
+            // Try by email if not found by username
+            if (!$customerRecord) {
+                $customerRecord = db_table('customers')->find('email', $usernameOrEmail);
+            }
+            
             if ($customerRecord && 
                 password_verify($password, $customerRecord['password']) && 
                 ($customerRecord['role'] ?? 'customer') === 'admin') {
@@ -178,8 +192,8 @@ if (!$isLoggedIn) {
 
             <form method="POST">
                 <div class="form-group">
-                    <label for="username"><?php echo __('auth.username'); ?></label>
-                    <input type="text" id="username" name="username" required autofocus>
+                    <label for="username">Username or Email</label>
+                    <input type="text" id="username" name="username" placeholder="Enter username or email" required autofocus>
                 </div>
                 <div class="form-group">
                     <label for="password"><?php echo __('auth.password'); ?></label>
