@@ -1,0 +1,251 @@
+# ============================================================================
+# GITIGNORE - OffMetaBG E-Commerce CMS
+# Production-ready configuration - excludes all testing/debug/internal files
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# RUNTIME DATA & GENERATED FILES
+# ----------------------------------------------------------------------------
+storage/
+uploads/
+logs/
+cache/
+temp/
+tmp/
+
+# ----------------------------------------------------------------------------
+# INTERNAL TOOLS (NEVER COMMIT - All testing/debug/automation)
+# ----------------------------------------------------------------------------
+internal-tools/
+
+# ----------------------------------------------------------------------------
+# DEPLOYMENT SCRIPTS (Contains server IPs and paths)
+# ----------------------------------------------------------------------------
+deploy*.ps1
+deploy*.sh
+*.deploy.ps1
+*.deploy.sh
+deploy-mobile-fix.ps1
+
+# ----------------------------------------------------------------------------
+# CONFIGURATION FILES (Sensitive credentials)
+# ----------------------------------------------------------------------------
+config/database.json
+config/email-config.php
+config/courier-config.php
+config/cloudflare-dns-setup.php
+.env
+.env.local
+.env.production
+.env.development
+.env.*.local
+.cloudflare-credentials
+
+# ----------------------------------------------------------------------------
+# DOCUMENTATION (Local/sensitive information)
+# ----------------------------------------------------------------------------
+# Internal documentation with credentials or local setup
+SECRETS.local.md
+SECRETS.md
+credentials.md
+*.secret.md
+
+# Project tracking & summaries (internal use)
+CHANGES-SUMMARY.md
+FINAL-STATE.md
+MIGRATION-COMPLETE.txt
+QUICK-START.md
+.github-deploy-checklist.md
+DEPLOYMENT-SUMMARY.local.md
+DEPLOYMENT-SUMMARY.md
+TODO-*.md
+FINAL-VERIFICATION.php
+
+# Verification and test reports
+ADMIN-OPERATIONS-VERIFICATION.md
+ADMIN-FRONTEND-SYNC-VERIFICATION.md
+TESTING-*.md
+INQUIRY-TEST-RESULTS.md
+PROMOTIONS-DISCOUNTS-REPORT.md
+ADMIN-TO-FRONTEND-MAPPING.md
+HARDCODED-ANALYSIS.md
+
+# Migration & setup documentation
+MIGRATION-GUIDE.md
+MIGRATION-COMPLETE.txt
+NORMALIZED-DB-STRUCTURE.md
+LOCAL-MSSQL-SETUP.md
+OAUTH-SETUP.md
+OAUTH-IMPLEMENTATION-COMPLETE.md
+PROMOTIONS-IMPLEMENTATION-COMPLETE.md
+REFACTORING-COMPLETE.md
+PERFORMANCE-OPTIMIZATION.md
+POSTFIX-SMTP-SETUP.md
+THEME-SYSTEM.local.md
+VPS-DEPLOYMENT-STEPS.md
+SETUP.md
+
+# ----------------------------------------------------------------------------
+# DEVELOPMENT & DEPLOYMENT SCRIPTS
+# ----------------------------------------------------------------------------
+# VPS/Server deployment
+deploy-to-vps.ps1
+deploy-vps.sh
+deploy.ps1
+setup-vps.sh
+git-deploy.ps1
+quick-deploy.ps1
+hetzner-cloud-config.yaml
+nginx-offmetabg.conf
+nginx-offmetabg-optimized.conf
+Procfile
+Dockerfile
+
+# PowerShell scripts (local automation)
+*.local.ps1
+*.local.sh
+deploy-config.local.ps1
+remove-sensitive-files.local.ps1
+cloudflare-config.local.ps1
+purge-cloudflare-cache.ps1
+set-cloudflare-cache-ttl.ps1
+export-production-db.ps1
+comprehensive-health-check.ps1
+system-health-check.ps1
+minify-assets.ps1
+minify.ps1
+
+# Shell scripts (server setup/automation)
+setup-postfix-smtp.sh.example
+setup-smtp-relay.sh
+emergency-change-db-password.sh
+test-vps-inquiries.sh
+
+# ----------------------------------------------------------------------------
+# TEST FILES (All testing/debugging code)
+# ----------------------------------------------------------------------------
+# Test PHP files
+test-*.php
+**/test-*.php
+test-*.html
+debug-*.php
+check-*.php
+show-*.php
+pg-diagnostic.php
+web-db-test.php
+
+# Specific test files
+test-email-send.php
+create-test-user.php
+create-admin.php
+reset-admin-passwords.php
+update-stefie-password.php
+
+# PowerShell test scripts
+test-*.ps1
+automated-crm-test.ps1
+correct-admin-test.ps1
+create-test-content.ps1
+final-manual-test-instructions.ps1
+final-report.ps1
+final-verification-test.ps1
+test-activation-flow.ps1
+test-admin-api.ps1
+test-admin-create.ps1
+test-admin-full.php
+test-crm.php
+test-direct-admin-post.ps1
+test-everything.ps1
+test-frontend-integration.ps1
+test-live-crm.ps1
+
+# ----------------------------------------------------------------------------
+# MIGRATION & DATABASE SCRIPTS
+# ----------------------------------------------------------------------------
+*.sql
+database-schema.sql
+schema-updates.sql
+add-missing-categories.sql
+add-wishlist-table.sql
+apply-activation-migration.ps1
+reset-pg-password.sql
+setup-test-promotions.sql
+test-discount.sql
+update-currency.sql
+fix-product-edit-constraints.sql
+
+# Migration scripts
+migrations/
+old-json-backup/
+run-migration.php
+simple-migration.php
+complete-migration.php
+sync-json-to-db.php
+remove-json-fallbacks.php
+link-products-categories.php
+install.php
+
+# Database optimization/fixes
+fix-product-edit-constraints.php
+optimize-images.php
+optimize-product-images.php
+purge-cloudflare-cache.php
+
+# ----------------------------------------------------------------------------
+# IDE & EDITOR FILES
+# ----------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.cursorrules
+
+# ----------------------------------------------------------------------------
+# CLOUDFLARE & API REFERENCES
+# ----------------------------------------------------------------------------
+CLOUDFLARE-API-REFERENCE.md
+CLOUDFLARE-API-REFERENCE.md.example
+
+# ----------------------------------------------------------------------------
+# LOCAL DEVELOPMENT FILES
+# ----------------------------------------------------------------------------
+start-server.bat
+restart-server.bat
+*.local.json
+*.local.env
+*.local.md
+
+# ----------------------------------------------------------------------------
+# SECURITY & CREDENTIALS
+# ----------------------------------------------------------------------------
+# SSH keys
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+authorized_keys
+
+# Password scripts
+*-password.sh
+*-password.php
+database-new.json
+pw.sql
+
+# ----------------------------------------------------------------------------
+# OS & SYSTEM FILES
+# ----------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.bak
+*.tmp
+*.log
+
+# ----------------------------------------------------------------------------
+# BACKUP FILES
+# ----------------------------------------------------------------------------
+*.backup
+*.b64
+temp-dashboard.b64
+login-response.html

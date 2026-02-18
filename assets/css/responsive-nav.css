@@ -1,0 +1,238 @@
+/* Professional Responsive Navigation - Mobile & Tablet */
+
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.hamburger-line {
+    width: 24px;
+    height: 3px;
+    background-color: var(--text-primary);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+
+.mobile-menu-toggle.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Navigation Layout */
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.main-nav {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.nav-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Cart Button Compact */
+.btn-cart {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cart-text {
+    display: inline;
+}
+
+/* Tablet Breakpoint - 1024px */
+@media (max-width: 1024px) {
+    .header-container {
+        padding: 8px 16px;
+    }
+    
+    .nav-buttons {
+        gap: 8px;
+    }
+    
+    .main-nav {
+        gap: 8px;
+    }
+    
+    .btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .btn-text {
+        display: none; /* Hide button text on tablet */
+    }
+    
+    .cart-text {
+        display: none; /* Cart icon only */
+    }
+    
+    .profile-trigger-name {
+        display: none; /* Profile picture/initials only */
+    }
+}
+
+/* Mobile Breakpoint - 768px */
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+    
+    .header-container {
+        padding: 10px 16px;
+        flex-wrap: nowrap;
+        flex-direction: row !important; /* Override old home.css column layout */
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .logo h1 {
+        font-size: 16px;
+    }
+    
+    .nav-buttons {
+        flex-wrap: nowrap;
+        gap: 8px;
+    }
+    
+    /* Mobile Navigation Drawer */
+    .main-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: var(--bg-card);
+        backdrop-filter: blur(20px);
+        padding: 80px 20px 20px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        box-shadow: -4px 0 16px var(--shadow-xl);
+        transition: right 0.3s ease;
+        z-index: 1000;
+        overflow-y: auto;
+    }
+    
+    .main-nav.active {
+        right: 0;
+    }
+    
+    .main-nav .btn {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+    
+    .main-nav .btn-text {
+        display: inline; /* Show text in mobile drawer */
+    }
+    
+    /* Mobile Overlay */
+    body.mobile-menu-open::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 999;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    /* Nav Controls - Always visible */
+    .nav-controls {
+        flex-shrink: 0;
+    }
+    
+    .cart-text {
+        display: none;
+    }
+    
+    .lang-toggle {
+        padding: 6px 10px;
+        font-size: 11px;
+        min-width: unset;
+    }
+    
+    .btn-cart {
+        padding: 6px 10px;
+        min-width: unset;
+    }
+    
+    .btn-cart svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Small Mobile - 480px */
+@media (max-width: 480px) {
+    .logo h1 {
+        font-size: 14px;
+    }
+    
+    .logo img {
+        max-width: 100px;
+    }
+    
+    .main-nav {
+        width: 250px;
+    }
+    
+    .nav-controls {
+        gap: 6px;
+    }
+    
+    .lang-toggle {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    
+    .btn-cart {
+        padding: 4px 8px;
+    }
+    
+    .btn-cart svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .cart-badge {
+        width: 16px;
+        height: 16px;
+        font-size: 10px;
+        top: -6px;
+        right: -6px;
+    }
+}

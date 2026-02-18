@@ -1,0 +1,29 @@
+/**
+ * OffMeta Theme Manager - Simplified for single Midnight Purple theme
+ * No theme switching - all functionality removed
+ */
+
+// Empty stub for backward compatibility
+class ThemeManager {
+    constructor() {
+        // Single theme only - no switching needed
+    }
+    
+    init() {
+        // No initialization needed
+    }
+}
+
+// Expose to global scope for backward compatibility
+window.themeManager = new ThemeManager();
+window.ThemeManager = ThemeManager;
+
+// Auto-initialize on page load (backward compatibility)
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('OffMeta: Single Midnight Purple theme active');
+});
+
+// Export if using modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ThemeManager;
+}
