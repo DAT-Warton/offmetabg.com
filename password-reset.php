@@ -105,10 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = __('password_reset.invalid_email');
     } else {
-        // Check if database is enabled
-        if (!db_enabled()) {
-            $error = __('password_reset.system_error');
-        } else {
+        try {
             // Check if user exists
             $user = null;
             $user_id = null;
@@ -142,12 +139,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
                 if ($result['success']) {
                     $message = __('password_reset.reset_link_sent');
                 } else {
-                    $error = __('password_reset.email_send_error');
+                    $error = __('password_reset.email_send_error') . ' - ' . ($result['message'] ?? 'Unknown error');
                 }
             } else {
                 // Don't reveal if email exists for security
                 $message = __('password_reset.email_if_exists');
             }
+        } catch (Exception $e) {
+            error_log('Password reset error: ' . $e->getMessage());
+            $error = __('password_reset.system_error');
         }
     }
 }
