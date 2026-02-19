@@ -215,7 +215,7 @@ purge-cloudflare-cache.php
 # ----------------------------------------------------------------------------
 # IDE & EDITOR FILES
 # ----------------------------------------------------------------------------
-.vscode/
+# .vscode/ - ВКЛЮЧЕНА В GIT за security settings (блокира credential leaks)
 .idea/
 *.swp
 *.swo
