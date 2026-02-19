@@ -131,8 +131,16 @@ test-*.html
 debug-*.php
 check-*.php
 show-*.php
+*diagnostic*.php
+**/*diagnostic*.php
 pg-diagnostic.php
 web-db-test.php
+
+# Test CSS/JS files
+*test*.css
+**/*test*.css
+*test*.js
+**/*test*.js
 
 # Specific test files
 test-email-send.php
