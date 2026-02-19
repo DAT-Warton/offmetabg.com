@@ -740,6 +740,7 @@ $translations = [
         'reset_link_sent' => 'Password reset link has been sent to your email.',
         'email_send_error' => 'Error sending email. Please try again.',
         'email_if_exists' => 'If this email exists, a reset link will be sent.',
+        'system_error' => 'System error. Please try again later.',
         'go_to_login' => 'Go to Login',
         'new_password' => 'New Password',
         'confirm_password' => 'Confirm Password',
