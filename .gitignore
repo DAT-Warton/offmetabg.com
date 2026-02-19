@@ -12,6 +12,7 @@ logs/
 cache/
 temp/
 tmp/
+backups/
 
 # ----------------------------------------------------------------------------
 # INTERNAL TOOLS (NEVER COMMIT - All testing/debug/automation)
@@ -83,6 +84,8 @@ PERFORMANCE-OPTIMIZATION.md
 POSTFIX-SMTP-SETUP.md
 THEME-SYSTEM.local.md
 VPS-DEPLOYMENT-STEPS.md
+VPS-EMAIL-DIAGNOSTIC-MANUAL.md
+DEPLOYMENT.md
 SETUP.md
 
 # ----------------------------------------------------------------------------
@@ -114,12 +117,17 @@ comprehensive-health-check.ps1
 system-health-check.ps1
 minify-assets.ps1
 minify.ps1
+add-email-dns.ps1
+add-email-dns.php
+vps-email-diagnostic.ps1
 
 # Shell scripts (server setup/automation)
 setup-postfix-smtp.sh.example
 setup-smtp-relay.sh
 emergency-change-db-password.sh
 test-vps-inquiries.sh
+vps-pull.sh
+vps-setup-email.sh
 
 # ----------------------------------------------------------------------------
 # TEST FILES (All testing/debugging code)
