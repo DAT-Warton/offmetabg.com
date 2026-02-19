@@ -75,6 +75,14 @@ class EmailSender {
         // Prepare recipient
         $to = !empty($to_name) ? "{$to_name} <{$to_email}>": $to_email;
         
+        // Log email attempt
+        $this->logEmail('Attempting to send email', [
+            'to' => $to,
+            'subject' => $subject,
+            'from' => $from_email,
+            'driver' => $this->config['driver']
+        ]);
+        
         // Send email using PHP mail() function (uses local Postfix)
         $result = @mail(
             $to,
@@ -84,11 +92,13 @@ class EmailSender {
         );
         
         if ($result) {
+            $this->logEmail('PHP mail() returned TRUE', ['to' => $to, 'subject' => $subject]);
             return ['success' => true, 'message' => 'Email sent successfully'];
         } else {
             $error = error_get_last();
             $error_message = $error ? $error['message'] : 'Unknown error';
             $this->logError('PHP mail() Error: ' . $error_message);
+            $this->logEmail('PHP mail() returned FALSE', ['to' => $to, 'error' => $error_message]);
             return ['success' => false, 'message' => 'Failed to send email'];
         }
     }
@@ -221,6 +231,29 @@ class EmailSender {
         
         $timestamp = date('Y-m-d H:i:s');
         $log_message = "[$timestamp] $message\n";
+        
+        @file_put_contents($log_file, $log_message, FILE_APPEND);
+    }
+    
+    /**
+     * Log email activity
+     */
+    private function logEmail($message, $data = []) {
+        $log_file = __DIR__ . '/../storage/email-activity.log';
+        $log_dir = dirname($log_file);
+        
+        if (!is_dir($log_dir)) {
+            @mkdir($log_dir, 0755, true);
+        }
+        
+        $timestamp = date('Y-m-d H:i:s');
+        $log_message = "[$timestamp] $message";
+        
+        if (!empty($data)) {
+            $log_message .= ' | ' . json_encode($data, JSON_UNESCAPED_UNICODE);
+        }
+        
+        $log_message .= "\n";
         
         @file_put_contents($log_file, $log_message, FILE_APPEND);
     }
