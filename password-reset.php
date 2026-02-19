@@ -237,7 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_reset'])) {
             <?php endif; ?>
             
             <div class="back-link-container">
-                <a href="/auth.php?action=login" class="btn-link">
+                <a href="/" class="btn-link">
                     <?php echo __('back_to_shop'); ?>
                 </a>
             </div>
