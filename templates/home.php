@@ -11,8 +11,9 @@ require_once __DIR__ . '/../includes/icons.php';
 $currency_settings = get_currency_settings();
 $default_currency = $currency_settings['symbol'];
 
-// Get products
+// Get products and apply active promotions/discounts
 $products = get_products_data();
+$products = apply_promotions_to_products($products);
 $published_products = array_filter($products, function($p) {
     return ($p['status'] ?? 'published') === 'published';
 });
@@ -86,8 +87,8 @@ foreach ($categories as $category) {
     <link rel="icon"type="image/x-icon"href="/favicon.ico">
     
     <!-- Preload critical resources for faster LCP -->
-    <link rel="preload"href="assets/css/themes.min.css"as="style">
-    <link rel="preload"href="assets/css/home.min.css"as="style">
+    <link rel="preload" href="/assets/css/themes.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- removed per-page preload for home.min.css, using unified app CSS -->
     <?php
     $logo_url = get_site_setting('logo_url', '');
     if (!empty($logo_url)):
@@ -102,11 +103,9 @@ foreach ($categories as $category) {
     <!-- zaeshkatadupka will be removed in near future-->
     <link rel="dns-prefetch"href="https://zaeshkatadupka.eu">
     
-    <link rel="stylesheet"href="assets/css/themes.min.css">
-    <link rel="stylesheet"href="assets/css/home.min.css">
-    <link rel="stylesheet"href="assets/css/profile-dropdown.css">
-    <link rel="stylesheet"href="assets/css/responsive-nav.css">
-    <link rel="stylesheet"href="assets/css/sidebar-banners.css">
+    <!-- Unified CSS -->
+    <link rel="stylesheet"href="assets/css/themes.min.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet"href="assets/css/app.min.css?v=<?php echo time(); ?>">
     <?php echo get_custom_theme_css(); ?>
 </head>
 <body>
@@ -422,7 +421,12 @@ foreach ($categories as $category) {
                                 <?php if (!empty($productCategoryLabel)): ?>
                                     <span class="product-category"><?php echo htmlspecialchars($productCategoryLabel); ?></span>
                                 <?php endif; ?>
-                                <h3 class="product-title"><?php echo htmlspecialchars($product['name']); ?></h3>
+                                <h3 class="product-title"><?php echo html_entity_decode(htmlspecialchars($product['name']), ENT_QUOTES, 'UTF-8'); ?></h3>
+                                <?php if (!empty($product['short_description'])): ?>
+                                    <p class="product-short-description" style="color: #666; font-size: 0.9em; margin: 8px 0; line-height: 1.4; max-height: 2.8em; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                        <?php echo strip_tags(html_entity_decode($product['short_description'], ENT_QUOTES, 'UTF-8')); ?>
+                                    </p>
+                                <?php endif; ?>
                                 <?php if (!empty($product['slug'])): ?>
                                     <a href="/product/<?php echo urlencode($product['slug']); ?>"class="btn-learn-more">
                                         📖 <?php echo __('product.learn_more'); ?>
@@ -432,7 +436,44 @@ foreach ($categories as $category) {
                                 <div class="product-footer">
                                     <div>
                                         <div class="product-price">
-                                            <?php echo number_format($price_eur, 2); ?> <span class="currency"><?php echo $default_currency; ?></span>
+                                            <?php if ($price_eur <= 0): ?>
+                                                <span class="contact-price" style="color: #3498db; font-weight: 600; font-style: italic;">
+                                                    📞 Свържете се за цена
+                                                </span>
+                                            <?php elseif (!empty($product['compare_price']) && $product['compare_price'] > $price_eur): ?>
+                                                <?php 
+                                                $dual_compare = get_dual_currency_price($product['compare_price'], 'EUR');
+                                                $dual_sale = get_dual_currency_price($price_eur, 'EUR');
+                                                ?>
+                                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                    <div>
+                                                        <span class="original-price" style="text-decoration: line-through; color: #999; font-size: 0.85em;">
+                                                            <?php echo number_format($dual_compare['eur'], 2); ?> € (<?php echo number_format($dual_compare['bgn'], 2); ?> лв.)
+                                                        </span>
+                                                    </div>
+                                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                                        <span class="sale-price" style="color: #e74c3c; font-weight: 700; font-size: 1.1em;">
+                                                            <?php echo number_format($dual_sale['eur'], 2); ?> €
+                                                        </span>
+                                                        <span class="sale-price-bgn" style="color: #666; font-size: 0.9em;">
+                                                            (<?php echo number_format($dual_sale['bgn'], 2); ?> лв.)
+                                                        </span>
+                                                        <span class="discount-badge" style="background: #e74c3c; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75em;">
+                                                            -<?php echo round((1 - $price_eur / $product['compare_price']) * 100); ?>%
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            <?php else: ?>
+                                                <?php 
+                                                $dual_price = get_dual_currency_price($price_eur, 'EUR');
+                                                ?>
+                                                <span class="price-eur" style="font-weight: 700; font-size: 1.1em;">
+                                                    <?php echo number_format($dual_price['eur'], 2); ?> €
+                                                </span>
+                                                <span class="price-bgn" style="color: #666; font-size: 0.9em; margin-left: 6px;">
+                                                    (<?php echo number_format($dual_price['bgn'], 2); ?> лв.)
+                                                </span>
+                                            <?php endif; ?>
                                         </div>
                                         <?php if ($stock > 0): ?>
                                             <div class="stock-indicator <?php echo $stock <= 5 ? 'low' : ''; ?>">

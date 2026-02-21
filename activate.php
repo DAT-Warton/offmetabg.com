@@ -90,8 +90,8 @@ if (empty($token)) {
             }
         })();
     </script>
-    <link rel="stylesheet"href="/assets/css/themes.css">
-    <link rel="stylesheet"href="/assets/css/activate.css">
+    <link rel="stylesheet" href="/assets/css/themes.min.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/assets/css/app.min.css?v=<?php echo time(); ?>">
 </head>
 <body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <div class="container">

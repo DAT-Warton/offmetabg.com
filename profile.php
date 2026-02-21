@@ -211,25 +211,32 @@ try {
 <html lang="<?php echo current_lang(); ?>">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo __('profile.my_profile'); ?> - <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></title>
     <script>
-        // Apply theme immediately from localStorage to prevent flash
+        // Apply theme immediately: prefer localStorage, fall back to server setting
         (function() {
-            const storedTheme = localStorage.getItem('offmeta_theme');
-            if (storedTheme) {
-                document.documentElement.setAttribute('data-theme', storedTheme);
+            try {
+                const storedTheme = localStorage.getItem('offmeta_theme');
+                if (storedTheme) {
+                    document.documentElement.setAttribute('data-theme', storedTheme);
+                } else {
+                    document.documentElement.setAttribute('data-theme', '<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>');
+                }
+            } catch (e) {
+                // ignore storage errors and fallback to server value
+                document.documentElement.setAttribute('data-theme', '<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>');
             }
         })();
     </script>
-    <link rel="stylesheet"href="/assets/css/themes.css">
-    <link rel="stylesheet"href="/assets/css/profile.css">
+    <link rel="stylesheet" href="/assets/css/themes.min.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/assets/css/app.min.css?v=<?php echo time(); ?>">
 </head>
 <body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
     <div class="profile-container">
         <header class="profile-header">
             <div class="header-content">
-                <a href="/"class="back-link"><?php echo __('back_to_shop'); ?></a>
+                <a href="/" class="back-link"><?php echo __('back_to_shop'); ?></a>
                 <h1><?php echo __('profile.my_profile'); ?></h1>
             </div>
         </header>
@@ -243,19 +250,19 @@ try {
         <?php endif; ?>
 
         <div class="profile-tabs">
-            <a href="?tab=profile"class="tab <?php echo $active_tab === 'profile' ? 'active' : ''; ?>">
+            <a href="?tab=profile" class="tab <?php echo $active_tab === 'profile' ? 'active' : ''; ?>">
                 <?php echo icon_user(20); ?> <?php echo __('profile.personal_info'); ?>
             </a>
-            <a href="?tab=security"class="tab <?php echo $active_tab === 'security' ? 'active' : ''; ?>">
+            <a href="?tab=security" class="tab <?php echo $active_tab === 'security' ? 'active' : ''; ?>">
                 <?php echo icon_lock(20); ?> <?php echo __('profile.security'); ?>
             </a>
-            <a href="?tab=wishlist"class="tab <?php echo $active_tab === 'wishlist' ? 'active' : ''; ?>">
+            <a href="?tab=wishlist" class="tab <?php echo $active_tab === 'wishlist' ? 'active' : ''; ?>">
                 <?php echo icon_heart(20); ?> <?php echo __('profile.wishlist'); ?>
                 <?php if (count($wishlist_items) > 0): ?>
                     <span class="badge"><?php echo count($wishlist_items); ?></span>
                 <?php endif; ?>
             </a>
-            <a href="?tab=orders"class="tab <?php echo $active_tab === 'orders' ? 'active' : ''; ?>">
+            <a href="?tab=orders" class="tab <?php echo $active_tab === 'orders' ? 'active' : ''; ?>">
                 <?php echo icon_shopping_bag(20); ?> <?php echo __('profile.orders'); ?>
             </a>
         </div>
@@ -271,7 +278,7 @@ try {
                     <div class="profile-picture-section">
                         <div class="current-picture">
                             <?php if (!empty($customer['profile_picture'])): ?>
-                                <img src="/<?php echo htmlspecialchars($customer['profile_picture']); ?>"alt="Profile Picture"class="profile-pic">
+                                <img src="/<?php echo htmlspecialchars($customer['profile_picture']); ?>" alt="Profile Picture" class="profile-pic">
                             <?php else: ?>
                                 <div class="profile-pic-placeholder">
                                     <?php echo icon_user(64); ?>
@@ -279,17 +286,17 @@ try {
                             <?php endif; ?>
                         </div>
                         <div class="picture-actions">
-                            <form method="POST"enctype="multipart/form-data"class="upload-form">
+                            <form method="POST" enctype="multipart/form-data" class="upload-form">
                                 <input type="hidden"name="action"value="upload_picture">
-                                <label for="profile_picture"class="btn btn-secondary">
+                                <label for="profile_picture" class="btn btn-secondary">
                                     <?php echo icon_upload(16); ?> <?php echo __('profile.upload_picture'); ?>
                                 </label>
                                 <input type="file"id="profile_picture"name="profile_picture"accept="image/*"style="display: none;"onchange="this.form.submit()">
                             </form>
                             <?php if (!empty($customer['profile_picture'])): ?>
-                                <form method="POST"style="display: inline;">
+                                <form method="POST" style="display: inline;">
                                     <input type="hidden"name="action"value="remove_picture">
-                                    <button type="submit"class="btn btn-danger"onclick="return confirm('<?php echo __('profile.confirm_remove_picture'); ?>')">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('<?php echo __('profile.confirm_remove_picture'); ?>')">
                                         <?php echo icon_trash(16); ?> <?php echo __('profile.remove'); ?>
                                     </button>
                                 </form>
@@ -297,7 +304,7 @@ try {
                         </div>
                     </div>
 
-                    <form method="POST"class="profile-form">
+                    <form method="POST" class="profile-form">
                         <input type="hidden"name="action"value="update_profile">
                         
                         <div class="form-group">
@@ -358,7 +365,7 @@ try {
                             <input type="text"value="<?php echo date('F j, Y', strtotime($customer['created_at'] ?? 'now')); ?>"disabled>
                         </div>
 
-                        <button type="submit"class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary">
                             <?php echo icon_save(16); ?> <?php echo __('profile.save_changes'); ?>
                         </button>
                     </form>
@@ -371,7 +378,7 @@ try {
                         <h2><?php echo __('profile.change_password'); ?></h2>
                     </div>
 
-                    <form method="POST"class="profile-form">
+                    <form method="POST" class="profile-form">
                         <input type="hidden"name="action"value="change_password">
                         
                         <div class="form-group">
@@ -390,7 +397,7 @@ try {
                             <input type="password"id="confirm_password"name="confirm_password"required minlength="6">
                         </div>
 
-                        <button type="submit"class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary">
                             <?php echo icon_lock(16); ?> <?php echo __('profile.update_password'); ?>
                         </button>
                     </form>
@@ -409,7 +416,7 @@ try {
                             <?php echo icon_heart(64); ?>
                             <h3><?php echo __('profile.wishlist_empty'); ?></h3>
                             <p><?php echo __('profile.wishlist_empty_text'); ?></p>
-                            <a href="/"class="btn btn-primary"><?php echo __('profile.browse_products'); ?></a>
+                            <a href="/" class="btn btn-primary"><?php echo __('profile.browse_products'); ?></a>
                         </div>
                     <?php else: ?>
                         <div class="wishlist-grid">
@@ -419,7 +426,7 @@ try {
                                         <?php if (!empty($item['image'])): ?>
                                             <img src="/<?php echo htmlspecialchars($item['image']); ?>"alt="<?php echo htmlspecialchars($item['title']); ?>">
                                         <?php else: ?>
-                                            <div class="no-image"><?php echo icon_image(48); ?></div>
+                                            <div class="no-image"><?php echo icon_user(48); ?></div>
                                         <?php endif; ?>
                                     </div>
                                     <div class="item-details">
@@ -427,7 +434,7 @@ try {
                                         <p class="item-price"><?php echo number_format($item['price'], 2); ?> <?php echo __('currency'); ?></p>
                                         <p class="item-added"><?php echo __('profile.added'); ?>: <?php echo date('M j, Y', strtotime($item['added_at'])); ?></p>
                                         <div class="item-actions">
-                                            <a href="/product/<?php echo htmlspecialchars($item['slug']); ?>"class="btn btn-primary btn-sm"><?php echo __('profile.view_product'); ?></a>
+                                            <a href="/product/<?php echo htmlspecialchars($item['slug']); ?>" class="btn btn-primary btn-sm"><?php echo __('profile.view_product'); ?></a>
                                             <button class="btn btn-danger btn-sm remove-wishlist"data-product-id="<?php echo htmlspecialchars($item['id']); ?>">
                                                 <?php echo icon_trash(14); ?> <?php echo __('profile.remove'); ?>
                                             </button>

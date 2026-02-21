@@ -245,11 +245,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 
+                // Price validation warnings
+                $price = floatval($_POST['price']);
+                $warningMessages = [];
+                
+                if ($price <= 0) {
+                    $warningMessages[] = "⚠️ Внимание: Цената е 0. Продуктът ще показва 'Свържете се за цена'.";
+                }
+                
+                if ($price > 0 && $price < 1) {
+                    $warningMessages[] = "⚠️ Внимание: Много ниска цена (под 1 {$_POST['currency']}).";
+                }
+                
                 save_product_data([
                     'id' => $product_id,
                     'name' => sanitize($_POST['name']),
                     'description' => sanitize($_POST['description']),
-                    'price' => floatval($_POST['price']),
+                    'price' => $price,
                     'image' => $imagePath,
                     'category' => sanitize($_POST['category'] ?? 'general'),
                     'stock' => intval($_POST['stock'] ?? 0),
@@ -262,6 +274,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
                 
                 $message = __('admin.product_saved');
+                if (!empty($warningMessages)) {
+                    $message .= '<br>' . implode('<br>', $warningMessages);
+                }
             } catch (Exception $e) {
                 error_log("Product save failed: ". $e->getMessage() . "| Trace: ". $e->getTraceAsString());
                 $message = "⚠️ Error saving product: ". htmlspecialchars($e->getMessage());
@@ -404,10 +419,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'updated' => date('Y-m-d H:i:s'),
                 ];
                 
-                // Visual promotion fields (banner, popup, notification, homepage)
-                if (in_array($promotion['type'], ['banner', 'popup', 'notification', 'homepage'])) {
+                // Visual promotion fields - ALL visual types need image/link
+                $visual_types = ['banner', 'popup', 'notification', 'homepage', 
+                                'sidebar_left', 'sidebar_right', 'slider', 
+                                'seasonal', 'flash_sale', 'clearance', 'new_arrival', 'bundle_deal'];
+                if (in_array($promotion['type'], $visual_types)) {
                     $promotion['image'] = sanitize($_POST['image'] ?? '');
                     $promotion['link'] = sanitize($_POST['link'] ?? '');
+                    $promotion['subtitle'] = sanitize($_POST['subtitle'] ?? '');
+                    $promotion['button_text'] = sanitize($_POST['button_text'] ?? '');
+                    $promotion['background_color'] = sanitize($_POST['background_color'] ?? '');
+                    $promotion['text_color'] = sanitize($_POST['text_color'] ?? '');
                 }
                 
                 // Sales promotion fields (bundle, buy_x_get_y, product_discount, category_discount, cart_discount)
@@ -578,6 +600,124 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             break;
 
+        // Bulk Edit Handlers
+        case 'bulk_fix_product':
+            try {
+                $product_id = $_POST['product_id'] ?? '';
+                $price = floatval($_POST['price'] ?? 0);
+                $stock = intval($_POST['stock'] ?? 0);
+                $short_description = sanitize($_POST['short_description'] ?? '');
+                
+                // Clean HTML artifacts from short description
+                $short_description = preg_replace('/<(\w+)\s+data-[^>]*>/', '<$1>', $short_description);
+                $short_description = preg_replace('/\sdata-[a-z-]+="[^"]*"/', '', $short_description);
+                $short_description = strip_tags($short_description);
+                
+                $db = Database::getInstance();
+                $pdo = $db->getPDO();
+                
+                // Update price
+                $stmt = $pdo->prepare("UPDATE product_prices SET price = ? WHERE product_id = ? AND is_active = true");
+                $stmt->execute([$price, $product_id]);
+                
+                // Update stock
+                $stmt = $pdo->prepare("UPDATE product_inventory SET quantity = ? WHERE product_id = ?");
+                $stmt->execute([$stock, $product_id]);
+                
+                // Update short description
+                $lang = $_SESSION['lang'] ?? 'bg';
+                $stmt = $pdo->prepare("UPDATE product_descriptions SET short_description = ? WHERE product_id = ? AND language_code = ?");
+                $stmt->execute([$short_description, $product_id, $lang]);
+                
+                // Clear product cache
+                $cache_files = glob(CMS_ROOT . '/cache/products_data_*.json');
+                foreach ($cache_files as $file) {
+                    @unlink($file);
+                }
+                
+                $message = '✅ Продуктът е актуализиран успешно!';
+            } catch (Exception $e) {
+                error_log('Error in bulk_fix_product: ' . $e->getMessage());
+                $message = '❌ Грешка: ' . htmlspecialchars($e->getMessage());
+            }
+            break;
+
+        case 'fix_all_html_entities':
+            try {
+                $db = Database::getInstance();
+                $pdo = $db->getPDO();
+                
+                // Fix product names
+                $stmt = $pdo->query("SELECT product_id, name, language_code FROM product_descriptions WHERE name LIKE '%&amp;%'");
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
+                $fixed_count = 0;
+                foreach ($rows as $row) {
+                    $decoded_name = html_entity_decode($row['name'], ENT_QUOTES, 'UTF-8');
+                    $update = $pdo->prepare("UPDATE product_descriptions SET name = ? WHERE product_id = ? AND language_code = ?");
+                    $update->execute([$decoded_name, $row['product_id'], $row['language_code']]);
+                    $fixed_count++;
+                }
+                
+                // Clear cache
+                $cache_files = glob(CMS_ROOT . '/cache/products_data_*.json');
+                foreach ($cache_files as $file) {
+                    @unlink($file);
+                }
+                
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => "✅ Fixed $fixed_count HTML entities!"]);
+                exit;
+            } catch (Exception $e) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => '❌ Error: ' . $e->getMessage()]);
+                exit;
+            }
+
+        case 'remove_all_html_artifacts':
+            try {
+                $db = Database::getInstance();
+                $pdo = $db->getPDO();
+                
+                // Get all short descriptions with HTML artifacts
+                $stmt = $pdo->query("SELECT product_id, short_description, language_code FROM product_descriptions WHERE short_description LIKE '%data-path-to-node%' OR short_description LIKE '%data-index-in-node%'");
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
+                $fixed_count = 0;
+                foreach ($rows as $row) {
+                    $cleaned = preg_replace('/<(\w+)\s+data-[^>]*>/', '<$1>', $row['short_description']);
+                    $cleaned = preg_replace('/\sdata-[a-z-]+="[^"]*"/', '', $cleaned);
+                    
+                    $update = $pdo->prepare("UPDATE product_descriptions SET short_description = ? WHERE product_id = ? AND language_code = ?");
+                    $update->execute([$cleaned, $row['product_id'], $row['language_code']]);
+                    $fixed_count++;
+                }
+                
+                // Clear cache
+                $cache_files = glob(CMS_ROOT . '/cache/products_data_*.json');
+                foreach ($cache_files as $file) {
+                    @unlink($file);
+                }
+                
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => "✅ Cleaned $fixed_count product descriptions!"]);
+                exit;
+            } catch (Exception $e) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => '❌ Error: ' . $e->getMessage()]);
+                exit;
+            }
+
+        case 'refresh_exchange_rate':
+            try {
+                require_once CMS_ROOT . '/includes/currency-exchange.php';
+                refresh_exchange_rate();
+                $message = '✅ Обменният курс е актуализиран успешно!';
+            } catch (Exception $e) {
+                $message = '❌ Грешка при актуализиране: ' . htmlspecialchars($e->getMessage());
+            }
+            break;
+
         default:
             // Unknown action - do nothing
             break;
@@ -664,10 +804,9 @@ $stats = get_dashboard_stats();
         .hint{display:block;margin-top:5px;color:var(--text-secondary);font-size:13px;line-height:1.4;min-height:18px}
     </style>
     
-    <!-- Load full CSS (sync for proper rendering) -->
-    <link rel="stylesheet" href="../assets/css/themes.min.css">
-    <link rel="stylesheet" href="assets/css/admin.min.css">
-    <link rel="stylesheet" href="assets/css/admin-dashboard-section.min.css">
+    <!-- Unified CSS -->
+    <link rel="stylesheet" href="../assets/css/themes.min.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../assets/css/app.min.css?v=<?php echo time(); ?>">
     <?php echo get_custom_theme_css(); ?>
     
     <script>
@@ -703,7 +842,14 @@ $stats = get_dashboard_stats();
         });
     </script>
 </head>
-<body data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
+<body class="admin-page" data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    
     <div class="container">
         <!-- Sidebar -->
         <aside class="sidebar">
@@ -724,6 +870,7 @@ $stats = get_dashboard_stats();
                     <ul>
                         <li><a href="?section=products" class="<?php echo $section === 'products' ? 'active' : ''; ?>"><?php echo icon_package(18); ?> <?php echo __('menu.products'); ?></a></li>
                         <li><a href="?section=import-products" class="<?php echo $section === 'import-products' ? 'active' : ''; ?>">📥 Импорт</a></li>
+                        <li><a href="?section=bulk-edit" class="<?php echo $section === 'bulk-edit' ? 'active' : ''; ?>">🛠️ Бърза корекция</a></li>
                         <li><a href="?section=categories" class="<?php echo $section === 'categories' ? 'active' : ''; ?>"><?php echo icon_folder(18); ?> <?php echo __('admin.categories'); ?></a></li>
                         <li><a href="?section=orders" class="<?php echo $section === 'orders' ? 'active' : ''; ?>"><?php echo icon_cart(18); ?> <?php echo __('menu.orders'); ?></a></li>
                     </ul>
@@ -781,6 +928,7 @@ $stats = get_dashboard_stats();
                 <p class="sidebar-section-title">Система</p>
                 <div class="sidebar-section-content">
                     <ul>
+                        <li><a href="?section=currency-settings" class="<?php echo $section === 'currency-settings' ? 'active' : ''; ?>">💱 Валутни курсове</a></li>
                         <li><a href="?section=database" class="<?php echo $section === 'database' ? 'active' : ''; ?>"><?php echo icon_settings(18); ?> <?php echo __('menu.database'); ?></a></li>
                         <li><a href="?section=database-browser" class="<?php echo $section === 'database-browser' ? 'active' : ''; ?>">🗄️ Database Browser</a></li>
                         <li><a href="?section=settings" class="<?php echo $section === 'settings' ? 'active' : ''; ?>"><?php echo icon_settings(18); ?> <?php echo __('menu.settings'); ?></a></li>
@@ -841,6 +989,8 @@ $stats = get_dashboard_stats();
                     include_once 'sections/themes.php';
                 } elseif ($section === 'users') {
                     include_once 'sections/users.php';
+                } elseif ($section === 'currency-settings') {
+                    include_once 'sections/currency-settings.php';
                 } elseif ($section === 'database') {
                     include_once 'sections/database.php';
                 } elseif ($section === 'database-browser') {
@@ -856,6 +1006,7 @@ $stats = get_dashboard_stats();
     </div>
     <script src="../assets/js/theme-manager.min.js"defer></script>
     <script src="assets/js/admin.js"defer></script>
+    <script src="assets/js/mobile-menu.js"></script>
 </body>
 </html>
 

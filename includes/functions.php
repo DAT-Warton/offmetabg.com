@@ -9,6 +9,9 @@ require_once __DIR__ . '/env-loader.php';
 // Load site settings helper
 require_once __DIR__ . '/site-settings.php';
 
+// Load currency exchange system
+require_once __DIR__ . '/currency-exchange.php';
+
 // Get current user
 function current_user() {
     return $_SESSION['user'] ?? null;
@@ -440,9 +443,16 @@ function render_description($description) {
     // Replace escaped newlines with actual newlines
     $description = str_replace('\n', "\n", $description);
     
+    // Remove HTML editor artifacts (data attributes from WYSIWYG editors)
+    $description = preg_replace('/<(\w+)\s+data-[^>]*>/', '<$1>', $description);
+    $description = preg_replace('/\sdata-[a-z-]+="[^"]*"/', '', $description);
+    
     // Allow only safe HTML tags
     $allowed_tags = '<p><br><b><strong><i><em><u><ul><ol><li><h1><h2><h3><h4><h5><h6><span><div><a>';
     $description = strip_tags($description, $allowed_tags);
+    
+    // Decode HTML entities
+    $description = html_entity_decode($description, ENT_QUOTES, 'UTF-8');
     
     // Convert newlines to <br> if not already in HTML format
     if (strpos($description, '<') === false) {
