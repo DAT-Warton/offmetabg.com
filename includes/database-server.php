@@ -1,7 +1,8 @@
 <?php
 /**
- * Database Layer - JSON Storage by default, MySQL/PostgreSQL optional
+ * Database Layer - PostgreSQL/MySQL/SQL Server Support
  * Now with environment variable support
+ * No JSON fallback - database connection required
  */
 
 // Load environment variables
@@ -9,7 +10,7 @@ require_once __DIR__ . '/env-loader.php';
 
 class Database {
     private static $instance = null;
-    private $driver = 'json'; // 'json', 'mysql', or 'pgsql'
+    private $driver = 'pgsql'; // 'mysql', 'pgsql', or 'sqlsrv'
     private $pdo = null;
 
     private function __construct() {
@@ -27,10 +28,11 @@ class Database {
             $config = [
                 'driver' => $dbType,
                 'host' => env('DB_HOST', 'localhost'),
-                'port' => env('DB_PORT', $dbType === 'pgsql' ? 5432 : 3306),
+                'port' => env('DB_PORT', $dbType === 'pgsql' ? 5432 : ($dbType === 'sqlsrv' ? 1433 : 3306)),
                 'database' => env('DB_NAME'),
                 'user' => env('DB_USER'),
-                'password' => env('DB_PASSWORD')
+                'password' => env('DB_PASSWORD'),
+                'integrated_security' => env('DB_INTEGRATED_SECURITY', false)
             ];
 
             if ($dbType === 'mysql') {
@@ -40,6 +42,10 @@ class Database {
             } elseif ($dbType === 'pgsql' || $dbType === 'postgresql') {
                 $this->driver = 'pgsql';
                 $this->connectPostgreSQL($config);
+                return;
+            } elseif ($dbType === 'sqlsrv' || $dbType === 'mssql') {
+                $this->driver = 'sqlsrv';
+                $this->connectMSSQL($config);
                 return;
             }
         }
@@ -59,6 +65,9 @@ class Database {
             } elseif ($config['driver'] === 'pgsql' || $config['driver'] === 'postgresql') {
                 $this->driver = 'pgsql';
                 $this->connectPostgreSQL($config);
+            } elseif ($config['driver'] === 'sqlsrv' || $config['driver'] === 'mssql') {
+                $this->driver = 'sqlsrv';
+                $this->connectMSSQL($config);
             }
         }
     }
@@ -76,8 +85,8 @@ class Database {
             $this->pdo = new PDO($dsn, $config['user'], $config['password']);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            error_log('Database connection failed: ' . $e->getMessage());
-            $this->driver = 'json'; // Fallback to JSON
+            error_log('MySQL connection failed: ' . $e->getMessage());
+            die('Database connection error. Please check your database configuration.');
         }
     }
 
@@ -92,7 +101,33 @@ class Database {
             $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log('PostgreSQL connection failed: ' . $e->getMessage());
-            $this->driver = 'json'; // Fallback to JSON
+            die('Database connection error. Please check your PostgreSQL configuration.');
+        }
+    }
+
+    private function connectMSSQL($config) {
+        try {
+            $host = $config['host'] ?? 'localhost';
+            $port = $config['port'] ?? 1433;
+            $database = $config['database'] ?? '';
+            
+            // Build DSN for SQL Server
+            $dsn = "sqlsrv:Server={$host},{$port};Database={$database}";
+            
+            // Check if using integrated security (Windows Authentication)
+            if (!empty($config['integrated_security']) && $config['integrated_security']) {
+                $this->pdo = new PDO($dsn);
+            } else {
+                $user = $config['user'] ?? '';
+                $password = $config['password'] ?? '';
+                $this->pdo = new PDO($dsn, $user, $password);
+            }
+            
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('MSSQL connection failed: ' . $e->getMessage());
+            die('Database connection error. Please check your SQL Server configuration. Error: ' . $e->getMessage());
         }
     }
 
@@ -112,7 +147,7 @@ class Database {
             $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log('DATABASE_URL connection failed: ' . $e->getMessage());
-            $this->driver = 'json'; // Fallback to JSON
+            die('Database connection error. DATABASE_URL is invalid or database is unreachable.');
         }
     }
 
@@ -126,41 +161,34 @@ class Database {
 
     // Table operations
     public function table($name) {
-        if (($this->driver === 'mysql' || $this->driver === 'pgsql') && $this->pdo) {
-            return new DatabaseTable($name, $this->pdo, $this->driver);
-        } else {
-            return new JSONTable($name);
+        if (!$this->pdo) {
+            die('Database not initialized. Please check your database configuration.');
         }
+        return new DatabaseTable($name, $this->pdo, $this->driver);
     }
 
     // Options operations
     public function getOption($key, $default = null) {
-        if ($this->pdo) {
-            $stmt = $this->pdo->prepare("SELECT option_value FROM options WHERE option_key = ?");
-            $stmt->execute([$key]);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $result ? $result['option_value'] : $default;
-        } else {
-            $options = load_json('storage/options.json');
-            return $options[$key] ?? $default;
+        if (!$this->pdo) {
+            return $default;
         }
+        $stmt = $this->pdo->prepare("SELECT option_value FROM options WHERE option_key = ?");
+        $stmt->execute([$key]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['option_value'] : $default;
     }
 
     public function setOption($key, $value) {
-        if ($this->pdo) {
-            $stmt = $this->pdo->prepare("
-                INSERT INTO options (option_key, option_value, updated_at) 
-                VALUES (?, ?, CURRENT_TIMESTAMP)
-                ON CONFLICT (option_key) 
-                DO UPDATE SET option_value = EXCLUDED.option_value, updated_at = CURRENT_TIMESTAMP
-            ");
-            return $stmt->execute([$key, $value]);
-        } else {
-            $options = load_json('storage/options.json');
-            $options[$key] = $value;
-            save_json('storage/options.json', $options);
-            return true;
+        if (!$this->pdo) {
+            return false;
         }
+        $stmt = $this->pdo->prepare("
+            INSERT INTO options (option_key, option_value, updated_at) 
+            VALUES (?, ?, CURRENT_TIMESTAMP)
+            ON CONFLICT (option_key) 
+            DO UPDATE SET option_value = EXCLUDED.option_value, updated_at = CURRENT_TIMESTAMP
+        ");
+        return $stmt->execute([$key, $value]);
     }
 
     // Convenience methods for direct operations
@@ -173,88 +201,13 @@ class Database {
     }
 }
 
-class JSONTable {
-    private $name;
-    private $data = [];
-
-    public function __construct($name) {
-        $this->name = $name;
-        $this->load();
-    }
-
-    private function load() {
-        $this->data = load_json("storage/{$this->name}.json");
-    }
-
-    private function save() {
-        save_json("storage/{$this->name}.json", $this->data);
-    }
-
-    public function all() {
-        return array_values($this->data);
-    }
-
-    public function find($key, $value) {
-        foreach ($this->data as $row) {
-            if (isset($row[$key]) && $row[$key] == $value) {
-                return $row;
-            }
-        }
-        return null;
-    }
-
-    public function where($key, $value) {
-        $results = [];
-        foreach ($this->data as $row) {
-            if (isset($row[$key]) && $row[$key] == $value) {
-                $results[] = $row;
-            }
-        }
-        return $results;
-    }
-
-    public function insert($data) {
-        $id = uniqid();
-        $this->data[$id] = array_merge($data, ['id' => $id, 'created_at' => date('Y-m-d H:i:s')]);
-        $this->save();
-        return $id;
-    }
-
-    public function update($id, $data) {
-        if (isset($this->data[$id])) {
-            $this->data[$id] = array_merge($this->data[$id], $data, ['updated_at' => date('Y-m-d H:i:s')]);
-            $this->save();
-            return true;
-        }
-        return false;
-    }
-
-    public function delete($id) {
-        if (isset($this->data[$id])) {
-            unset($this->data[$id]);
-            $this->save();
-            return true;
-        }
-        return false;
-    }
-
-    public function count() {
-        return count($this->data);
-    }
-
-    public function truncate() {
-        $this->data = [];
-        $this->save();
-        return true;
-    }
-}
-
 class DatabaseTable {
     private $name;
     private $pdo;
     private $driver;
     private $query;
     private $params = [];
+    private $wheres = [];
 
     public function __construct($name, $pdo, $driver = 'mysql') {
         $this->name = $name;
@@ -262,9 +215,74 @@ class DatabaseTable {
         $this->driver = $driver;
     }
 
+    public function where($column, $operator, $value = null) {
+        // If only 2 parameters, assume = operator
+        if ($value === null) {
+            $value = $operator;
+            $operator = '=';
+        }
+        
+        $this->wheres[] = [
+            'column' => $column,
+            'operator' => $operator,
+            'value' => $value
+        ];
+        
+        return $this;
+    }
+
     public function all() {
-        $stmt = $this->pdo->query("SELECT * FROM {$this->name}");
+        if (empty($this->wheres)) {
+            $stmt = $this->pdo->query("SELECT * FROM {$this->name}");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        
+        // Build WHERE clause
+        $where_clauses = [];
+        $params = [];
+        
+        foreach ($this->wheres as $where) {
+            $where_clauses[] = "{$where['column']} {$where['operator']} ?";
+            $params[] = $where['value'];
+        }
+        
+        $where_sql = implode(' AND ', $where_clauses);
+        $sql = "SELECT * FROM {$this->name} WHERE {$where_sql}";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        
+        // Reset wheres for next query
+        $this->wheres = [];
+        
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function first() {
+        if (empty($this->wheres)) {
+            $stmt = $this->pdo->query("SELECT * FROM {$this->name} LIMIT 1");
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        
+        // Build WHERE clause
+        $where_clauses = [];
+        $params = [];
+        
+        foreach ($this->wheres as $where) {
+            $where_clauses[] = "{$where['column']} {$where['operator']} ?";
+            $params[] = $where['value'];
+        }
+        
+        $where_sql = implode(' AND ', $where_clauses);
+        $sql = "SELECT * FROM {$this->name} WHERE {$where_sql} LIMIT 1";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        
+        // Reset wheres for next query
+        $this->wheres = [];
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function find($key, $value) {

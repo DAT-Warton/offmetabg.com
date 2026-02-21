@@ -6,7 +6,7 @@
 
 $configFile = CMS_ROOT . '/config/database.json';
 $config = file_exists($configFile) ? json_decode(file_get_contents($configFile), true) : [];
-$currentDriver = $config['driver'] ?? 'json';
+$currentDriver = $config['driver'] ?? 'pgsql';
 
 // Check for DATABASE_URL environment variable
 $databaseUrl = getenv('DATABASE_URL');
@@ -268,12 +268,14 @@ if (isset($_POST['save_database_config'])) {
                 INDEX `idx_period` (`period_start`, `period_end`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
             
-            $message = '✅ Database configured and all CRM tables created successfully! MySQL is now active.';
+            $message = '✅ Database configured and all tables created successfully! MySQL is now active.';
         } catch (PDOException $e) {
             $message = '❌ Error setting up database: ' . $e->getMessage();
         }
+    } elseif ($newConfig['driver'] === 'pgsql') {
+        $message = '✅ PostgreSQL configuration saved successfully!';
     } else {
-        $message = '✅ Configuration saved. Using JSON file storage.';
+        $message = '✅ Configuration saved successfully!';
     }
     
     // Reload config
@@ -284,7 +286,7 @@ if (isset($_POST['save_database_config'])) {
 
 <div>
     <h2>🗄️ Database Configuration</h2>
-    <p class="header-note">Switch between JSON file storage and MySQL database for cPanel hosting.</p>
+    <p class="header-note">Configure PostgreSQL or MySQL database connection for your application.</p>
 
     <?php if (isset($message)): ?>
         <div class="message"><?php echo $message; ?></div>
@@ -304,11 +306,11 @@ if (isset($_POST['save_database_config'])) {
                 ℹ️ Using DATABASE_URL from environment. PostgreSQL is active and will override config below.
             </div>
         <?php else: ?>
-            <span class="db-mode-label db-mode-<?php echo $currentDriver === 'pgsql' ? 'pgsql' : ($currentDriver === 'mysql' ? 'mysql' : 'json'); ?>">
+            <span class="db-mode-label db-mode-<?php echo $currentDriver === 'pgsql' ? 'pgsql' : 'mysql'; ?>">
                 <?php 
                     if ($currentDriver === 'mysql') echo '🗄️ MySQL Database';
                     elseif ($currentDriver === 'pgsql') echo '🐘 PostgreSQL Database';
-                    else echo '📄 JSON File Storage';
+                    else echo '⚠️ No Database Configured';
                 ?>
             </span>
         <?php endif; ?>
@@ -316,13 +318,12 @@ if (isset($_POST['save_database_config'])) {
 
     <form method="POST">
         <div class="form-group">
-            <label>Storage Mode</label>
+            <label>Database Driver</label>
             <select name="driver"id="driver"onchange="toggleMySQLFields()"class="select-plain">
-                <option value="json"<?php echo $currentDriver === 'json' ? 'selected' : ''; ?>>📄 JSON File Storage (Default)</option>
-                <option value="mysql"<?php echo $currentDriver === 'mysql' ? 'selected' : ''; ?>>🗄️ MySQL Database</option>
                 <option value="pgsql"<?php echo $currentDriver === 'pgsql' ? 'selected' : ''; ?>>🐘 PostgreSQL Database</option>
+                <option value="mysql"<?php echo $currentDriver === 'mysql' ? 'selected' : ''; ?>>🗄️ MySQL Database</option>
             </select>
-            <small class="hint">JSON is simpler. PostgreSQL/MySQL for high-traffic sites.</small>
+            <small class="hint">PostgreSQL recommended for production. MySQL for cPanel hosting.</small>
             <?php if ($usingEnvDatabase): ?>
                 <small class="hint hint-warning">⚠️ DATABASE_URL is set - using PostgreSQL automatically</small>
             <?php endif; ?>
