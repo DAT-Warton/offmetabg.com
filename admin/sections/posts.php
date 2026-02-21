@@ -26,7 +26,7 @@ $editPost = $editSlug ? get_post($editSlug) : null;
 
             <div class="form-group">
                 <label>Съдържание</label>
-                <textarea name="content"required><?php echo htmlspecialchars($editPost['content'] ?? ''); ?></textarea>
+                <textarea name="content" required><?php echo htmlspecialchars($editPost['content'] ?? ''); ?></textarea>
             </div>
 
             <div class="form-group">
@@ -69,6 +69,25 @@ $editPost = $editSlug ? get_post($editSlug) : null;
 
             <button type="submit"><?php echo __('save'); ?> статия</button>
         </form>
+        <?php if ($editPost || $action === 'new'): ?>
+            <!-- Load TinyMCE and initialize WYSIWYG for post content -->
+            <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    if (window.tinymce) {
+                        tinymce.init({
+                            selector: 'textarea[name="content"]',
+                            height: 480,
+                            menubar: false,
+                            plugins: 'link image lists code table paste',
+                            toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | code',
+                            branding: false,
+                            convert_urls: false
+                        });
+                    }
+                });
+            </script>
+        <?php endif; ?>
     <?php endif; ?>
 
     <table>

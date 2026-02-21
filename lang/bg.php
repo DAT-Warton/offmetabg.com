@@ -406,6 +406,38 @@ $translations = [
         'unpaid' => 'Неплатено',
         'pending' => 'Предстоящо',
     ],
+    // Installer / Инсталатор
+    'installer' => [
+        'title' => 'Инсталатор',
+        'heading' => 'Инсталатор на OffMetaBG',
+        'site_section' => 'Сайт',
+        'app_url' => 'APP URL',
+        'app_timezone' => 'Часова зона',
+        'database_section' => 'База данни',
+        'db_type' => 'Тип',
+        'db_host' => 'Хост',
+        'db_port' => 'Порт',
+        'db_name' => 'Име на БД',
+        'db_user' => 'Потребител на БД',
+        'db_password' => 'Парола на БД',
+        'admin_section' => 'Административен акаунт',
+        'admin_name' => 'Име на администратор',
+        'admin_email' => 'Email на администратор',
+        'admin_password' => 'Парола на администратор',
+        'email_section' => 'Имейл (по избор)',
+        'mail_host' => 'SMTP хост',
+        'mail_port' => 'SMTP порт',
+        'mail_username' => 'SMTP потребител',
+        'mail_password' => 'SMTP парола',
+        'mail_from_address' => 'От адрес',
+        'install_button' => 'Инсталирай',
+        'installer_disabled' => 'Инсталаторът е деактивиран. Премахнете .env и .installed за повторен запуск.'
+    ],
+    'cloudflare' => [
+        'token' => 'Cloudflare API токен',
+        'zone_id' => 'Cloudflare Zone ID',
+        'ip' => 'Публичен IP за A записите'
+    ],
     
     // Admin Menu / Админ меню
     'menu' => [

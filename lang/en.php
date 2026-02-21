@@ -402,6 +402,38 @@ $translations = [
         'unpaid' => 'Unpaid',
         'pending' => 'Pending',
     ],
+    // Installer
+    'installer' => [
+        'title' => 'Installer',
+        'heading' => 'OffMetaBG Installer',
+        'site_section' => 'Site',
+        'app_url' => 'APP URL',
+        'app_timezone' => 'Timezone',
+        'database_section' => 'Database',
+        'db_type' => 'Type',
+        'db_host' => 'Host',
+        'db_port' => 'Port',
+        'db_name' => 'DB Name',
+        'db_user' => 'DB User',
+        'db_password' => 'DB Password',
+        'admin_section' => 'Admin account',
+        'admin_name' => 'Admin name',
+        'admin_email' => 'Admin email',
+        'admin_password' => 'Admin password',
+        'email_section' => 'Email (optional)',
+        'mail_host' => 'SMTP host',
+        'mail_port' => 'SMTP port',
+        'mail_username' => 'SMTP user',
+        'mail_password' => 'SMTP password',
+        'mail_from_address' => 'From address',
+        'install_button' => 'Install',
+        'installer_disabled' => 'Installer disabled. Remove .env and .installed to run again.'
+    ],
+    'cloudflare' => [
+        'token' => 'Cloudflare API token',
+        'zone_id' => 'Cloudflare Zone ID',
+        'ip' => 'Public IP for A records'
+    ],
     
     // Admin Menu
     'menu' => [
