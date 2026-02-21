@@ -219,8 +219,8 @@ $pageTitle = $action === 'register' ? __('auth.register_title') : __('auth.login
             }
         })();
     </script>
-    <link rel="stylesheet"href="/assets/css/themes.css">
-    <link rel="stylesheet"href="/assets/css/auth.css">
+    <link rel="stylesheet" href="/assets/css/themes.min.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/assets/css/app.min.css?v=<?php echo time(); ?>">
     <?php echo get_custom_theme_css(); ?>
 </head>
 <body class="auth-page"data-theme="<?php echo htmlspecialchars(db_get_option('active_theme', 'default')); ?>">

@@ -16,8 +16,8 @@ $post = $post ?? [];
     <link rel="icon"type="image/svg+xml"href="/favicon.svg">
     <link rel="icon"type="image/x-icon"href="/favicon.ico">
     
-    <link rel="stylesheet"href="/assets/css/themes.min.css">
-    <link rel="stylesheet"href="/assets/css/post.css">
+    <link rel="stylesheet" href="/assets/css/themes.min.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/assets/css/app.min.css?v=<?php echo time(); ?>">
     <?php echo get_custom_theme_css(); ?>
 </head>
 <body>

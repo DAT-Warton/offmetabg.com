@@ -11,8 +11,8 @@ $page = $page ?? [];
     <meta name="viewport"content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($page['title'] ?? 'Page'); ?> - <?php echo htmlspecialchars(get_option('site_title', 'My CMS')); ?></title>
     <meta name="description"content="<?php echo htmlspecialchars($page['meta_description'] ?? ''); ?>">
-    <link rel="stylesheet"href="/assets/css/themes.min.css">
-    <link rel="stylesheet"href="/assets/css/page.css">
+    <link rel="stylesheet" href="/assets/css/themes.min.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/assets/css/app.min.css?v=<?php echo time(); ?>">
     <?php echo get_custom_theme_css(); ?>
 </head>
 <body>

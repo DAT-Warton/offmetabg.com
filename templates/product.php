@@ -36,8 +36,8 @@ $price = $product['price'] ?? 0;
     <?php if (!empty($product['image'])): ?>
         <meta property="og:image"content="<?php echo htmlspecialchars($product['image']); ?>">
     <?php endif; ?>
-    <link rel="stylesheet"href="/assets/css/themes.min.css">
-    <link rel="stylesheet"href="/assets/css/product.min.css">
+    <link rel="stylesheet" href="/assets/css/themes.min.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/assets/css/app.min.css?v=<?php echo time(); ?>">
     <?php echo get_custom_theme_css(); ?>
 </head>
 <body>
@@ -126,12 +126,25 @@ $price = $product['price'] ?? 0;
                 
                 <!-- Price -->
                 <div class="product-price-section">
-                    <div class="product-price-large">
-                        <?php echo number_format($price, 2); ?> <span class="currency"><?php echo $currency_symbol; ?></span>
-                    </div>
+                    <?php if ($price <= 0): ?>
+                        <div class="product-price-large" style="color: #3498db;">
+                            📞 Свържете се за цена
+                        </div>
+                    <?php else: ?>
+                        <?php 
+                        $dual_price = get_dual_currency_price($price, 'EUR');
+                        ?>
+                        <div class="product-price-large">
+                            <span style="font-weight: 700; font-size: 2em;"><?php echo number_format($dual_price['eur'], 2); ?> €</span>
+                            <span style="color: #666; font-size: 1.2em; margin-left: 12px;">(<?php echo number_format($dual_price['bgn'], 2); ?> лв.)</span>
+                        </div>
+                    <?php endif; ?>
                     <?php if (!empty($product['compare_price']) && $product['compare_price'] > $price): ?>
+                        <?php 
+                        $dual_compare = get_dual_currency_price($product['compare_price'], 'EUR');
+                        ?>
                         <div class="compare-price">
-                            <s><?php echo number_format($product['compare_price'], 2); ?> <?php echo $currency_symbol; ?></s>
+                            <s><?php echo number_format($dual_compare['eur'], 2); ?> € (<?php echo number_format($dual_compare['bgn'], 2); ?> лв.)</s>
                             <span class="discount-badge">
                                 -<?php echo round((1 - $price / $product['compare_price']) * 100); ?>%
                             </span>
