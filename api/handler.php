@@ -85,14 +85,13 @@ try {
             $pdo = $db->getPDO();
             $existingTheme = null;
             
-            if ($pdo) {
-                $stmt = $pdo->prepare("SELECT id FROM themes WHERE slug = ?");
-                $stmt->execute([$input['slug']]);
-                $existingTheme = $stmt->fetch(PDO::FETCH_ASSOC);
-            } else {
-                // JSON fallback
-                $existingTheme = $db->table('themes')->find('slug', $input['slug']);
+            if (!$pdo) {
+                throw new Exception('Database connection required');
             }
+            
+            $stmt = $pdo->prepare("SELECT id FROM themes WHERE slug = ?");
+            $stmt->execute([$input['slug']]);
+            $existingTheme = $stmt->fetch(PDO::FETCH_ASSOC);
             
             $themeData = [
                 'name' => $input['name'],
@@ -108,23 +107,19 @@ try {
                 // Update existing theme
                 $themeId = $existingTheme['id'];
                 
-                if ($pdo) {
-                    $stmt = $pdo->prepare("
-                        UPDATE themes 
-                        SET name = ?, description = ?, category = ?, variables = ?, version = ?, updated_at = CURRENT_TIMESTAMP 
-                        WHERE id = ?
-                    ");
-                    $stmt->execute([
-                        $themeData['name'],
-                        $themeData['description'],
-                        $themeData['category'],
-                        $themeData['variables'],
-                        $themeData['version'],
-                        $themeId
-                    ]);
-                } else {
-                    $db->table('themes')->update($themeId, $themeData);
-                }
+                $stmt = $pdo->prepare("
+                    UPDATE themes 
+                    SET name = ?, description = ?, category = ?, variables = ?, version = ?, updated_at = CURRENT_TIMESTAMP 
+                    WHERE id = ?
+                ");
+                $stmt->execute([
+                    $themeData['name'],
+                    $themeData['description'],
+                    $themeData['category'],
+                    $themeData['variables'],
+                    $themeData['version'],
+                    $themeId
+                ]);
                 
                 $message = 'Theme updated successfully';
             } else {
@@ -150,14 +145,13 @@ try {
             
             // Get theme from database
             $pdo = $db->getPDO();
-            if ($pdo) {
-                $stmt = $pdo->prepare("SELECT * FROM themes WHERE id = ?");
-                $stmt->execute([$themeId]);
-                $theme = $stmt->fetch(PDO::FETCH_ASSOC);
-            } else {
-                // JSON fallback
-                $theme = $db->table('themes')->find('id', $themeId);
+            if (!$pdo) {
+                throw new Exception('Database connection required');
             }
+            
+            $stmt = $pdo->prepare("SELECT * FROM themes WHERE id = ?");
+            $stmt->execute([$themeId]);
+            $theme = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if (!$theme) {
                 throw new Exception('Theme not found');
@@ -191,13 +185,12 @@ try {
         case 'list-custom-themes':
             // List all custom themes
             $pdo = $db->getPDO();
-            if ($pdo) {
-                $stmt = $pdo->query("SELECT * FROM themes ORDER BY created_at DESC");
-                $themes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } else {
-                // JSON fallback
-                $themes = $db->table('themes')->all();
+            if (!$pdo) {
+                throw new Exception('Database connection required');
             }
+            
+            $stmt = $pdo->query("SELECT * FROM themes ORDER BY created_at DESC");
+            $themes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
             // Parse variables JSON for each theme
             foreach ($themes as &$theme) {

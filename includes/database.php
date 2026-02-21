@@ -1,7 +1,8 @@
 <?php
 /**
- * Database Layer - JSON Storage by default, MySQL/PostgreSQL optional
+ * Database Layer - PostgreSQL/MySQL/SQL Server Support
  * Now with environment variable support
+ * No JSON fallback - database connection required
  */
 
 // Load environment variables
@@ -9,7 +10,7 @@ require_once __DIR__ . '/env-loader.php';
 
 class Database {
     private static $instance = null;
-    private $driver = 'json'; // 'json', 'mysql', 'pgsql', or 'sqlsrv'
+    private $driver = 'pgsql'; // 'mysql', 'pgsql', or 'sqlsrv'
     private $pdo = null;
 
     private function __construct() {
