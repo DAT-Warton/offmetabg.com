@@ -169,10 +169,10 @@ if (!$isLoggedIn) {
         </style>
         
         <!-- Load additional CSS asynchronously (non-critical) -->
-        <link rel="preload" href="/assets/css/themes.min.css?v=<?php echo time(); ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="preload" href="/assets/css/themes.css?v=<?php echo time(); ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript>
-            <link rel="stylesheet" href="/assets/css/themes.min.css?v=<?php echo time(); ?>">
-            <link rel="stylesheet" href="/assets/css/app.min.css?v=<?php echo time(); ?>">
+            <link rel="stylesheet" href="/assets/css/themes.css?v=<?php echo time(); ?>">
+            <link rel="stylesheet" href="/assets/css/app.css?v=<?php echo time(); ?>">
         </noscript>
         <?php echo get_custom_theme_css(); ?>
     </head>

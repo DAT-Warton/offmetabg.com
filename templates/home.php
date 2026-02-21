@@ -87,7 +87,6 @@ foreach ($categories as $category) {
     <link rel="icon"type="image/x-icon"href="/favicon.ico">
     
     <!-- Preload critical resources for faster LCP -->
-    <link rel="preload" href="/assets/css/themes.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <!-- removed per-page preload for home.min.css, using unified app CSS -->
     <?php
     $logo_url = get_site_setting('logo_url', '');
@@ -104,8 +103,9 @@ foreach ($categories as $category) {
     <link rel="dns-prefetch"href="https://zaeshkatadupka.eu">
     
     <!-- Unified CSS -->
-    <link rel="stylesheet"href="assets/css/themes.min.css?v=<?php echo time(); ?>">
-    <link rel="stylesheet"href="assets/css/app.min.css?v=<?php echo time(); ?>">
+    <link rel="preload" href="/assets/css/themes.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/assets/css/themes.min.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/assets/css/app.min.css?v=<?php echo time(); ?>">
     <?php echo get_custom_theme_css(); ?>
 </head>
 <body>

@@ -6,8 +6,8 @@
     <title>404 - Страницата не е намерена | <?php echo htmlspecialchars(get_option('site_title', 'OffMeta')); ?></title>
     <link rel="icon"type="image/svg+xml"href="/favicon.svg">
     <link rel="icon"type="image/x-icon"href="/favicon.ico">
-    <link rel="stylesheet" href="/assets/css/themes.min.css?v=<?php echo time(); ?>">
-    <link rel="stylesheet" href="/assets/css/app.min.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/assets/css/themes.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/assets/css/app.css?v=<?php echo time(); ?>">
 </head>
 <body>
     <div class="error-container">
