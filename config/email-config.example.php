@@ -1,33 +1,37 @@
 <?php
 /**
- * Email Configuration for MailerSend
- * 
- * IMPORTANT: Copy this file to email-config.php and update with your credentials
+ * Email Configuration (Local PHP mail / Postfix)
+ *
+ * IMPORTANT: Copy this file to `config/email-config.php` and update values.
+ * This project uses PHP's `mail()` function with a local MTA (Postfix) by default.
  */
 
 return [
-    // MailerSend API Token
-    'api_token' => 'YOUR_MAILERSEND_API_TOKEN',
-    
-    // From Email (must be verified in MailerSend)
+    // Driver: 'postfix' uses local PHP `mail()` (recommended)
+    // Other options (if you configure external SMTP) could be 'smtp'.
+    'driver' => 'postfix',
+
+    // From Email and Name used in outgoing messages
     'from_email' => 'noreply@yourdomain.com',
-    
-    // From Name (displayed to recipients)
     'from_name' => 'Your Site Name',
-    
-    // Reply-To Email (optional)
+
+    // Optional Reply-To
     'reply_to_email' => '',
     'reply_to_name' => '',
-    
+
     // Site Settings
     'site_name' => 'Your Site Name',
     'site_url' => 'https://yourdomain.com',
-    
-    // Email Features
+
+    // Email Features (toggle as needed)
     'enable_email_verification' => true,
     'enable_password_reset' => true,
     'enable_order_confirmation' => true,
-    
-    // API Endpoint
-    'api_url' => 'https://api.mailersend.com/v1/email',
+
+    // If you later use external SMTP, add settings here (example fields):
+    'smtp_host' => '',
+    'smtp_port' => 587,
+    'smtp_user' => '',
+    'smtp_pass' => '',
+    'smtp_encryption' => 'tls',
 ];

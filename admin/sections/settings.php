@@ -430,8 +430,7 @@ foreach ($all_settings as $setting) {
                                     } elseif ($name === 'email_driver') {
                                         $options = [
                                             'postfix' => 'Postfix (Local SMTP - Recommended)',
-                                            'smtp' => 'External SMTP Server',
-                                            'mailersend' => 'MailerSend API (Deprecated)'
+                                            'smtp' => 'External SMTP Server'
                                         ];
                                     } elseif ($name === 'smtp_encryption') {
                                         $options = [

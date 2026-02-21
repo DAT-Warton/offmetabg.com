@@ -28,7 +28,7 @@ Modern Bulgarian e-commerce platform built with PHP and PostgreSQL.
 - 🗄️ **PostgreSQL Database** - Robust and scalable data storage
 - 🎨 **Modern UI/UX** - Clean and intuitive interface
 - 🔒 **Security** - Password hashing, CSRF protection, secure sessions
-- 📧 **Email Integration** - MailerSend API for transactional emails
+- 📧 **Email Integration** - PHP `mail()` with local Postfix (configurable SMTP)
 - 🚚 **Courier Integration** - Automated shipping with Speedy/Econt
 
 ## 🛠️ Technology Stack
@@ -37,7 +37,7 @@ Modern Bulgarian e-commerce platform built with PHP and PostgreSQL.
 - **Database:** PostgreSQL 14+
 - **Frontend:** Vanilla JavaScript, CSS3
 - **Server:** Nginx
-- **Email:** MailerSend API
+- **Email:** PHP `mail()` / Postfix (or external SMTP)
 - **Deployment:** Docker, VPS hosting
 
 ## 📋 Requirements
@@ -46,7 +46,7 @@ Modern Bulgarian e-commerce platform built with PHP and PostgreSQL.
 - PostgreSQL 14 or higher
 - Nginx or Apache web server
 - Composer (for dependency management)
-- MailerSend account (for email functionality)
+- A working local MTA (Postfix) or external SMTP account for email functionality
 
 ## 🔧 Installation
 
@@ -115,7 +115,9 @@ This application can be deployed to:
 
 ## 📧 Email Configuration
 
-The platform uses MailerSend for transactional emails. Configure in `config/email-config.php`:
+The platform sends email using PHP's `mail()` function by default (uses a local MTA such as Postfix). You can also configure external SMTP settings in `config/email-config.php`.
+
+Email types configured:
 - Account activation emails
 - Password reset emails
 - Order confirmation emails
